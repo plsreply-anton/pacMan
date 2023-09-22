@@ -2,11 +2,12 @@ cmake_minimum_required(VERSION 3.27.2)
 project(pacMan)
 
 add_executable(pacMan ${CMAKE_SOURCE_DIR}/src/main.cpp
-                      ${CMAKE_SOURCE_DIR}/src/mainMenu.cpp)
+                      ${CMAKE_SOURCE_DIR}/src/game.cpp)
 
 set_property(TARGET pacMan PROPERTY CXX_STANDARD 17)
 
-include_directories(/Users/antonlarsson/SFML/include)
+include_directories(/Users/antonlarsson/SFML/include
+                    ${CMAKE_SOURCE_DIR}/include )
 
 #set(CMAKE_PREFIX_PATH "/Users/antonlarsson/SFML")
 #set(SFML_DIR "/Users/antonlarsson/SFML/")
