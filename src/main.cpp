@@ -1,5 +1,5 @@
 #include <SFML/Graphics.hpp>
-#include "../include/game.h"
+#include "../include/Game.h"
 
 int main() 
 {
@@ -7,11 +7,7 @@ int main()
 
     Game game;
 
-    while(game.getWindow().isOpen())
-    {
-        game.update();
-        game.render();
-    }
+    game.run();
 
     return 0;
 }

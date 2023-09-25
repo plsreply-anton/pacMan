@@ -1,29 +1,35 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "GameState.h"
+#include "MainMenuState.h"
 
 class Game
 {
 private:
-    int width = 800;
-    int height = 600;
+    //int width = 800;
+    //int height = 600;
 
-    sf::RenderWindow window;
+    sf::RenderWindow* window;
     sf::Event ev;
 
+    sf::Clock dtClock;
+    float dt;
+
+    std::stack<State*> states;
+
 public:
+
     Game();
     virtual ~Game();
 
-    int getHeight() const;
-    int getWidth() const;
-    void setHeight(int heigth);
-    void setWidth(int width);
-
-    const sf::RenderWindow& getWindow() const;
+    //Methods
+    const sf::RenderWindow* getWindow() const;
 
     void initWindow();
+    void initStates();
     void update();
     void render();
-
+    void run();
+    void updateSFMLEvents();
+    void updateDt();
 
 };
