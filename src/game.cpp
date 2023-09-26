@@ -60,7 +60,19 @@ void Game::update()
     if (!this->states.empty())
     {
         this->states.top()->update(this->dt);
+        if (this->states.top()->getQuit())
+        {
+            //Do something before quit?
+            delete this->states.top();
+            this->states.pop();
+        }
     }
+    else if (this->states.empty())
+    {
+        std::cout << "Exiting" << std::endl;
+        this->window->close();
+    }
+    
 }
 
 void Game::updateSFMLEvents()
@@ -72,9 +84,10 @@ void Game::updateSFMLEvents()
             this->window->close();
         } else if (this->ev.type == sf::Event::KeyPressed && sf::Keyboard::Escape)
         {
-            this->window->close();
-        }
+            //this->window->close();
+        } 
     }
+
 }
 
 void Game::run()

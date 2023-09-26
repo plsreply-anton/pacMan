@@ -16,10 +16,19 @@ void GameState::endState()
 
 }
 
+void GameState::updateKeybinds(const float& dt)
+{
+    this->checkForQuit();
+}
 
 void GameState::update(const float& dt)
 {
-    std::cout << "Hola from GS" << std::endl;
+    this->updateKeybinds(dt);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+       std::cout << "Hola from GS" << std::endl;
+    }
 }
 
 void GameState::render(sf::RenderTarget* target)

@@ -12,6 +12,8 @@ public:
     virtual ~GameState();
 
     void endState();
+    void keyPressed(std::string key);
+    void updateKeybinds(const float& dt);
 
     void update(const float& dt);
     void render(sf::RenderTarget* target = nullptr);

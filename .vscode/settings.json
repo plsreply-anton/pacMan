@@ -1,7 +1,8 @@
 {
     "C_Cpp.autocompleteAddParentheses": true,
     "files.associations": {
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "stack": "cpp"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/clang++"
 }

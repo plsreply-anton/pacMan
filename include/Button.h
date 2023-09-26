@@ -12,9 +12,9 @@ private:
 
     bool pressed;
     bool hover;
+    bool active;
 
     sf::RectangleShape shape;
-    //sf::Font* font;
     sf::Text* text;
 
     sf::Color color;
@@ -22,10 +22,13 @@ private:
 
 public:
 
-    Button(sf::RectangleShape shape, sf::Font font, sf::Color color, sf::Color hoverColor, 
+    Button(sf::Font* font, sf::Color color, sf::Color hoverColor, 
             std::string text, float x, float y, float width, float height);
     virtual ~Button();
 
-    void update(const sf::Vector2f mousePos);
+    void setActiveButton();
+    void setUnactiveButton();
+
+    void update();
     void render(sf::RenderTarget* target);
 };
