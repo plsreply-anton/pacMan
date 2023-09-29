@@ -4,33 +4,36 @@
 
 class Game
 {
-private:
-    sf::RenderWindow* window; //Window to render graphics on
-    sf::Event ev;
 
-    sf::Clock dtClock;
-    float dt;
+    private:
 
-    std::stack<State*> states; //Pointers to all different states
+    protected:
+        sf::RenderWindow* window; //Window to render graphics on
+        std::stack<State*> states; //Pointers to all different states
+    
+        sf::Event ev;
 
-public:
+        sf::Clock dtClock;
+        float dt;
 
-    //Constructor and Destructor
-    Game();
-    virtual ~Game();
+    public:
 
-    //Getters
-    const sf::RenderWindow* getWindow() const;
+        //Constructor and Destructor
+        Game();
+        virtual ~Game();
 
-    //Initialisers
-    void initWindow();
-    void initStates();
+        //Getters
+        const sf::RenderWindow* getWindow() const;
 
-    //Methods
-    void update();
-    void render();
-    void run();
-    void updateSFMLEvents();
-    void updateDt();
+        //Initialisers
+        void initWindow();
+        void initStates();
+
+        //Methods
+        void update();
+        void render();
+        void run();
+        void updateSFMLEvents();
+        void updateDt();
 
 };

@@ -12,19 +12,20 @@ class Button
 {
 private:
     short unsigned buttonState;
-
     bool pressed;
 
     sf::RectangleShape shape;
     sf::Text* text;
+    sf::Font font;
 
-    sf::Color color;
-    sf::Color hoverColor;
+    sf::Color buttonColor;
+    sf::Color textColor;
+    sf::Color activeButtonColor;
 
 public:
 
     //Constructor and Destructor
-    Button(sf::Font* font, sf::Color color, sf::Color hoverColor, 
+    Button(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextColor, 
             std::string text, float x, float y, float width, float height);
     virtual ~Button();
 

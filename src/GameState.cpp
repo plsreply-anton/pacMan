@@ -1,23 +1,21 @@
-#include "../include/GameState.h"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused"
+
+#include "../include/GameState.h"
 
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
     : State(window, states)
 {
-    this->bgImage.loadFromFile("../util/bg.jpg");
-    this->bgSprite = new sf::Sprite(this->bgImage);
-    this->bgSprite->setPosition(sf::Vector2f(0, 0));
-    this->bgSprite->setScale(sf::Vector2f(2,2));
+    this->bgRect.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
+    this->bgRect.setFillColor(sf::Color::Black);
     this->paused = false;
-    std::cout << "New Game State" << std::endl;
     this->initWorld();
+    std::cout << "New Game State" << std::endl;
 }
 
 GameState::~GameState()
 {
     this->endState();
-    delete this->bgSprite;
     
     for ( auto wallObj : this->WallObjectVector )
         delete wallObj;   
@@ -39,12 +37,18 @@ void GameState::updateKeybinds(const float& dt)
     //this->moveButton();
 }
 
+void GameState::checkForQuit()
+{
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    {
+        this->quit = true;
+    }
+}
+
 void GameState::moveButton()
 {
 
 }
-
-
 
 void GameState::update(const float& dt)
 {
@@ -55,16 +59,14 @@ void GameState::update(const float& dt)
 void GameState::render(sf::RenderTarget* target)
 {
     if (!target)
-    {
-        target = this->getWindow();
-    }
-    target->draw(*this->bgSprite);
+        target = this->window;
+
+    target->draw(this->bgRect);
     this->pacMan.render(target);
 
     for (int i = 0; i < this->WallObjectVector.size(); i++)
-    {
         this->WallObjectVector[i]->render(target);
-    }
     
 }
+
 #pragma GCC diagnostic pop

@@ -29,8 +29,8 @@ void Game::initWindow()
     ifstream ifs("config/window.ini");
 
     string title = "PacMan, by Anton";
-    //sf::VideoMode window_bounds(sf::Vector2u(width, height));
-    sf::VideoMode window_bounds = sf::VideoMode::getDesktopMode();
+    sf::VideoMode window_bounds(sf::Vector2u(width, height));
+    //sf::VideoMode window_bounds = sf::VideoMode::getDesktopMode();
     unsigned framerate_limit = 120;
     bool vertical_sync_enabled = false;
     unsigned int antialiasing_level = 0;
@@ -42,7 +42,7 @@ void Game::initWindow()
         ifs >> framerate_limit;
         ifs >> vertical_sync_enabled;
         
-        window_bounds.size = sf::Vector2u(width, height);
+        sf::VideoMode window_bounds(sf::Vector2u(width, height));
     }
     sf::ContextSettings window_settings;
     window_settings.antialiasingLevel = antialiasing_level;
@@ -70,7 +70,7 @@ void Game::update()
         }
     } else if (this->states.empty())
     {
-        std::cout << "Exiting Application" << std::endl;
+        std::cout << "No More State - Exiting" << std::endl;
         this->window->close();
     }
     
@@ -113,11 +113,6 @@ void Game::render()
 
     this->window->display();
 
-}
-
-const sf::RenderWindow* Game::getWindow() const
-{
-    return this->window;
 }
 
 void Game::updateDt()

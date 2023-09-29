@@ -1,25 +1,22 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused"
 #include "../include/Packie.h"
-
 
 Packie::Packie()
 {
     this->packieOpen.loadFromFile("../util/pacMan_open.png");
     this->packieClosed.loadFromFile("../util/pacMan_closed.png");
-    this->packieSprite = new sf::Sprite(this->packieClosed);
-    //this->packieSprite->setScale(sf::Vector2f(0.05,0.05));    
-    this->packieSprite->setOrigin(sf::Vector2f(this->packieSprite->getGlobalBounds().width/2,this->packieSprite->getGlobalBounds().height/2));
+
+    this->packieSprite = new sf::Sprite(this->packieClosed); 
+    this->packieSprite->setOrigin(sf::Vector2f(
+        this->packieSprite->getGlobalBounds().width/2,
+        this->packieSprite->getGlobalBounds().height/2));
     this->packieSprite->setPosition(sf::Vector2f(400, 300)); 
-    std::cout << this->packieSprite->getOrigin().x << std::endl;
 }
 
 Packie::~Packie()
 {
     delete this->packieSprite;
-}
-
-void Packie::actions()
-{
-    
 }
 
 sf::Sprite* Packie::getSprite()
@@ -38,19 +35,12 @@ void Packie::move(const float& dt, float x_dir, float y_dir)
 void Packie::updateMouth()
 {
     if (this->debounceClock.getElapsedTime().asMilliseconds() < 200)
-    {
         this->packieSprite->setTexture(this->packieOpen);
-    }
     else
-    {
         this->packieSprite->setTexture(this->packieClosed);
-    }
-    
     
     if (this->debounceClock.getElapsedTime().asMilliseconds() > 400)
-    {
         this->debounceClock.restart();
-    }
 }
 
 void Packie::update(const float& dt, const std::vector<WallObject*>& wallObj)
@@ -84,16 +74,12 @@ void Packie::update(const float& dt, const std::vector<WallObject*>& wallObj)
     }
 
     // Calculate the new position Pacman wants to move to
-    float newX = this->packieSprite->getPosition().x + deltaX * dt * movementSpeed;
-    float newY = this->packieSprite->getPosition().y + deltaY * dt * movementSpeed;
+    float newX = this->packieSprite->getPosition().x + deltaX*this->movementSpeed;
+    float newY = this->packieSprite->getPosition().y + deltaY*this->movementSpeed;
 
     // Check for collisions here
     if (!checkForCollision(newX, newY, wallObj))
-    {
-        // If there's no collision, update Pacman's position
         this->move(dt, deltaX, deltaY);
-    }
-
 }
 
 bool Packie::checkForCollision(float newX, float newY, const std::vector<WallObject*>& wallObj)
@@ -104,11 +90,14 @@ bool Packie::checkForCollision(float newX, float newY, const std::vector<WallObj
         sf::FloatRect wallBounds = wall->getRect().getGlobalBounds();
 
         // Create a new FloatRect representing Pacman's new position
-        sf::FloatRect newPacmanBounds(sf::Vector2f(newX, newY), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
-
+        this->newPacmanBounds = sf::FloatRect(sf::Vector2f(newX-21, newY-21), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
+        // std::cout << "X" << std::endl;
+        // std::cout << pacmanBounds.getPosition().x << " " << newPacmanBounds.getPosition().x << std::endl;
+        // std::cout << "Y" << std::endl;
+        // std::cout << pacmanBounds.getPosition().y << " " << newPacmanBounds.getPosition().y << std::endl;
+        // std::cout << std::endl;
         // Check for collision between Pacman's new position and the wall
         if (newPacmanBounds.findIntersection(wallBounds)) {
-            std::cout << "HIT" << std::endl;
             return true; // Collision detected
         }
     }
@@ -122,3 +111,4 @@ void Packie::render(sf::RenderTarget* target)
     target->draw(*this->packieSprite);
     
 }
+#pragma GCC diagnostic pop

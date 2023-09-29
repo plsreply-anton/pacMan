@@ -77,5 +77,6 @@
         "algorithm": "cpp",
         "filesystem": "cpp"
     },
-    "C_Cpp.default.compilerPath": "/usr/bin/clang++"
+    "C_Cpp.default.compilerPath": "/usr/bin/clang++",
+    "cmake.configureOnOpen": false
 }

@@ -1,14 +1,21 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused"
+
 #include "../include/Button.h"
 
-Button::Button(sf::Font* font, sf::Color color, sf::Color hoverColor,
+Button::Button(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextColor,
                 std::string text, float x, float y, float width, float height)
 {
+    this->font.loadFromFile("../util/PacfontGood.ttf");
+    this->buttonColor = buttonColor;
+    this->activeButtonColor = activeTextColor;
+
     this->shape.setPosition(sf::Vector2f(x,y));
     this->shape.setSize(sf::Vector2f(width, height));
-    this->text = new sf::Text(*font, text, 20);
-    this->color = color;
-    this->shape.setFillColor(color);
-    this->hoverColor = hoverColor;
+    this->shape.setFillColor(buttonColor);
+
+    this->text = new sf::Text(font, text, 20);
+    
     this->text->setPosition(
         sf::Vector2f(int(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text->getGlobalBounds().width / 2.f), 
                      int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->text->getGlobalBounds().height / 2.f)));
@@ -35,15 +42,12 @@ void Button::setUnactiveButton()
 void Button::update()
 {
     if (this->buttonState == BTN_HOVER)
-    {
-        this->shape.setFillColor(this->hoverColor);
-    } else if (this->buttonState == BTN_IDLE)
-    {
-        this->shape.setFillColor(this->color);
-    } else if (this->buttonState == BTN_PRESSED)
-    {
+        this->text->setFillColor(this->activeButtonColor);
+    else if (this->buttonState == BTN_IDLE)
+        this->text->setFillColor(this->textColor);
+    else if (this->buttonState == BTN_PRESSED)
+        // Make an animation when clicked
         this->pressed = true;
-    }
 }
 
 short unsigned Button::getButtonState()
@@ -61,3 +65,5 @@ void Button::render(sf::RenderTarget* target)
     target->draw(this->shape);
     target->draw(*this->text);
 }
+
+#pragma GCC diagnostic pop

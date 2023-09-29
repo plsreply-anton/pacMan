@@ -7,9 +7,6 @@ class MainMenuState :
     public State
 {
 private:
-    sf::RectangleShape background;
-    sf::Font font;
-    sf::Font buttonFont;
     sf::Sprite* bgSprite;
     sf::Texture bgImage;
 
@@ -26,7 +23,8 @@ public:
     virtual ~MainMenuState();
 
     //initialisers
-    void initButtons(sf::RenderWindow* window);
+    void initButtons();
+    void initBackground();
 
     //Methods
     void endState();
@@ -35,5 +33,4 @@ public:
     void setActiveButton();
     void update(const float& dt);
     void render(sf::RenderTarget* target = nullptr);
-    sf::Text setText();
 };

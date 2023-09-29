@@ -20,17 +20,7 @@ void State::checkForQuit()
     }
 }
 
-void State::setQuit()
-{
-    this->quit = true;
-}
-
 const bool& State::getQuit() const
 {
     return this->quit;
-}
-
-sf::RenderWindow* State::getWindow()
-{
-    return this->window;
 }
