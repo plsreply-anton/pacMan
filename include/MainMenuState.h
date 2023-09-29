@@ -14,24 +14,26 @@ private:
     sf::Texture bgImage;
 
     std::vector<Button*> buttons;
-    int buttonNumber;
+    int buttonNumber; //Current active button
 
     bool keyPressed = false; // Flag to track if a key is currently pressed
     sf::Clock debounceClock; // Clock to measure key press duration
 
-    //Button* playButton;
-
 public:
-    MainMenuState(sf::RenderWindow* window);
+
+    //Constructor and Destructor
+    MainMenuState(sf::RenderWindow* window, std::stack<State*>* states);
     virtual ~MainMenuState();
 
-    void initButtons();
-    void updateKeybinds(const float& dt);
+    //initialisers
+    void initButtons(sf::RenderWindow* window);
 
+    //Methods
+    void endState();
+    void updateKeybinds(const float& dt);
     void moveButton();
     void setActiveButton();
-
     void update(const float& dt);
     void render(sf::RenderTarget* target = nullptr);
-    sf::Text setHeader();
+    sf::Text setText();
 };

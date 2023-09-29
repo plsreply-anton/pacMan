@@ -1,9 +1,10 @@
 #include "../include/State.h"
 
-State::State(sf::RenderWindow* window)
+State::State(sf::RenderWindow* window, std::stack<State*>* states)
 {
     this->window = window;
     this->quit = false;
+    this->states = states;
 }
 
 State::~State()
@@ -17,6 +18,11 @@ void State::checkForQuit()
     {
         this->quit = true;
     }
+}
+
+void State::setQuit()
+{
+    this->quit = true;
 }
 
 const bool& State::getQuit() const

@@ -15,6 +15,9 @@
 
 class State
 {
+    protected:
+    std::stack<State*>* states; //Pointer to pointers for states
+
     private:
     std::vector<sf::Texture> textures;
     sf::RenderWindow* window;
@@ -22,15 +25,20 @@ class State
     bool quit;
 
     public:
-    const bool& getQuit() const;
 
-    State(sf::RenderWindow* window);
+    //Constructor and Destructor
+    State(sf::RenderWindow* window, std::stack<State*>* states);
     virtual ~State();
 
+    //Getters
+    const bool& getQuit() const;
     sf::RenderWindow* getWindow();
 
-    virtual void checkForQuit();
+    //Setters
+    void setQuit();
 
+    //Methods
+    virtual void checkForQuit();
     virtual void updateKeybinds(const float& dt) = 0;
 
     virtual void update(const float& dt) = 0;

@@ -29,9 +29,11 @@ void Game::initWindow()
     ifstream ifs("config/window.ini");
 
     string title = "PacMan, by Anton";
-    sf::VideoMode window_bounds(sf::Vector2u(width, height));
+    //sf::VideoMode window_bounds(sf::Vector2u(width, height));
+    sf::VideoMode window_bounds = sf::VideoMode::getDesktopMode();
     unsigned framerate_limit = 120;
     bool vertical_sync_enabled = false;
+    unsigned int antialiasing_level = 0;
     
     if (ifs.is_open())
     {
@@ -42,15 +44,16 @@ void Game::initWindow()
         
         window_bounds.size = sf::Vector2u(width, height);
     }
-    
-    this->window = new sf::RenderWindow(window_bounds, title);
+    sf::ContextSettings window_settings;
+    window_settings.antialiasingLevel = antialiasing_level;
+    this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Default, window_settings);
     this->window->setFramerateLimit(framerate_limit);
     this->window->setVerticalSyncEnabled(vertical_sync_enabled);
 }
 
 void Game::initStates()
 {
-    this->states.push(new MainMenuState(this->window));
+    this->states.push(new MainMenuState(this->window, &this->states));
 }
 
 void Game::update()
@@ -62,14 +65,12 @@ void Game::update()
         this->states.top()->update(this->dt);
         if (this->states.top()->getQuit())
         {
-            //Do something before quit?
             delete this->states.top();
             this->states.pop();
         }
-    }
-    else if (this->states.empty())
+    } else if (this->states.empty())
     {
-        std::cout << "Exiting" << std::endl;
+        std::cout << "Exiting Application" << std::endl;
         this->window->close();
     }
     
@@ -82,9 +83,9 @@ void Game::updateSFMLEvents()
         if (this->ev.type == sf::Event::Closed)
         {
             this->window->close();
-        } else if (this->ev.type == sf::Event::KeyPressed && sf::Keyboard::Escape)
+        } else if ((this->ev.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
         {
-            //this->window->close();
+            this->window->close();
         } 
     }
 

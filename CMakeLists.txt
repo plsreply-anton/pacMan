@@ -6,7 +6,9 @@ add_executable(pacMan ${CMAKE_SOURCE_DIR}/src/main.cpp
                       ${CMAKE_SOURCE_DIR}/src/State.cpp
                       ${CMAKE_SOURCE_DIR}/src/GameState.cpp
                       ${CMAKE_SOURCE_DIR}/src/MainMenuState.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Button.cpp)
+                      ${CMAKE_SOURCE_DIR}/src/Button.cpp
+                      ${CMAKE_SOURCE_DIR}/src/Packie.cpp
+                      ${CMAKE_SOURCE_DIR}/src/WallObject.cpp)
 
 set_property(TARGET pacMan PROPERTY CXX_STANDARD 17)
 

@@ -12,7 +12,7 @@ Button::Button(sf::Font* font, sf::Color color, sf::Color hoverColor,
     this->text->setPosition(
         sf::Vector2f(int(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text->getGlobalBounds().width / 2.f), 
                      int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->text->getGlobalBounds().height / 2.f)));
-    this->active=false;
+    this->buttonState=BTN_IDLE;
 }
 
 Button::~Button()
@@ -22,24 +22,38 @@ Button::~Button()
 
 void Button::setActiveButton()
 {
-    this->active=true;
+    this->buttonState=BTN_HOVER;
 }
 
 void Button::setUnactiveButton()
 {
-    this->active=false;
+    this->buttonState=BTN_IDLE;
+    this->pressed = false;
+
 }
 
 void Button::update()
 {
-    if (this->active)
+    if (this->buttonState == BTN_HOVER)
     {
         this->shape.setFillColor(this->hoverColor);
-    } else
+    } else if (this->buttonState == BTN_IDLE)
     {
         this->shape.setFillColor(this->color);
+    } else if (this->buttonState == BTN_PRESSED)
+    {
+        this->pressed = true;
     }
-    
+}
+
+short unsigned Button::getButtonState()
+{
+    return this->buttonState;
+}
+
+void Button::buttonPressed()
+{
+    this->buttonState = BTN_PRESSED;
 }
 
 void Button::render(sf::RenderTarget* target)

@@ -5,27 +5,28 @@
 class Game
 {
 private:
-    //int width = 800;
-    //int height = 600;
-
-    sf::RenderWindow* window;
+    sf::RenderWindow* window; //Window to render graphics on
     sf::Event ev;
 
     sf::Clock dtClock;
     float dt;
 
-    std::stack<State*> states;
+    std::stack<State*> states; //Pointers to all different states
 
 public:
 
+    //Constructor and Destructor
     Game();
     virtual ~Game();
 
-    //Methods
+    //Getters
     const sf::RenderWindow* getWindow() const;
 
+    //Initialisers
     void initWindow();
     void initStates();
+
+    //Methods
     void update();
     void render();
     void run();
