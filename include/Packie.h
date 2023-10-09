@@ -10,7 +10,9 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "WallObject.h"
+#include "Map.h"
+
+
 class Packie
 {
     private:
@@ -32,10 +34,11 @@ class Packie
 
         sf::Sprite* getSprite();
         void move(const float& dt, float x_dir, float y_dir);
-
-        bool checkForCollision(float newX, float newY, const std::vector<WallObject*>& wallObj);
+        bool checkForCollision(float newX, float newY, float deltaX, float deltaY, Map map);
+        void throwAround();
+        void checkForPellet(Map map);
 
         void updateMouth();    
-        void update(const float& dt, const std::vector<WallObject*>& wallObj);
+        void update(const float& dt, Map map);
         void render(sf::RenderTarget* target);
 };

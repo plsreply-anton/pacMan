@@ -17,13 +17,15 @@ GameState::~GameState()
 {
     this->endState();
     
-    for ( auto wallObj : this->WallObjectVector )
-        delete wallObj;   
+    //for ( auto wallObj : this->WallObjectVector )
+    //    delete wallObj;   
 }
 
 void GameState::initWorld()
 {
-        this->WallObjectVector.push_back(new WallObject(100, 100, 10, 100));
+        //this->WallObjectVector.push_back(new WallObject(100, 100, 10, 100));
+        this->map.loadMapFromFile();
+        this->map.initTiles();
 }
 
 void GameState::endState()
@@ -53,7 +55,7 @@ void GameState::moveButton()
 void GameState::update(const float& dt)
 {
     this->updateKeybinds(dt);
-    this->pacMan.update(dt, this->WallObjectVector);
+    this->pacMan.update(dt, this->map);
 }
 
 void GameState::render(sf::RenderTarget* target)
@@ -62,11 +64,8 @@ void GameState::render(sf::RenderTarget* target)
         target = this->window;
 
     target->draw(this->bgRect);
-    this->pacMan.render(target);
-
-    for (int i = 0; i < this->WallObjectVector.size(); i++)
-        this->WallObjectVector[i]->render(target);
-    
+    this->map.render(target);
+    this->pacMan.render(target);    
 }
 
 #pragma GCC diagnostic pop

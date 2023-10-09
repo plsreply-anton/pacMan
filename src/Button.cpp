@@ -7,6 +7,7 @@ Button::Button(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextC
                 std::string text, float x, float y, float width, float height)
 {
     this->font.loadFromFile("../util/PacfontGood.ttf");
+    this->font.setSmooth(true);
     this->buttonColor = buttonColor;
     this->activeButtonColor = activeTextColor;
 
@@ -59,9 +60,10 @@ void Button::buttonPressed()
 {
     this->buttonState = BTN_PRESSED;
 }
-
+    
 void Button::render(sf::RenderTarget* target)
 {
+
     target->draw(this->shape);
     target->draw(*this->text);
 }

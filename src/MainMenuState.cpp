@@ -25,6 +25,7 @@ MainMenuState::~MainMenuState()
 void MainMenuState::initBackground()
 {
     this->bgImage.loadFromFile("../util/menuImage.png");
+    this->bgImage.setSmooth(true);
     this->bgSprite = new sf::Sprite(this->bgImage);
 }
 
@@ -98,6 +99,8 @@ void MainMenuState::setActiveButton()
 
     this->buttons[this->buttonNumber]->setActiveButton();
 }
+
+
 
 void MainMenuState::update(const float& dt)
 {

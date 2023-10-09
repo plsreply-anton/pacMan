@@ -1,8 +1,8 @@
 #pragma once
 
 #include "State.h"
-#include "WallObject.h"
 #include "Packie.h"
+#include "Map.h"
 
 class GameState : public State
 {
@@ -16,7 +16,8 @@ class GameState : public State
         sf::Clock debounceClock; // Clock to measure key press duration
 
         Packie pacMan;
-        std::vector<WallObject*> WallObjectVector;
+        //std::vector<WallObject*> WallObjectVector;
+        Map map;
 
     public:
 

@@ -9,9 +9,9 @@ Packie::Packie()
 
     this->packieSprite = new sf::Sprite(this->packieClosed); 
     this->packieSprite->setOrigin(sf::Vector2f(
-        this->packieSprite->getGlobalBounds().width/2,
-        this->packieSprite->getGlobalBounds().height/2));
-    this->packieSprite->setPosition(sf::Vector2f(400, 300)); 
+                                this->packieSprite->getGlobalBounds().width/2,
+                                this->packieSprite->getGlobalBounds().height/2));
+    this->packieSprite->setPosition(sf::Vector2f(400, 250)); 
 }
 
 Packie::~Packie()
@@ -30,6 +30,24 @@ void Packie::move(const float& dt, float x_dir, float y_dir)
     float y = y_dir*this->movementSpeed;
     this->packieSprite->move(sf::Vector2(x, y));
     this->updateMouth();
+    this->throwAround();
+}
+
+void Packie::throwAround()
+{
+    if (this->packieSprite->getPosition().x < 10 && 
+        this->packieSprite->getPosition().y > 270 &&
+        this->packieSprite->getPosition().y < 330 )
+    {
+       this->packieSprite->setPosition(sf::Vector2f(785,300));
+    }
+    if (this->packieSprite->getPosition().x > 790 && 
+        this->packieSprite->getPosition().y > 270 &&
+        this->packieSprite->getPosition().y < 330 )
+    {
+       this->packieSprite->setPosition(sf::Vector2f(15,300));
+    }
+    
 }
 
 void Packie::updateMouth()
@@ -43,10 +61,12 @@ void Packie::updateMouth()
         this->debounceClock.restart();
 }
 
-void Packie::update(const float& dt, const std::vector<WallObject*>& wallObj)
+void Packie::update(const float& dt, Map map)
 {   
     float deltaX = 0.f;
     float deltaY = 0.f;
+     this->checkForPellet(map);
+
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
@@ -76,39 +96,53 @@ void Packie::update(const float& dt, const std::vector<WallObject*>& wallObj)
     // Calculate the new position Pacman wants to move to
     float newX = this->packieSprite->getPosition().x + deltaX*this->movementSpeed;
     float newY = this->packieSprite->getPosition().y + deltaY*this->movementSpeed;
-
+    
     // Check for collisions here
-    if (!checkForCollision(newX, newY, wallObj))
+    if (!checkForCollision(newX+20*deltaX, newY+20*deltaY, deltaX, deltaY, map))
+    {
         this->move(dt, deltaX, deltaY);
-}
-
-bool Packie::checkForCollision(float newX, float newY, const std::vector<WallObject*>& wallObj)
-{
-    // Loop through all wall objects
-    for (const WallObject* wall : wallObj) {
-        sf::FloatRect pacmanBounds = this->packieSprite->getGlobalBounds();
-        sf::FloatRect wallBounds = wall->getRect().getGlobalBounds();
-
-        // Create a new FloatRect representing Pacman's new position
-        this->newPacmanBounds = sf::FloatRect(sf::Vector2f(newX-21, newY-21), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
-        // std::cout << "X" << std::endl;
-        // std::cout << pacmanBounds.getPosition().x << " " << newPacmanBounds.getPosition().x << std::endl;
-        // std::cout << "Y" << std::endl;
-        // std::cout << pacmanBounds.getPosition().y << " " << newPacmanBounds.getPosition().y << std::endl;
-        // std::cout << std::endl;
-        // Check for collision between Pacman's new position and the wall
-        if (newPacmanBounds.findIntersection(wallBounds)) {
-            return true; // Collision detected
-        }
     }
 
-    // No collision detected
+   
+}
+
+bool Packie::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map map)
+{
+    int tileX = newX/10;
+    int tileY = newY/10;
+
+    sf::FloatRect tileBound = map.getTiles()[tileY][tileX].getRect().getGlobalBounds();
+    sf::FloatRect pacmanBounds = this->packieSprite->getGlobalBounds();
+
+    sf::FloatRect newPacmanBounds1 = sf::FloatRect(sf::Vector2f(newX-21, newY-21), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
+    
+    if ((newPacmanBounds1.findIntersection(tileBound) 
+        && map.getTiles()[tileY][tileX].getRect().getFillColor() == sf::Color::Red)) 
+        {
+            return true; // Collision detected
+        }
+    
     return false;
 }
+
+void Packie::checkForPellet(Map map)
+{
+    int tileX = this->packieSprite->getPosition().x/10;
+    int tileY = this->packieSprite->getPosition().y/10;
+
+    if (map.getTiles()[tileY][tileX].hasPellet())
+    {
+        std::cout << "Pellet Eaten" << std::endl;
+        map.getTiles()[tileY][tileX].destroyPellet();
+    }
+
+}
+
 
 void Packie::render(sf::RenderTarget* target)
 {
     target->draw(*this->packieSprite);
     
 }
+
 #pragma GCC diagnostic pop

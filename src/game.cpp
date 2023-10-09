@@ -73,6 +73,7 @@ void Game::update()
         std::cout << "No More State - Exiting" << std::endl;
         this->window->close();
     }
+    sf::sleep(sf::microseconds(50));
     
 }
 
