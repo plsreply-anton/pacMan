@@ -2,6 +2,22 @@
 #include <fstream>
 #include <iostream>
 
+Map::Map()
+{
+    std::cout << "Map created" << std::endl;
+}
+
+Map::~Map()
+{
+    // Deallocate memory for the Tile objects in tileMap
+    for (int i = 0; i < tileMap.size(); i++) {
+        for (int j = 0; j < tileMap[i].size(); j++) {
+            delete tileMap[i][j];
+        }
+    }
+}
+
+
 void Map::loadMapFromFile(const std::string &filename)
 {
     std::ifstream openfile(filename);
@@ -22,9 +38,41 @@ void Map::loadMapFromFile(const std::string &filename)
     }
 }
 
+Map& Map::operator=(const Map& other)
+{
+    if (this == &other) {
+        return *this; // Handle self-assignment
+    }
+
+    // Clear the existing map
+    for (int i = 0; i < tileMap.size(); i++) {
+        for (int j = 0; j < tileMap[i].size(); j++) {
+            delete tileMap[i][j];
+        }
+    }
+    tileMap.clear();
+
+    // Copy the tilemap from 'other'
+    this->tilemap = other.tilemap;
+
+    // Initialize new tiles based on 'other'
+    initTiles();
+
+    return *this;
+}
+
+Map::Map(const Map& other)
+{
+    // Copy the tilemap from 'other'
+    this->tilemap = other.tilemap;
+
+    // Initialize new tiles based on 'other'
+    initTiles();
+}
+
 void Map::initTiles()
 {
-    std::vector<Tile> row;
+    std::vector<Tile*> row;
     for (int i = 0; i < tilemap.size(); i++)
     {   
         row.clear();
@@ -32,17 +80,17 @@ void Map::initTiles()
         {   
             if (tilemap[i][j] == 2)
             {
-                row.push_back(Tile(tilemap[i][j], j*10, i*10, true));
+                row.push_back(new Tile(tilemap[i][j], j*10, i*10, true));
             } else
             {   
-                row.push_back(Tile(tilemap[i][j], j*10, i*10, false));
+                row.push_back(new Tile(tilemap[i][j], j*10, i*10, false));
             }
         }
         this->tileMap.push_back(row);
     }   
 }
 
-std::vector<std::vector<Tile>> Map::getTiles()
+std::vector<std::vector<Tile*>> Map::getTiles()
 {
     return this->tileMap;
 }
@@ -53,7 +101,7 @@ void Map::render(sf::RenderTarget* target)
     {
         for (int j = 0; j < tileMap[i].size(); j++)
         {
-            tileMap[i][j].render(target);
+            tileMap[i][j]->render(target);
         }
         
     }

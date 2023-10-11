@@ -11,6 +11,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "Map.h"
+#include "StatusBar.h"
 
 
 class Packie
@@ -23,6 +24,7 @@ class Packie
         float middleposX, middleposY;
         std::string currentOrientation;
         sf::FloatRect newPacmanBounds;
+        int score = 0;
 
         sf::Clock debounceClock; // Clock to measure close/open mouth
 
@@ -34,11 +36,11 @@ class Packie
 
         sf::Sprite* getSprite();
         void move(const float& dt, float x_dir, float y_dir);
-        bool checkForCollision(float newX, float newY, float deltaX, float deltaY, Map map, float dir);
+        bool checkForCollision(float newX, float newY, float deltaX, float deltaY, Map *map, float dir);
         void throwAround();
-        void checkForPellet(Map map);
+        void checkForPellet(Map *map);
 
         void updateMouth();    
-        void update(const float& dt, Map map);
+        void update(const float& dt, Map *map, StatusBar &statusBar);
         void render(sf::RenderTarget* target);
 };

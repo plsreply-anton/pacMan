@@ -6,9 +6,7 @@ Pellet::Pellet(int xPos, int yPos)
     this->initSprite(xPos, yPos);
 }
 
-Pellet::~Pellet()
-{
-}
+Pellet::~Pellet(){}
 
 void Pellet::initSprite(int xPos, int yPos)
 {
@@ -19,26 +17,10 @@ void Pellet::initSprite(int xPos, int yPos)
     this->isEaten = false;
 }
 
-bool Pellet::isEatenCheck()
-{
-    if (this->isEaten)
-    {
-        return false;
-    }
-    return true;
-}
-
-void Pellet::eaten()
-{
-    this->isEaten = true;
-}
-
 void Pellet::render(sf::RenderTarget* target)
 {
     if (!isEaten)
     {
         target->draw(this->cicle);
     }
-    
-    
 }

@@ -37,16 +37,16 @@ void Packie::move(const float& dt, float x_dir, float y_dir)
 void Packie::throwAround()
 {
     if (this->packieSprite->getPosition().x < 10 && 
-        this->packieSprite->getPosition().y > 270 &&
-        this->packieSprite->getPosition().y < 330 )
+        this->packieSprite->getPosition().y > 200 &&
+        this->packieSprite->getPosition().y < 500 )
     {
-       this->packieSprite->setPosition(sf::Vector2f(785,300));
+       this->packieSprite->setPosition(sf::Vector2f(785,330));
     }
     if (this->packieSprite->getPosition().x > 790 && 
-        this->packieSprite->getPosition().y > 270 &&
-        this->packieSprite->getPosition().y < 330 )
+        this->packieSprite->getPosition().y > 200 &&
+        this->packieSprite->getPosition().y < 400 )
     {
-       this->packieSprite->setPosition(sf::Vector2f(15,300));
+       this->packieSprite->setPosition(sf::Vector2f(15,330));
     }
     
 }
@@ -62,13 +62,11 @@ void Packie::updateMouth()
         this->debounceClock.restart();
 }
 
-void Packie::update(const float& dt, Map map)
+void Packie::update(const float& dt, Map *map, StatusBar &statusBar)
 {   
     float deltaX = 0.f;
     float deltaY = 0.f;
      
-
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
         deltaY = 1.f;
@@ -106,10 +104,10 @@ void Packie::update(const float& dt, Map map)
         this->checkForPellet(map);
     }
 
-   
+   statusBar.update(dt, this->score);
 }
 
-bool Packie::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map map, float dir)
+bool Packie::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map* map, float dir)
 {
     int tileX = newX/10;
     int tileY = newY/10;
@@ -121,46 +119,35 @@ bool Packie::checkForCollision(float newX, float newY, float deltaX, float delta
     else
         dirX=2;
 
-    
-
-    sf::FloatRect tileBound = map.getTiles()[tileY][tileX].getRect().getGlobalBounds();
-    sf::FloatRect tileBoundNeg = map.getTiles()[tileY-dirY][tileX-dirX].getRect().getGlobalBounds();
-    sf::FloatRect tileBoundPos = map.getTiles()[tileY+dirY][tileX+dirX].getRect().getGlobalBounds();
+    sf::FloatRect tileBound = map->getTiles()[tileY][tileX]->getRect().getGlobalBounds();
+    sf::FloatRect tileBoundNeg = map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getGlobalBounds();
+    sf::FloatRect tileBoundPos = map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getGlobalBounds();
 
     sf::FloatRect pacmanBounds = this->packieSprite->getGlobalBounds();
     sf::FloatRect newPacmanBounds = sf::FloatRect(sf::Vector2f(newX-21, newY-21), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
 
-    // if ((newPacmanBounds.findIntersection(tileBound) 
-    //     && map.getTiles()[tileY][tileX].getRect().getFillColor() == sf::Color::Red)) 
-    //     {
-    //         return true; // Collision detected
-    //     }
-    
-    if ((newPacmanBounds.findIntersection(tileBoundNeg) 
-        && map.getTiles()[tileY-dirY][tileX-dirX].getRect().getFillColor() == sf::Color::Red)) 
-        {
+    if ((newPacmanBounds.findIntersection(tileBound) 
+        && map->getTiles()[tileY][tileX]->getRect().getFillColor() == sf::Color::Red)) 
             return true; // Collision detected
-        }
-    
+    else if ((newPacmanBounds.findIntersection(tileBoundNeg) 
+        && map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getFillColor() == sf::Color::Red)) 
+            return true; // Collision detected
     else if ((newPacmanBounds.findIntersection(tileBoundPos) 
-        && map.getTiles()[tileY+dirY][tileX+dirX].getRect().getFillColor() == sf::Color::Red)) 
-        {
+        && map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getFillColor() == sf::Color::Red)) 
             return true; // Collision detected
-            
-        }
     
     return false;
 }
 
-void Packie::checkForPellet(Map map)
+void Packie::checkForPellet(Map *map)
 {
     int tileX = this->packieSprite->getPosition().x/10;
     int tileY = this->packieSprite->getPosition().y/10;
 
-    if (map.getTiles()[tileY][tileX].hasPellet())
+    if (map->getTiles()[tileY][tileX]->hasPellet())
     {
-        std::cout << "Pellet Eaten" << std::endl;
-        map.getTiles()[tileY][tileX].destroyPellet();
+        this->score += 10;
+        map->getTiles()[tileY][tileX]->destroyPellet();
     }
 
 }
@@ -168,8 +155,7 @@ void Packie::checkForPellet(Map map)
 
 void Packie::render(sf::RenderTarget* target)
 {
-    target->draw(*this->packieSprite);
-    
+    target->draw(*this->packieSprite); 
 }
 
 #pragma GCC diagnostic pop

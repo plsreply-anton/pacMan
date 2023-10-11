@@ -14,8 +14,6 @@ class Pellet
         Pellet(int xPos, int yPos);
         ~Pellet();
         void initSprite(int xPos, int yPos);
-        bool isEatenCheck();
-        void eaten();
         void render(sf::RenderTarget* target = nullptr);
 
 };

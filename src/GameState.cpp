@@ -20,8 +20,10 @@ GameState::~GameState()
 
 void GameState::initWorld()
 {
-        this->map.loadMapFromFile();
-        this->map.initTiles();
+    this->map = new Map();
+    this->map->loadMapFromFile();
+    this->map->initTiles();
+    this->statusBar.initWindow();
 }
 
 void GameState::endState()
@@ -44,13 +46,13 @@ void GameState::checkForQuit()
 
 void GameState::moveButton()
 {
-
+    //SKABADADO
 }
 
 void GameState::update(const float& dt)
 {
     this->updateKeybinds(dt);
-    this->pacMan.update(dt, this->map);
+    this->pacMan.update(dt, this->map, this->statusBar);
 }
 
 void GameState::render(sf::RenderTarget* target)
@@ -59,8 +61,9 @@ void GameState::render(sf::RenderTarget* target)
         target = this->window;
 
     target->draw(this->bgRect);
-    this->map.render(target);
-    this->pacMan.render(target);    
+    this->map->render(target);
+    this->pacMan.render(target);
+    this->statusBar.render(target);
 }
 
 #pragma GCC diagnostic pop

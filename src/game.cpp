@@ -25,7 +25,7 @@ Game::~Game()
 void Game::initWindow()
 {
     int width = 800;
-    int height = 600;
+    int height = 660;
     ifstream ifs("config/window.ini");
 
     string title = "PacMan, by Anton";

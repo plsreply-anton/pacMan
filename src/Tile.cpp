@@ -50,12 +50,7 @@ void Tile::changeHasPellet()
 
 void Tile::destroyPellet()
 {
-    std::cout << this->hasPellet_ << std::endl;
-    std::cout << "Pellet Destroyed" << std::endl;
     this->hasPellet_=false;
-    this->pellet_->eaten();
-    std::cout << this->hasPellet_ << std::endl;
-    //this->pellet_->~Pellet();
 }
 
 sf::RectangleShape Tile::getRect()
@@ -74,8 +69,6 @@ void Tile::render(sf::RenderTarget* target)
     
     if (hasPellet_)
     {
-
         this->pellet_->render(target);
     }
-
 }

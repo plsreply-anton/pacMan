@@ -3,6 +3,7 @@
 #include "State.h"
 #include "Packie.h"
 #include "Map.h"
+#include "StatusBar.h"
 
 class GameState : public State
 {
@@ -17,7 +18,8 @@ class GameState : public State
 
         Packie pacMan;
         //std::vector<WallObject*> WallObjectVector;
-        Map map;
+        Map* map;
+        StatusBar statusBar;
 
     public:
 
