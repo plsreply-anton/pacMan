@@ -1,7 +1,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused"
 
-#include "../include/Button.h"
+#include "Button.h"
 
 Button::Button(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextColor,
                 std::string text, float x, float y, float width, float height)

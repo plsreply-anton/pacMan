@@ -34,7 +34,7 @@ class Packie
 
         sf::Sprite* getSprite();
         void move(const float& dt, float x_dir, float y_dir);
-        bool checkForCollision(float newX, float newY, float deltaX, float deltaY, Map map);
+        bool checkForCollision(float newX, float newY, float deltaX, float deltaY, Map map, float dir);
         void throwAround();
         void checkForPellet(Map map);
 

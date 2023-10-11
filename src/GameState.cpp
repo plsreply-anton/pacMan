@@ -1,7 +1,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused"
 
-#include "../include/GameState.h"
+#include "GameState.h"
 
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
     : State(window, states)
@@ -15,15 +15,11 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
 
 GameState::~GameState()
 {
-    this->endState();
-    
-    //for ( auto wallObj : this->WallObjectVector )
-    //    delete wallObj;   
+    this->endState(); 
 }
 
 void GameState::initWorld()
 {
-        //this->WallObjectVector.push_back(new WallObject(100, 100, 10, 100));
         this->map.loadMapFromFile();
         this->map.initTiles();
 }
@@ -36,7 +32,6 @@ void GameState::endState()
 void GameState::updateKeybinds(const float& dt)
 {
     this->checkForQuit();
-    //this->moveButton();
 }
 
 void GameState::checkForQuit()

@@ -2,7 +2,12 @@
 cmake_minimum_required(VERSION 3.27.2)
 
 #Setting project name(space)
-project(pacMan)
+project(pacMan VERSION 0.1)
+
+#Make sure the version nr is included in full name. 
+#Set version above in project and use pacManConfig.h.in
+#to give access to version nr for the src code.
+configure_file(pacManConfig.h.in pacManConfig.h)
 
 #Add executable files of which the project is built on
 add_executable(pacMan ${CMAKE_SOURCE_DIR}/src/main.cpp
@@ -16,12 +21,15 @@ add_executable(pacMan ${CMAKE_SOURCE_DIR}/src/main.cpp
                       ${CMAKE_SOURCE_DIR}/src/Tile.cpp
                       ${CMAKE_SOURCE_DIR}/src/Pellet.cpp)
 
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR})
+
 #Specifying settings for compilation and linking
 set_property(TARGET pacMan PROPERTY CXX_STANDARD 17)
 
-#Specify path to libraries
-include_directories(/Users/antonlarsson/SFML/include
-                    ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(pacMan PRIVATE 
+    /Users/antonlarsson/SFML/include
+    ${CMAKE_SOURCE_DIR}/include
+)
 
 #Speicfy which libraries should ne included
 target_link_libraries(pacMan
@@ -37,3 +45,7 @@ target_link_libraries(pacMan
 #set(SFML_DIR "/Users/antonlarsson/SFML/")
 #find_package(SFML 3.0 COMPONENTS graphics window system audio network REQUIRED)
 #target_link_libraries(pacMan sfml-graphics sfml-window sfml-system)
+
+#include(InstallRequiredSystemLibraries)
+# set(CPACK_RESOURCE_FILE_LICENSE "{CMAKE_SOURCE_DIR/License.txt}")
+# set(CPACK_PACKAGE_VERSION_MAJOR "${}")

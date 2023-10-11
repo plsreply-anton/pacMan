@@ -1,0 +1,2 @@
+#define pacMan_VERSION_MAJOR @pacMan_VERSION_MAJOR@
+#define pacMan_VERSION_MINOR @pacMan_VERSION_MINOR@

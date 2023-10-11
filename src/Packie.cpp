@@ -1,6 +1,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused"
-#include "../include/Packie.h"
+
+#include "Packie.h"
 
 Packie::Packie()
 {
@@ -65,7 +66,7 @@ void Packie::update(const float& dt, Map map)
 {   
     float deltaX = 0.f;
     float deltaY = 0.f;
-     this->checkForPellet(map);
+     
 
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
@@ -98,28 +99,54 @@ void Packie::update(const float& dt, Map map)
     float newY = this->packieSprite->getPosition().y + deltaY*this->movementSpeed;
     
     // Check for collisions here
-    if (!checkForCollision(newX+20*deltaX, newY+20*deltaY, deltaX, deltaY, map))
+    if (!checkForCollision(newX+20*deltaX, newY+20*deltaY, deltaX, deltaY, map, deltaX))
     {
+        
         this->move(dt, deltaX, deltaY);
+        this->checkForPellet(map);
     }
 
    
 }
 
-bool Packie::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map map)
+bool Packie::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map map, float dir)
 {
     int tileX = newX/10;
     int tileY = newY/10;
+    int dirX = 0;
+    int dirY = 0;
+
+    if (dir != 0)
+        dirY=2;
+    else
+        dirX=2;
+
+    
 
     sf::FloatRect tileBound = map.getTiles()[tileY][tileX].getRect().getGlobalBounds();
-    sf::FloatRect pacmanBounds = this->packieSprite->getGlobalBounds();
+    sf::FloatRect tileBoundNeg = map.getTiles()[tileY-dirY][tileX-dirX].getRect().getGlobalBounds();
+    sf::FloatRect tileBoundPos = map.getTiles()[tileY+dirY][tileX+dirX].getRect().getGlobalBounds();
 
-    sf::FloatRect newPacmanBounds1 = sf::FloatRect(sf::Vector2f(newX-21, newY-21), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
+    sf::FloatRect pacmanBounds = this->packieSprite->getGlobalBounds();
+    sf::FloatRect newPacmanBounds = sf::FloatRect(sf::Vector2f(newX-21, newY-21), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
+
+    // if ((newPacmanBounds.findIntersection(tileBound) 
+    //     && map.getTiles()[tileY][tileX].getRect().getFillColor() == sf::Color::Red)) 
+    //     {
+    //         return true; // Collision detected
+    //     }
     
-    if ((newPacmanBounds1.findIntersection(tileBound) 
-        && map.getTiles()[tileY][tileX].getRect().getFillColor() == sf::Color::Red)) 
+    if ((newPacmanBounds.findIntersection(tileBoundNeg) 
+        && map.getTiles()[tileY-dirY][tileX-dirX].getRect().getFillColor() == sf::Color::Red)) 
         {
             return true; // Collision detected
+        }
+    
+    else if ((newPacmanBounds.findIntersection(tileBoundPos) 
+        && map.getTiles()[tileY+dirY][tileX+dirX].getRect().getFillColor() == sf::Color::Red)) 
+        {
+            return true; // Collision detected
+            
         }
     
     return false;

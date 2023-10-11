@@ -16,7 +16,7 @@ class Map
 
     public:
         void initTiles();
-        void loadMapFromFile(const std::string &filename = "../util/map.txt");
+        void loadMapFromFile(const std::string &filename = "../util/map_debug.txt");
         std::vector<std::vector<Tile>> getTiles();
         void render(sf::RenderTarget* target);
 

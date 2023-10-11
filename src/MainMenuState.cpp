@@ -1,7 +1,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused"
 
-#include "../include/MainMenuState.h"
+#include "MainMenuState.h"
 
 MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* states)
     : State(window, states)

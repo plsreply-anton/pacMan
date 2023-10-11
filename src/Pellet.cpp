@@ -1,4 +1,4 @@
-#include "../include/Pellet.h"
+#include "Pellet.h"
 #include <iostream>
 
 Pellet::Pellet(int xPos, int yPos)
@@ -8,7 +8,6 @@ Pellet::Pellet(int xPos, int yPos)
 
 Pellet::~Pellet()
 {
-
 }
 
 void Pellet::initSprite(int xPos, int yPos)
