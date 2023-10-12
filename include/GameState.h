@@ -4,6 +4,7 @@
 #include "Packie.h"
 #include "Map.h"
 #include "StatusBar.h"
+#include "Ghost.h"
 
 class GameState : public State
 {
@@ -17,6 +18,7 @@ class GameState : public State
         sf::Clock debounceClock; // Clock to measure key press duration
 
         Packie pacMan;
+        Ghost blinky;
         //std::vector<WallObject*> WallObjectVector;
         Map* map;
         StatusBar statusBar;

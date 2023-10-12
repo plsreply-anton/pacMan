@@ -20,7 +20,8 @@ add_executable(pacMan ${CMAKE_SOURCE_DIR}/src/main.cpp
                       ${CMAKE_SOURCE_DIR}/src/Map.cpp
                       ${CMAKE_SOURCE_DIR}/src/Tile.cpp
                       ${CMAKE_SOURCE_DIR}/src/Pellet.cpp
-                      ${CMAKE_SOURCE_DIR}/src/StatusBar.cpp)
+                      ${CMAKE_SOURCE_DIR}/src/StatusBar.cpp
+                      ${CMAKE_SOURCE_DIR}/src/Ghost.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 
@@ -50,3 +51,6 @@ target_link_libraries(pacMan
 #include(InstallRequiredSystemLibraries)
 # set(CPACK_RESOURCE_FILE_LICENSE "{CMAKE_SOURCE_DIR/License.txt}")
 # set(CPACK_PACKAGE_VERSION_MAJOR "${}")
+
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+install(FILES "${PROJECT_BINARY_DIR}/pacManConfig.h" DESTINATION include) 

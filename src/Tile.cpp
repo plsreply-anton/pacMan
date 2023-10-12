@@ -31,7 +31,7 @@ void Tile::initSprite(int tileType, int xPos, int yPos)
     if (!tileType)
         this->color_ = sf::Color::Black;
     else
-        this->color_ = sf::Color::Red;
+        this->color_ = sf::Color::Blue;
     
     this->rect_.setFillColor(this->color_);
     this->rect_.setSize(sf::Vector2f(this->width_, this->height_));

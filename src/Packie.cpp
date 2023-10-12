@@ -127,13 +127,13 @@ bool Packie::checkForCollision(float newX, float newY, float deltaX, float delta
     sf::FloatRect newPacmanBounds = sf::FloatRect(sf::Vector2f(newX-21, newY-21), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
 
     if ((newPacmanBounds.findIntersection(tileBound) 
-        && map->getTiles()[tileY][tileX]->getRect().getFillColor() == sf::Color::Red)) 
+        && map->getTiles()[tileY][tileX]->getRect().getFillColor() == sf::Color::Blue)) 
             return true; // Collision detected
     else if ((newPacmanBounds.findIntersection(tileBoundNeg) 
-        && map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getFillColor() == sf::Color::Red)) 
+        && map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getFillColor() == sf::Color::Blue)) 
             return true; // Collision detected
     else if ((newPacmanBounds.findIntersection(tileBoundPos) 
-        && map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getFillColor() == sf::Color::Red)) 
+        && map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getFillColor() == sf::Color::Blue)) 
             return true; // Collision detected
     
     return false;
