@@ -95,6 +95,11 @@ std::vector<std::vector<Tile*>> Map::getTiles()
     return this->tileMap;
 }
 
+std::vector<std::vector<int>> Map::getintMap()
+{
+    return this->tilemap;
+}
+
 void Map::render(sf::RenderTarget* target)
  {
     for (int i = 0; i < tileMap.size(); i++)

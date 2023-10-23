@@ -16,6 +16,7 @@ class Map
         ~Map();
         Map& operator=(const Map& other);
         Map(const Map& other);
+        std::vector<std::vector<int>> getintMap();
         
         void initTiles();
         void loadMapFromFile(const std::string &filename = "../util/map.txt");

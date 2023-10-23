@@ -21,7 +21,8 @@ add_executable(pacMan ${CMAKE_SOURCE_DIR}/src/main.cpp
                       ${CMAKE_SOURCE_DIR}/src/Tile.cpp
                       ${CMAKE_SOURCE_DIR}/src/Pellet.cpp
                       ${CMAKE_SOURCE_DIR}/src/StatusBar.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Ghost.cpp)
+                      ${CMAKE_SOURCE_DIR}/src/Ghost.cpp
+                      ${CMAKE_SOURCE_DIR}/src/Pathfinding.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 
