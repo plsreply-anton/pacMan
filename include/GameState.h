@@ -18,8 +18,7 @@ class GameState : public State
         sf::Clock debounceClock; // Clock to measure key press duration
 
         Packie pacMan;
-        Ghost blinky;
-        //std::vector<WallObject*> WallObjectVector;
+        //Ghost blinky;
         Map* map;
         StatusBar statusBar;
 

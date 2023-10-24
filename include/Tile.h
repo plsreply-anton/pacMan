@@ -10,8 +10,8 @@ class Tile
         sf::Color color_;
         int tileType_;
         bool hasPellet_;
-        int width_ = 10;
-        int height_ = 10;
+        int width_ = 40;
+        int height_ = 40;
         int xPos_;
         int yPos_;
         std::unique_ptr<Pellet> pellet_;

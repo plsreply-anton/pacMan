@@ -55,7 +55,6 @@ void Ghost::update(const float& dt, Map *map)
 
 }
 
-
 void Ghost::move(const float& dt)
 {
     if (!this->path.empty()) {
@@ -63,19 +62,19 @@ void Ghost::move(const float& dt)
         Node nextTile = *this->path.front();
         
         // Calculate the direction to move
-        float x_dir = (nextTile.y*10 - this->ghostSprite->getPosition().x > 0) ? 1.0f : -1.0f;
-        float y_dir = (nextTile.x*10 - this->ghostSprite->getPosition().y > 0) ? 1.0f : -1.0f;
+        float x_dir = (nextTile.y*40 - this->ghostSprite->getPosition().x > 0) ? 1.0f : -1.0f;
+        float y_dir = (nextTile.x*40 - this->ghostSprite->getPosition().y > 0) ? 1.0f : -1.0f;
         
         // Calculate the movement amount based on speed and time
-        float x = x_dir * movementSpeed * dt;
-        float y = y_dir * movementSpeed * dt;
+        float x = x_dir * movementSpeed*dt;
+        float y = y_dir * movementSpeed*dt;
         
         // Move the ghost
         this->ghostSprite->move(sf::Vector2f(x, y));
         
         // Check if the ghost has reached the next tile
-        if (std::abs(this->ghostSprite->getPosition().x - nextTile.y*10) < movementSpeed * dt &&
-            std::abs(this->ghostSprite->getPosition().y - nextTile.x*10) < movementSpeed * dt) {
+        if (std::abs(this->ghostSprite->getPosition().x - nextTile.y*40) < movementSpeed * dt &&
+            std::abs(this->ghostSprite->getPosition().y - nextTile.x*40) < movementSpeed * dt) {
             // Remove the reached tile from the path
                 this->path.erase(this->path.begin());
         }
@@ -84,7 +83,7 @@ void Ghost::move(const float& dt)
 
  void Ghost::goalReached(sf::Vector2f currentPos)
  {  
-    if (abs(currentPos.x/10-this->newPos.x) < 5 && abs(currentPos.y/10-this->newPos.y) < 5 )
+    if (abs(currentPos.x/40-this->newPos.x) < 5 && abs(currentPos.y/40-this->newPos.y) < 5 )
     {
         this->goalReached_=true;
     }
@@ -92,28 +91,32 @@ void Ghost::move(const float& dt)
  }
 
 sf::Vector2f Ghost::setNewPosition(Map *map) {
-    int maxRetries = 100; // Limit the number of retries
-    int retryCount = 0;
+    // int maxRetries = 100; // Limit the number of retries
+    // int retryCount = 0;
 
-    while (retryCount < maxRetries) {
-        int randY = rand() % map->getTiles().size();
-        int randX = rand() % map->getTiles()[randY].size();
-        //cout << randY << " " << randX << endl;
+    // while (retryCount < maxRetries) {
+    //     int randY = rand() % map->getTiles().size();
+    //     int randX = rand() % map->getTiles()[randY].size();
+    //     //cout << randY << " " << randX << endl;
 
-        if (map->getTiles()[randY / 10][randX / 10]->gettileType() != 1) {
-            // return sf::Vector2f(randX, randY); //Skickar i txt-koordinater
-            return sf::Vector2f(75, 61);
-        }
+    //     if (map->getTiles()[randY / 10][randX / 10]->gettileType() != 1) {
+    //         // return sf::Vector2f(randX, randY); //Skickar i txt-koordinater
+    //         return sf::Vector2f(75, 61);
+    //     }
         
-        retryCount++;
-    }
+    //     retryCount++;
 
-    // Handle the case where no walkable tile is found
-    std::cerr << "No walkable tile found after " << maxRetries << " retries." << std::endl;
+        
+    // }
 
-    // In this case, you might want to take specific action, e.g., terminate the ghost or reset the map.
-    // For now, just return a default position:
-    return sf::Vector2f(0, 0);
+    // // Handle the case where no walkable tile is found
+    // std::cerr << "No walkable tile found after " << maxRetries << " retries." << std::endl;
+
+    // // In this case, you might want to take specific action, e.g., terminate the ghost or reset the map.
+    // // For now, just return a default position:
+    // return sf::Vector2f(0, 0);
+
+    return sf::Vector2f(18, 20);
 }
 
 void Ghost::render(sf::RenderTarget* target)

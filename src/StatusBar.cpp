@@ -15,7 +15,7 @@ StatusBar::~StatusBar()
 void StatusBar::initWindow()
 {
     this->postionX = 20;
-    this->postionY = 625;
+    this->postionY = 870;
     this->font.loadFromFile("../util/SF Atarian System.ttf");
     this->font.setSmooth(true);
     this->string = "score: 0";

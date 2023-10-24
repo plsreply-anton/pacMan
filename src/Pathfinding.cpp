@@ -1,16 +1,8 @@
 #include "Pathfinding.h"
 
-using namespace std;
+Pathfinding::Pathfinding() {}
 
-
-// Pathfinding.cpp
-Pathfinding::Pathfinding() {
-    // Constructor implementation
-}
-
-Pathfinding::~Pathfinding() {
-    // Destructor implementation
-}
+Pathfinding::~Pathfinding() {}
 
 // A* pathfinding algorithm
 vector<Node*> Pathfinding::findPath(vector<vector<int>> map, sf::Vector2f start, sf::Vector2f goal) {

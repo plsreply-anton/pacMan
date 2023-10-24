@@ -32,7 +32,6 @@ struct CompareNode {
 };
 
 class Pathfinding {
-private:
 
 public:
     Pathfinding();

@@ -5,14 +5,14 @@
 
 Packie::Packie()
 {
-    this->packieOpen.loadFromFile("../util/pacMan_open.png");
-    this->packieClosed.loadFromFile("../util/pacMan_closed.png");
+    this->packieOpen.loadFromFile("../util/pacMan_35_open.png");
+    this->packieClosed.loadFromFile("../util/pacMan_35_closed.png");
 
     this->packieSprite = new sf::Sprite(this->packieClosed); 
     this->packieSprite->setOrigin(sf::Vector2f(
                                 this->packieSprite->getGlobalBounds().width/2,
                                 this->packieSprite->getGlobalBounds().height/2));
-    this->packieSprite->setPosition(sf::Vector2f(400, 250)); 
+    this->packieSprite->setPosition(sf::Vector2f(320, 480)); 
 }
 
 Packie::~Packie()
@@ -36,17 +36,17 @@ void Packie::move(const float& dt, float x_dir, float y_dir)
 
 void Packie::throwAround()
 {
-    if (this->packieSprite->getPosition().x < 10 && 
-        this->packieSprite->getPosition().y > 200 &&
-        this->packieSprite->getPosition().y < 500 )
+    if (this->packieSprite->getPosition().x < 40 && 
+        this->packieSprite->getPosition().y > 400 &&
+        this->packieSprite->getPosition().y < 480 )
     {
-       this->packieSprite->setPosition(sf::Vector2f(785,330));
+       this->packieSprite->setPosition(sf::Vector2f(800,420));
     }
-    if (this->packieSprite->getPosition().x > 790 && 
-        this->packieSprite->getPosition().y > 200 &&
-        this->packieSprite->getPosition().y < 400 )
+    if (this->packieSprite->getPosition().x > 810 && 
+        this->packieSprite->getPosition().y > 400 &&
+        this->packieSprite->getPosition().y < 480 )
     {
-       this->packieSprite->setPosition(sf::Vector2f(15,330));
+       this->packieSprite->setPosition(sf::Vector2f(50,420));
     }
     
 }
@@ -99,41 +99,44 @@ void Packie::update(const float& dt, Map *map, StatusBar &statusBar)
     // Check for collisions here
     if (!checkForCollision(newX+20*deltaX, newY+20*deltaY, deltaX, deltaY, map, deltaX))
     {
-        
         this->move(dt, deltaX, deltaY);
         this->checkForPellet(map);
     }
 
-   statusBar.update(dt, this->score);
+
+    statusBar.update(dt, this->score);
 }
 
 bool Packie::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map* map, float dir)
 {
-    int tileX = newX/10;
-    int tileY = newY/10;
+    int tileX = newX/40;
+    int tileY = newY/40;
     int dirX = 0;
     int dirY = 0;
 
     if (dir != 0)
-        dirY=2;
+        dirY=1;
     else
-        dirX=2;
+        dirX=1;
 
     sf::FloatRect tileBound = map->getTiles()[tileY][tileX]->getRect().getGlobalBounds();
     sf::FloatRect tileBoundNeg = map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getGlobalBounds();
     sf::FloatRect tileBoundPos = map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getGlobalBounds();
 
+    //Get pacmanbounds adjusted for an offset
     sf::FloatRect pacmanBounds = this->packieSprite->getGlobalBounds();
-    sf::FloatRect newPacmanBounds = sf::FloatRect(sf::Vector2f(newX-21, newY-21), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
+    sf::FloatRect pacManBoundsNeg = sf::FloatRect(sf::Vector2f(newX-15*dirX, newY-15*dirY), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
+    sf::FloatRect pacManBoundsPos = sf::FloatRect(sf::Vector2f(newX+15*dirX, newY+15*dirY), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
+    std::cout << tileBoundNeg.getPosition().y << " " << pacManBoundsNeg.getPosition().y << std::endl;
 
-    if ((newPacmanBounds.findIntersection(tileBound) 
+    if ((pacmanBounds.findIntersection(tileBound) 
         && map->getTiles()[tileY][tileX]->getRect().getFillColor() == sf::Color::Blue)) 
             return true; // Collision detected
-    else if ((newPacmanBounds.findIntersection(tileBoundNeg) 
-        && map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getFillColor() == sf::Color::Blue)) 
+    else if ((pacManBoundsNeg.findIntersection(tileBoundNeg)
+        && map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getFillColor() == sf::Color::Blue))
             return true; // Collision detected
-    else if ((newPacmanBounds.findIntersection(tileBoundPos) 
-        && map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getFillColor() == sf::Color::Blue)) 
+    else if ((pacManBoundsPos.findIntersection(tileBoundPos) 
+        && map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getFillColor() == sf::Color::Blue))
             return true; // Collision detected
     
     return false;
@@ -141,8 +144,8 @@ bool Packie::checkForCollision(float newX, float newY, float deltaX, float delta
 
 void Packie::checkForPellet(Map *map)
 {
-    int tileX = this->packieSprite->getPosition().x/10;
-    int tileY = this->packieSprite->getPosition().y/10;
+    int tileX = this->packieSprite->getPosition().x/40;
+    int tileY = this->packieSprite->getPosition().y/40;
 
     if (map->getTiles()[tileY][tileX]->hasPellet())
     {

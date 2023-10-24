@@ -17,7 +17,6 @@ Map::~Map()
     }
 }
 
-
 void Map::loadMapFromFile(const std::string &filename)
 {
     std::ifstream openfile(filename);
@@ -80,10 +79,10 @@ void Map::initTiles()
         {   
             if (tilemap[i][j] == 2)
             {
-                row.push_back(new Tile(tilemap[i][j], j*10, i*10, true));
+                row.push_back(new Tile(tilemap[i][j], j*40, i*40, true));
             } else
             {   
-                row.push_back(new Tile(tilemap[i][j], j*10, i*10, false));
+                row.push_back(new Tile(tilemap[i][j], j*40, i*40, false));
             }
         }
         this->tileMap.push_back(row);
