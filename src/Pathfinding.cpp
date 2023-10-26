@@ -12,8 +12,19 @@ vector<Node*> Pathfinding::findPath(vector<vector<int>> map, sf::Vector2f start,
     vector<vector<bool>> closedList(map.size(), vector<bool>(map[0].size(), false));
 
     // Create start and goal nodes
-    Node* startNode = new Node(start.y/10, start.x/10, 0, 0, nullptr);
-    Node* goalNode = new Node(goal.y, goal.x, 0, 0, nullptr);
+    Node* startNode = new Node(start.x/40, start.y/40, 0, 0, nullptr);
+    Node* goalNode = new Node(goal.x, goal.y, 0, 0, nullptr);
+
+    if (abs(start.x/40 - goal.x) < 2 && abs(start.y/40-goal.y) < 2 )
+    {
+        return {};
+    }
+    
+    
+    cout << "------------------" << endl;
+    cout << startNode->x << " " << startNode->y << endl;
+    cout << startNode->x << " " << startNode->y << endl;
+    cout << "------------------" << endl;
     
     openList.push(startNode);
 

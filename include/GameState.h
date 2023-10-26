@@ -18,7 +18,7 @@ class GameState : public State
         sf::Clock debounceClock; // Clock to measure key press duration
 
         Packie pacMan;
-        //Ghost blinky;
+        Ghost blinky;
         Map* map;
         StatusBar statusBar;
 

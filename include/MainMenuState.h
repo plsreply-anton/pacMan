@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameState.h"
+#include "HighScoreState.h"
 #include "Button.h"
 
 class MainMenuState : public State
@@ -10,7 +11,7 @@ class MainMenuState : public State
         sf::Texture bgImage;
 
         std::vector<Button*> buttons;
-        int buttonNumber; //Current active button
+        int buttonNumber = 0; //Current active button
 
         bool keyPressed = false; // Flag to track if a key is currently pressed
         sf::Clock debounceClock; // Clock to measure key press duration

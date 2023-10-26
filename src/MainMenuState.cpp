@@ -8,7 +8,6 @@ MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* state
 {
     this->initBackground();
     this->initButtons();
-    this->buttonNumber = 0;
     std::cout << "New Menu State" << std::endl;
 }
 
@@ -35,10 +34,10 @@ void MainMenuState::initButtons()
     int height = 50; 
     int pos_x = ((sf::Vector2u(this->window->getSize()).x - width)/2)+130;
 
-    this->buttons.push_back(new Button(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "PLAY", pos_x, 200, width, height));
-    this->buttons.push_back(new Button(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "LEADERBOARD", pos_x, 260, width, height));
-    this->buttons.push_back(new Button(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "SETTINGS", pos_x, 320, width, height));
-    this->buttons.push_back(new Button(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "QUIT", pos_x, 380, width, height));
+    this->buttons.push_back(new Button(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "PLAY", pos_x, 340, width, height));
+    this->buttons.push_back(new Button(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "LEADERBOARD", pos_x, 420, width, height));
+    this->buttons.push_back(new Button(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "SETTINGS", pos_x, 500, width, height));
+    this->buttons.push_back(new Button(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "QUIT", pos_x, 580, width, height));
     this->buttons[0]->setActiveButton();
 }
 
@@ -112,6 +111,11 @@ void MainMenuState::update(const float& dt)
         if (this->buttons[i]->getButtonState() == 2 && buttonNumber == 0)
         {
             this->states->push(new GameState(this->window, this->states));
+            this->buttons[i]->setActiveButton();
+        } 
+        if (this->buttons[i]->getButtonState() == 2 && buttonNumber == 1)
+        {
+            this->states->push(new HighScoreState(this->window, this->states));
             this->buttons[i]->setActiveButton();
         } 
         else if (this->buttons[i]->getButtonState() == 2 && buttonNumber == 3)

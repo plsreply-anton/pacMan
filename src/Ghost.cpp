@@ -13,7 +13,7 @@ Ghost::Ghost()
     this->ghostSprite->setOrigin(sf::Vector2f(
                                 this->ghostSprite->getGlobalBounds().width/2,
                                 this->ghostSprite->getGlobalBounds().height/2));
-    this->ghostSprite->setPosition(sf::Vector2f(100, 50)); 
+    this->ghostSprite->setPosition(sf::Vector2f(80, 80)); 
     debounceClock.restart();
     
 }
@@ -34,6 +34,13 @@ void Ghost::update(const float& dt, Map *map)
         this-> newPos = this->setNewPosition(map); //txt-koord.
         this->path = pathfinder.findPath(map->getintMap(), this->ghostSprite->getPosition(), this->newPos);
         cout << "pathfinding done" << endl;
+        cout << "PATH" << endl;
+        for (auto tile : path)
+        {
+            cout << tile->x << " " << tile->y << endl;
+        }
+        cout << "--------" << endl;
+        
         goalReached_=false;
         debounceClock.restart();
     } else {
@@ -116,7 +123,7 @@ sf::Vector2f Ghost::setNewPosition(Map *map) {
     // // For now, just return a default position:
     // return sf::Vector2f(0, 0);
 
-    return sf::Vector2f(18, 20);
+    return sf::Vector2f(17, 2);
 }
 
 void Ghost::render(sf::RenderTarget* target)

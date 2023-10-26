@@ -53,7 +53,7 @@ void GameState::update(const float& dt)
 {
     this->updateKeybinds(dt);
     this->pacMan.update(dt, this->map, this->statusBar);
-    //this->blinky.update(dt, this->map);
+    this->blinky.update(dt, this->map);
 }
 
 void GameState::render(sf::RenderTarget* target)
@@ -64,7 +64,7 @@ void GameState::render(sf::RenderTarget* target)
     target->draw(this->bgRect);
     this->map->render(target);
     this->pacMan.render(target);
-    //this->blinky.render(target);
+    this->blinky.render(target);
     this->statusBar.render(target);
 }
 

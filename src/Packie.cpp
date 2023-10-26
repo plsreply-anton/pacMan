@@ -120,24 +120,24 @@ bool Packie::checkForCollision(float newX, float newY, float deltaX, float delta
         dirX=1;
 
     sf::FloatRect tileBound = map->getTiles()[tileY][tileX]->getRect().getGlobalBounds();
-    sf::FloatRect tileBoundNeg = map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getGlobalBounds();
-    sf::FloatRect tileBoundPos = map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getGlobalBounds();
+    // sf::FloatRect tileBoundNeg = map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getGlobalBounds();
+    // sf::FloatRect tileBoundPos = map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getGlobalBounds();
 
     //Get pacmanbounds adjusted for an offset
     sf::FloatRect pacmanBounds = this->packieSprite->getGlobalBounds();
-    sf::FloatRect pacManBoundsNeg = sf::FloatRect(sf::Vector2f(newX-15*dirX, newY-15*dirY), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
-    sf::FloatRect pacManBoundsPos = sf::FloatRect(sf::Vector2f(newX+15*dirX, newY+15*dirY), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
-    std::cout << tileBoundNeg.getPosition().y << " " << pacManBoundsNeg.getPosition().y << std::endl;
+    // sf::FloatRect pacManBoundsNeg = sf::FloatRect(sf::Vector2f(newX-15*dirX, newY-15*dirY), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
+    // sf::FloatRect pacManBoundsPos = sf::FloatRect(sf::Vector2f(newX+15*dirX, newY+15*dirY), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
+    // std::cout << tileBoundNeg.getPosition().y << " " << pacManBoundsNeg.getPosition().y << std::endl;
 
     if ((pacmanBounds.findIntersection(tileBound) 
         && map->getTiles()[tileY][tileX]->getRect().getFillColor() == sf::Color::Blue)) 
             return true; // Collision detected
-    else if ((pacManBoundsNeg.findIntersection(tileBoundNeg)
-        && map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getFillColor() == sf::Color::Blue))
-            return true; // Collision detected
-    else if ((pacManBoundsPos.findIntersection(tileBoundPos) 
-        && map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getFillColor() == sf::Color::Blue))
-            return true; // Collision detected
+    // else if ((pacManBoundsNeg.findIntersection(tileBoundNeg)
+    //     && map->getTiles()[tileY-dirY][tileX-dirX]->getRect().getFillColor() == sf::Color::Blue))
+    //         return true; // Collision detected
+    // else if ((pacManBoundsPos.findIntersection(tileBoundPos) 
+    //     && map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getFillColor() == sf::Color::Blue))
+    //         return true; // Collision detected
     
     return false;
 }
