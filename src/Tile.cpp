@@ -7,7 +7,7 @@ Tile::Tile(int tileType, int xPos, int yPos, bool hasPellet)
 {
     if (hasPellet_) 
     {
-        pellet_ = std::make_unique<Pellet>(xPos, yPos); // Create a Pellet if hasPellet is true
+        pellet_ = std::make_unique<Pellet>(xPos+20, yPos+20); // Create a Pellet if hasPellet is true
         this->tileType_ = 0;
     } else
     {

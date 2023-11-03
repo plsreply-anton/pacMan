@@ -34,11 +34,13 @@ private:
     vector<Node*> path;
 
     sf::Clock debounceClock; // For setting new goalpos.
-    float debounceThreshold = 5.0;
+    float debounceThreshold = 10.0;
 
 public:
     Ghost();
     ~Ghost();
+
+    void initGhost();
 
     void move(const float& dt);
     sf::Vector2f setNewPosition(Map *map);

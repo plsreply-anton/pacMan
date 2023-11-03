@@ -15,6 +15,10 @@ HighScoreState::~HighScoreState()
 {
     this->endState();
     delete this->bgSprite;
+    delete this->backSprite;
+    delete this->text;
+    for (sf::Text* text : this->leaderboard)
+        delete text;
 }
 
 void HighScoreState::initBackground()

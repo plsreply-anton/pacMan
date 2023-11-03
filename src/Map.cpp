@@ -77,7 +77,7 @@ void Map::initTiles()
         row.clear();
         for (int j = 0; j < tilemap[i].size(); j++)
         {   
-            if (tilemap[i][j] == 2)
+            if (tilemap[i][j] == 0)
             {
                 row.push_back(new Tile(tilemap[i][j], j*40, i*40, true));
             } else

@@ -17,16 +17,16 @@ class HighScoreState : public State
         sf::Texture backImage;
 
         sf::RectangleShape shape;
-        sf::Font textFont;
-        sf::Color buttonColor = sf::Color (255,237,10);
-        sf::Color textColor = sf::Color (255,122,0);
         sf::Text* text;
 
-        std::vector<sf::Text*> leaderboard;
+        sf::Font textFont;
         sf::Font leaderboardFont;
 
-        bool keyPressed = false; // Flag to track if a key is currently pressed
-        sf::Clock debounceClock; // Clock to measure key press duration
+        sf::Color buttonColor = sf::Color (255,237,10);
+        sf::Color textColor = sf::Color (255,122,0);
+
+        std::vector<sf::Text*> leaderboard;
+
 
     public:
 
@@ -37,9 +37,9 @@ class HighScoreState : public State
         //initialisers
         void initBackground();
         void initLeaderboard();
-        void readFile();
 
         //Methods
+        void readFile();
         void endState();
         void updateKeybinds(const float& dt);
         void checkForQuit();
