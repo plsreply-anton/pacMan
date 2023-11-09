@@ -22,8 +22,6 @@ vector<Node*> Pathfinding::findPath(vector<vector<int>> map, sf::Vector2f start,
     cout << goalNode->x << " " << goalNode->y << endl;
     cout << "------------------" << endl;
     
-    openList.push(startNode);
-
     while (!openList.empty()) {
         Node* currentNode = openList.top();
         openList.pop();

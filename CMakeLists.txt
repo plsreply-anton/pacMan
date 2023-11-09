@@ -10,7 +10,7 @@ project(pacMan VERSION 0.1)
 configure_file(pacManConfig.h.in pacManConfig.h)
 
 #Add executable files of which the project is built on
-add_executable(pacMan ${CMAKE_SOURCE_DIR}/src/main.cpp
+add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp
                       ${CMAKE_SOURCE_DIR}/src/Game.cpp
                       ${CMAKE_SOURCE_DIR}/src/State.cpp
                       ${CMAKE_SOURCE_DIR}/src/GameState.cpp
@@ -28,9 +28,9 @@ add_executable(pacMan ${CMAKE_SOURCE_DIR}/src/main.cpp
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 
 #Specifying settings for compilation and linking
-set_property(TARGET pacMan PROPERTY CXX_STANDARD 17)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 
-target_include_directories(pacMan PRIVATE 
+target_include_directories(${PROJECT_NAME} PRIVATE 
     /Users/antonlarsson/SFML/include
     ${CMAKE_SOURCE_DIR}/include
 )
@@ -43,16 +43,6 @@ target_link_libraries(pacMan
     /Users/antonlarsson/SFML/lib/libsfml-audio.dylib
     /Users/antonlarsson/SFML/lib/libsfml-network.dylib)
 
-#Should also work, but getting some error so linking all
-#SFML-libraries manually
-#set(CMAKE_PREFIX_PATH "/Users/antonlarsson/SFML")
-#set(SFML_DIR "/Users/antonlarsson/SFML/")
-#find_package(SFML 3.0 COMPONENTS graphics window system audio network REQUIRED)
-#target_link_libraries(pacMan sfml-graphics sfml-window sfml-system)
-
-#include(InstallRequiredSystemLibraries)
-# set(CPACK_RESOURCE_FILE_LICENSE "{CMAKE_SOURCE_DIR/License.txt}")
-# set(CPACK_PACKAGE_VERSION_MAJOR "${}")
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/pacManConfig.h" DESTINATION include) 
