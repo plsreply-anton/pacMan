@@ -12,6 +12,7 @@
 
 #include "Map.h"
 #include "StatusBar.h"
+#include "Ghost.h"
 
 
 class Packie
@@ -25,8 +26,10 @@ class Packie
         std::string currentOrientation;
         sf::FloatRect newPacmanBounds;
         int score = 0;
+        int health = 3;
 
         sf::Clock debounceClock; // Clock to measure close/open mouth
+        sf::Clock debounceClockGhost; // Clock to measure ghost collisions
 
     public:
         
@@ -39,8 +42,10 @@ class Packie
         bool checkForCollision(float newX, float newY, float deltaX, float deltaY, Map *map, float dir);
         void throwAround();
         void checkForPellet(Map *map);
+        bool checkForGhost(Ghost &ghost);
+        bool checkAlive();
 
         void updateMouth();    
-        void update(const float& dt, Map *map, StatusBar &statusBar);
+        void update(const float& dt, Map *map, StatusBar &statusBar, Ghost &blinky);
         void render(sf::RenderTarget* target);
 };

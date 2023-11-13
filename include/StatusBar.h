@@ -12,15 +12,19 @@ class StatusBar
 private:
     int postionX;
     int postionY;
+    int health = 3;
     sf::Font font;
     sf::Text *text;
     std::string string;
+    sf::Texture heartTexture;
+    std::vector<sf::Sprite*> heartSprites;
+    // sf::Sprite* heartSprite;
 
 public:
     StatusBar();
     ~StatusBar();
     void initWindow();
-    void update(const float& dt, int score);
+    void update(const float& dt, int score, int health);
     void render(sf::RenderTarget* target = nullptr);
 };
 

@@ -23,6 +23,7 @@ void GameState::initWorld()
     this->map = new Map();
     this->map->loadMapFromFile();
     this->map->initTiles();
+    
     this->statusBar.initWindow();
 }
 
@@ -52,8 +53,15 @@ void GameState::moveButton()
 void GameState::update(const float& dt)
 {
     this->updateKeybinds(dt);
-    this->pacMan.update(dt, this->map, this->statusBar);
+    this->pacMan.update(dt, this->map, this->statusBar, this->blinky);
     this->blinky.update(dt, this->map);
+
+    if (!this->pacMan.checkAlive())
+    {
+        this->quit = true;
+        this->states->push(new LooseState(this->window, this->states, 10));
+    }
+    
 }
 
 void GameState::render(sf::RenderTarget* target)

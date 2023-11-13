@@ -62,7 +62,7 @@ void Packie::updateMouth()
         this->debounceClock.restart();
 }
 
-void Packie::update(const float& dt, Map *map, StatusBar &statusBar)
+void Packie::update(const float& dt, Map *map, StatusBar &statusBar, Ghost &blinky)
 {   
     float deltaX = 0.f;
     float deltaY = 0.f;
@@ -103,8 +103,26 @@ void Packie::update(const float& dt, Map *map, StatusBar &statusBar)
         this->checkForPellet(map);
     }
 
+    if (checkForGhost(blinky) && this->debounceClockGhost.getElapsedTime().asMilliseconds() > 2000)
+    {
+        cout << "FUCKING HIT A GHOST" << endl;
+        this->health -= 1;
+        this->debounceClockGhost.restart();
+    }
+    
 
-    statusBar.update(dt, this->score);
+
+    statusBar.update(dt, this->score, this->health);
+}
+
+bool Packie::checkAlive()
+{
+    if (this->health < 1)
+    {
+        return false;
+    }
+    return true;
+    
 }
 
 bool Packie::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map* map, float dir)
@@ -155,6 +173,14 @@ void Packie::checkForPellet(Map *map)
 
 }
 
+bool Packie::checkForGhost(Ghost &ghost)
+{
+    if (this->packieSprite->getGlobalBounds().findIntersection(ghost.getSprite().getGlobalBounds()))
+        return true;
+    
+    return false;
+   
+}
 
 void Packie::render(sf::RenderTarget* target)
 {

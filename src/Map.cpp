@@ -22,7 +22,7 @@ void Map::loadMapFromFile(const std::string &filename)
     std::ifstream openfile(filename);
     if (openfile.is_open())
     {
-        std::vector<int> row;
+        std::vector<TileType> row;
         std::string line;
         while (std::getline(openfile, line))
         {
@@ -30,7 +30,7 @@ void Map::loadMapFromFile(const std::string &filename)
             for (char c : line)
             {
                 int tileType = c -'0';
-                row.push_back(tileType);
+                row.push_back((TileType)tileType);
             }
             this->tilemap.push_back(row);
         }   
@@ -94,7 +94,7 @@ std::vector<std::vector<Tile*>> Map::getTiles()
     return this->tileMap;
 }
 
-std::vector<std::vector<int>> Map::getintMap()
+std::vector<std::vector<TileType>> Map::getintMap()
 {
     return this->tilemap;
 }

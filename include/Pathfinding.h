@@ -13,6 +13,8 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 
+#include "Map.h"
+
 using namespace std;
 
 // Define a structure for a map node
@@ -27,7 +29,13 @@ struct Node {
 // Define a custom comparator for the priority queue
 struct CompareNode {
     bool operator()(Node* a, Node* b) {
-        return (a->g + a->h) > (b->g + b->h);
+        return (a->g + a->h) < (b->g + b->h);
+    }
+};
+
+struct CompareNodeDijkstra {
+    bool operator()(Node* const& a, Node* const& b) {
+        return a->g < b->g; // Min-heap: smaller g values have higher priority
     }
 };
 
@@ -36,7 +44,7 @@ class Pathfinding {
 public:
     Pathfinding();
     ~Pathfinding();
-    vector<Node*> findPath(vector<vector<int>> map, sf::Vector2f start, sf::Vector2f goal);
+    vector<Node*>* findPath(vector<vector<TileType>> map, sf::Vector2f start, sf::Vector2f goal);
 };
 
 

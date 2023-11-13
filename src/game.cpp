@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <iostream>
+
 using namespace std;
 
 
@@ -26,26 +27,33 @@ void Game::initWindow()
 {
     int width = 860;
     int height = 880;
-    ifstream ifs("config/window.ini");
+    ifstream ifs("../src/config/window.ini");
 
     string title = "PacMan, by Anton";
     sf::VideoMode window_bounds(sf::Vector2u(width, height));
-    //sf::VideoMode window_bounds = sf::VideoMode::getDesktopMode();
     unsigned framerate_limit = 120;
     bool vertical_sync_enabled = false;
     unsigned int antialiasing_level = 0;
+    cout << "Current Working Directory: " << filesystem::current_path() << endl;
     
     if (ifs.is_open())
     {
+        cout << "open" << endl;
         getline(ifs, title);
         ifs >> width >> height;
         ifs >> framerate_limit;
         ifs >> vertical_sync_enabled;
         
-        sf::VideoMode window_bounds(sf::Vector2u(width, height));
+        window_bounds = sf::VideoMode(sf::Vector2u(width, height));
+    } 
+    else if(!ifs.is_open())
+    {
+        cerr << "Error: Could not open ../src/config/window.ini" << endl;
     }
+
     sf::ContextSettings window_settings;
     window_settings.antialiasingLevel = antialiasing_level;
+
     this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Default, window_settings);
     this->window->setFramerateLimit(framerate_limit);
     this->window->setVerticalSyncEnabled(vertical_sync_enabled);

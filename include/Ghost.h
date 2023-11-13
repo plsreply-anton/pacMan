@@ -34,7 +34,7 @@ private:
     vector<Node*> path;
 
     sf::Clock debounceClock; // For setting new goalpos.
-    float debounceThreshold = 10.0;
+    float debounceThreshold = 20;
 
 public:
     Ghost();
@@ -45,6 +45,7 @@ public:
     void move(const float& dt);
     sf::Vector2f setNewPosition(Map *map);
     void goalReached(sf::Vector2f currentPos);
+    sf::Sprite getSprite();
 
     void update(const float& dt, Map *map);
     void render(sf::RenderTarget* target);

@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "StatusBar.h"
 #include "Ghost.h"
+#include "LooseState.h"
 
 class GameState : public State
 {
