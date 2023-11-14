@@ -1,11 +1,12 @@
 #pragma once
 
 #include "State.h"
-#include "Packie.h"
+#include "PacMan.h"
 #include "Map.h"
 #include "StatusBar.h"
 #include "Ghost.h"
 #include "LooseState.h"
+
 
 class GameState : public State
 {
@@ -18,8 +19,8 @@ class GameState : public State
         bool keyPressed = false; // Flag to track if a key is currently pressed
         sf::Clock debounceClock; // Clock to measure key press duration
 
-        Packie pacMan;
-        Ghost blinky;
+        PacMan pacMan;
+        vector <Ghost*> ghosts;
         Map* map;
         StatusBar statusBar;
 
@@ -27,7 +28,7 @@ class GameState : public State
 
         //Constructor and Destructor
         GameState(sf::RenderWindow* window, std::stack<State*>* states);
-        virtual ~GameState();
+        ~GameState();
 
         //Methods
         void checkForQuit();

@@ -15,37 +15,41 @@
 #include "Ghost.h"
 
 
-class Packie
+class PacMan
 {
     private:
-        sf::Sprite* packieSprite;
-        sf::Texture packieOpen;
-        sf::Texture packieClosed;
-        float movementSpeed = 3;
+        sf::Sprite* pacManSprite;
+        sf::Texture pacManOpenTexture;
+        sf::Texture pacManClosedTexture;
+
         float middleposX, middleposY;
         std::string currentOrientation;
         sf::FloatRect newPacmanBounds;
+
+        float movementSpeed = 3;
         int score = 0;
         int health = 3;
 
         sf::Clock debounceClock; // Clock to measure close/open mouth
-        sf::Clock debounceClockGhost; // Clock to measure ghost collisions
+        sf::Clock healthDebounceClock; // Clock to measure ghost collisions
 
     public:
         
-        //Constructor and Destructor
-        Packie();
-        ~Packie();
+        PacMan();
+        ~PacMan();
+        void initSprite();
 
-        sf::Sprite* getSprite();
+        sf::Sprite* getSpritePointer();
+        int getScore();
+
         void move(const float& dt, float x_dir, float y_dir);
         bool checkForCollision(float newX, float newY, float deltaX, float deltaY, Map *map, float dir);
-        void throwAround();
+        void changeSide();
         void checkForPellet(Map *map);
-        bool checkForGhost(Ghost &ghost);
+        bool checkForGhost(vector<Ghost*> ghosts);
         bool checkAlive();
+        void updateMouth(); 
 
-        void updateMouth();    
-        void update(const float& dt, Map *map, StatusBar &statusBar, Ghost &blinky);
+        void update(const float& dt, Map *map, StatusBar &statusBar, vector<Ghost*> ghosts);
         void render(sf::RenderTarget* target);
 };

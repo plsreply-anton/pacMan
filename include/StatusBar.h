@@ -18,7 +18,6 @@ private:
     std::string string;
     sf::Texture heartTexture;
     std::vector<sf::Sprite*> heartSprites;
-    // sf::Sprite* heartSprite;
 
 public:
     StatusBar();

@@ -11,15 +11,15 @@ class HighScoreState : public State
         string filePath = "../util/highScore.csv";
 
         sf::Sprite* bgSprite;
-        sf::Texture bgImage;
+        sf::Texture bgTexture;
 
-        sf::Sprite* backSprite;
-        sf::Texture backImage;
+        sf::Sprite* backArrowSprite;
+        sf::Texture backArrowTexture;
 
         sf::RectangleShape shape;
         sf::Text* text;
 
-        sf::Font textFont;
+        sf::Font headerFont;
         sf::Font leaderboardFont;
 
         sf::Color buttonColor = sf::Color (255,237,10);

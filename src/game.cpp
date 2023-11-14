@@ -78,7 +78,7 @@ void Game::update()
         }
     } else if (this->states.empty())
     {
-        std::cout << "No More State - Exiting" << std::endl;
+        std::cout << "No More States - Exiting" << std::endl;
         this->window->close();
     }
     sf::sleep(sf::microseconds(50));

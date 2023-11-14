@@ -18,6 +18,7 @@ MainMenuState::~MainMenuState()
     {
        delete this->buttons[i];
     }
+    this->buttons.clear();
     delete this->bgSprite;
 }
 

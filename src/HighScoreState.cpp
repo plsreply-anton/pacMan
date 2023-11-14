@@ -15,22 +15,23 @@ HighScoreState::~HighScoreState()
 {
     this->endState();
     delete this->bgSprite;
-    delete this->backSprite;
+    delete this->backArrowSprite;
     delete this->text;
     for (sf::Text* text : this->leaderboard)
         delete text;
+    this->leaderboard.clear();
 }
 
 void HighScoreState::initBackground()
 {
-    this->bgImage.loadFromFile("../util/menuImage.png");
-    this->bgImage.setSmooth(true);
-    this->bgSprite = new sf::Sprite(this->bgImage);
+    this->bgTexture.loadFromFile("../util/menuImage.png");
+    this->bgTexture.setSmooth(true);
+    this->bgSprite = new sf::Sprite(this->bgTexture);
 
-    this->backImage.loadFromFile("../util/back.png");
-    this->backImage.setSmooth(true);
-    this->backSprite = new sf::Sprite(this->backImage);
-    this->backSprite->setPosition(sf::Vector2f(20,830));
+    this->backArrowTexture.loadFromFile("../util/BackArrow.png");
+    this->backArrowTexture.setSmooth(true);
+    this->backArrowSprite = new sf::Sprite(this->backArrowTexture);
+    this->backArrowSprite->setPosition(sf::Vector2f(20,830));
 }
 
 void HighScoreState::endState()
@@ -54,13 +55,13 @@ void HighScoreState::checkForQuit()
 void HighScoreState::initLeaderboard()
 {
     this->leaderboardFont.loadFromFile("../util/SF Atarian System.ttf");
-    this->textFont.loadFromFile("../util/PacfontGood.ttf");
+    this->headerFont.loadFromFile("../util/PacfontGood.ttf");
     int pos_x = ((sf::Vector2u(this->window->getSize()).x - 200)/2)+130;
     int pos_y = 340;
     this->shape.setPosition(sf::Vector2f(pos_x,pos_y));
     this->shape.setSize(sf::Vector2f(200, 50));
     this->shape.setFillColor(this->buttonColor);
-    this->text = new sf::Text(textFont, "highscores", 20);
+    this->text = new sf::Text(headerFont, "highscores", 20);
     this->text->setFillColor(this->textColor);
     this->text->setPosition(
         sf::Vector2f(int(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text->getGlobalBounds().width / 2.f), 
@@ -69,11 +70,8 @@ void HighScoreState::initLeaderboard()
 }
 
 void HighScoreState::readFile()
-{
-    // File pointer 
+{ 
     fstream fin; 
-  
-    // Open an existing file 
     fin.open(this->filePath, ios::in); 
 
     // Read the Data from the file 
@@ -92,15 +90,11 @@ void HighScoreState::readFile()
         // used for breaking words 
         stringstream s(line); 
   
-        // read every column data of a row and 
-        // store it in a string variable, 'word' 
+        // read every column data of a row and store it in a string variable, 'word' 
         while (getline(s, word, ',')) { 
   
-            // add all the column data 
-            // of a row to a vector 
+            // add all the column data of a row to a vector 
             temp += word;
-
-            
         } 
         this->leaderboard.push_back(new sf::Text(leaderboardFont, temp, 20));
         this->leaderboard[i]->setPosition(sf::Vector2f(525, 400 + i*40));
@@ -126,7 +120,7 @@ void HighScoreState::render(sf::RenderTarget* target)
     {
         target->draw(*this->leaderboard[i]);
     }
-    target->draw(*this->backSprite);
+    target->draw(*this->backArrowSprite);
 }
 
 #pragma GCC diagnostic pop

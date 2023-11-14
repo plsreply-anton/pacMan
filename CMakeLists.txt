@@ -16,7 +16,7 @@ add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp
                       ${CMAKE_SOURCE_DIR}/src/GameState.cpp
                       ${CMAKE_SOURCE_DIR}/src/MainMenuState.cpp
                       ${CMAKE_SOURCE_DIR}/src/Button.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Packie.cpp
+                      ${CMAKE_SOURCE_DIR}/src/PacMan.cpp
                       ${CMAKE_SOURCE_DIR}/src/Map.cpp
                       ${CMAKE_SOURCE_DIR}/src/Tile.cpp
                       ${CMAKE_SOURCE_DIR}/src/Pellet.cpp

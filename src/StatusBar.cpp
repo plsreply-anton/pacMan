@@ -3,16 +3,15 @@
 #include <iostream>
 #include "StatusBar.h"
 
-StatusBar::StatusBar(/* args */)
+StatusBar::StatusBar()
 {   
     this->initWindow();
 }
 
 StatusBar::~StatusBar()
 {
-    for (sf::Sprite* sprite : this->heartSprites) {
+    for (sf::Sprite* sprite : this->heartSprites)
         delete sprite;
-    }
     heartSprites.clear();
     delete this->text;
 }
@@ -25,6 +24,7 @@ void StatusBar::initWindow()
     this->font.setSmooth(true);
     this->string = "score: 0";
     this->text = new sf::Text(font, this->string, 20);
+    this->text->setPosition(sf::Vector2f(postionX, postionY));
 
     this->heartTexture.loadFromFile("../util/heart.png");
 
@@ -32,12 +32,8 @@ void StatusBar::initWindow()
     {
         heartSprites.push_back(new sf::Sprite(this->heartTexture));
         heartSprites[i]->setScale(sf::Vector2f(0.1, 0.1));
-        heartSprites[i]->setPosition(sf::Vector2f(600 + i * 10, 850));
+        heartSprites[i]->setPosition(sf::Vector2f(600 + i * 20, 850));
     }
-    
-    
-    
-    this->text->setPosition(sf::Vector2f(postionX, postionY));
 }
 
 void StatusBar::update(const float& dt, int score, int health)
@@ -46,10 +42,6 @@ void StatusBar::update(const float& dt, int score, int health)
     this->string = "score: ";
     string += std::to_string(score);
     this->text->setString(string);
-
-
-
-    
 }
 
 void StatusBar::render(sf::RenderTarget* target )
@@ -59,9 +51,6 @@ void StatusBar::render(sf::RenderTarget* target )
     {
         target->draw(*this->heartSprites[i]);
     }
-    
-    // target->draw(*this->heartSprite);
-
 }
 
 #pragma GCC diagnostic pop

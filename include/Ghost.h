@@ -18,6 +18,14 @@
 
 using namespace std;
 
+enum GhostType
+{
+    blinky,
+    pinky,
+    inky,
+    clyde
+};
+
 
 class Ghost
 {
@@ -37,10 +45,10 @@ private:
     float debounceThreshold = 20;
 
 public:
-    Ghost();
+    Ghost(sf::Vector2f startPos, GhostType ghostType);
     ~Ghost();
 
-    void initGhost();
+    void initGhost(sf::Vector2f startPos, GhostType ghostType);
 
     void move(const float& dt);
     sf::Vector2f setNewPosition(Map *map);

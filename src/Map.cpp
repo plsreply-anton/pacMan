@@ -14,7 +14,9 @@ Map::~Map()
         for (int j = 0; j < tileMap[i].size(); j++) {
             delete tileMap[i][j];
         }
+        tileMap[i].clear();
     }
+    tileMap.clear();
 }
 
 void Map::loadMapFromFile(const std::string &filename)

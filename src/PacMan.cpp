@@ -1,68 +1,74 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused"
 
-#include "Packie.h"
+#include "PacMan.h"
 
-Packie::Packie()
+PacMan::PacMan()
 {
-    this->packieOpen.loadFromFile("../util/pacMan_35_open.png");
-    this->packieClosed.loadFromFile("../util/pacMan_35_closed.png");
-
-    this->packieSprite = new sf::Sprite(this->packieClosed); 
-    this->packieSprite->setOrigin(sf::Vector2f(
-                                this->packieSprite->getGlobalBounds().width/2,
-                                this->packieSprite->getGlobalBounds().height/2));
-    this->packieSprite->setPosition(sf::Vector2f(320, 480)); 
+   this->initSprite();
 }
 
-Packie::~Packie()
+PacMan::~PacMan()
 {
-    delete this->packieSprite;
+    delete this->pacManSprite;
 }
 
-sf::Sprite* Packie::getSprite()
+void PacMan::initSprite()
 {
-    return this->packieSprite;
+    this->pacManOpenTexture.loadFromFile("../util/pacMan_35_open.png");
+    this->pacManClosedTexture.loadFromFile("../util/pacMan_35_closed.png");
+
+    this->pacManSprite = new sf::Sprite(this->pacManClosedTexture); 
+    this->pacManSprite->setOrigin(sf::Vector2f(
+                                this->pacManSprite->getGlobalBounds().width/2,
+                                this->pacManSprite->getGlobalBounds().height/2));
+    this->pacManSprite->setPosition(sf::Vector2f(320, 480)); 
 }
 
-void Packie::move(const float& dt, float x_dir, float y_dir)
+sf::Sprite* PacMan::getSpritePointer()
+{
+    return this->pacManSprite;
+}
+
+void PacMan::move(const float& dt, float x_dir, float y_dir)
 {   
     float x = x_dir*this->movementSpeed;
     float y = y_dir*this->movementSpeed;
-    this->packieSprite->move(sf::Vector2(x, y));
+
+    this->pacManSprite->move(sf::Vector2(x, y));
     this->updateMouth();
-    this->throwAround();
+    this->changeSide();
 }
 
-void Packie::throwAround()
+void PacMan::changeSide()
 {
-    if (this->packieSprite->getPosition().x < 40 && 
-        this->packieSprite->getPosition().y > 400 &&
-        this->packieSprite->getPosition().y < 480 )
+    if (this->pacManSprite->getPosition().x < 40 && 
+        this->pacManSprite->getPosition().y > 400 &&
+        this->pacManSprite->getPosition().y < 480 )
     {
-       this->packieSprite->setPosition(sf::Vector2f(800,420));
+       this->pacManSprite->setPosition(sf::Vector2f(800,420));
     }
-    if (this->packieSprite->getPosition().x > 810 && 
-        this->packieSprite->getPosition().y > 400 &&
-        this->packieSprite->getPosition().y < 480 )
+    if (this->pacManSprite->getPosition().x > 810 && 
+        this->pacManSprite->getPosition().y > 400 &&
+        this->pacManSprite->getPosition().y < 480 )
     {
-       this->packieSprite->setPosition(sf::Vector2f(50,420));
+       this->pacManSprite->setPosition(sf::Vector2f(50,420));
     }
     
 }
 
-void Packie::updateMouth()
+void PacMan::updateMouth()
 {
     if (this->debounceClock.getElapsedTime().asMilliseconds() < 200)
-        this->packieSprite->setTexture(this->packieOpen);
+        this->pacManSprite->setTexture(this->pacManOpenTexture);
     else
-        this->packieSprite->setTexture(this->packieClosed);
+        this->pacManSprite->setTexture(this->pacManClosedTexture);
     
     if (this->debounceClock.getElapsedTime().asMilliseconds() > 400)
         this->debounceClock.restart();
 }
 
-void Packie::update(const float& dt, Map *map, StatusBar &statusBar, Ghost &blinky)
+void PacMan::update(const float& dt, Map *map, StatusBar &statusBar, vector<Ghost*> ghosts)
 {   
     float deltaX = 0.f;
     float deltaY = 0.f;
@@ -70,31 +76,31 @@ void Packie::update(const float& dt, Map *map, StatusBar &statusBar, Ghost &blin
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
         deltaY = 1.f;
-        this->packieSprite->setRotation(sf::degrees(90));
+        this->pacManSprite->setRotation(sf::degrees(90));
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
         deltaY = -1.f;
-        this->packieSprite->setRotation(sf::degrees(270));
+        this->pacManSprite->setRotation(sf::degrees(270));
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
         deltaX = -1.f;
-        this->packieSprite->setRotation(sf::degrees(180));
+        this->pacManSprite->setRotation(sf::degrees(180));
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         deltaX = 1.f;
-        this->packieSprite->setRotation(sf::degrees(0));
+        this->pacManSprite->setRotation(sf::degrees(0));
     }
     else
     {
-        this->packieSprite->setTexture(this->packieOpen);
+        this->pacManSprite->setTexture(this->pacManOpenTexture);
     }
 
     // Calculate the new position Pacman wants to move to
-    float newX = this->packieSprite->getPosition().x + deltaX*this->movementSpeed;
-    float newY = this->packieSprite->getPosition().y + deltaY*this->movementSpeed;
+    float newX = this->pacManSprite->getPosition().x + deltaX*this->movementSpeed;
+    float newY = this->pacManSprite->getPosition().y + deltaY*this->movementSpeed;
     
     // Check for collisions here
     if (!checkForCollision(newX+20*deltaX, newY+20*deltaY, deltaX, deltaY, map, deltaX))
@@ -103,29 +109,29 @@ void Packie::update(const float& dt, Map *map, StatusBar &statusBar, Ghost &blin
         this->checkForPellet(map);
     }
 
-    if (checkForGhost(blinky) && this->debounceClockGhost.getElapsedTime().asMilliseconds() > 2000)
+    if (checkForGhost(ghosts) && this->healthDebounceClock.getElapsedTime().asMilliseconds() > 2000)
     {
         cout << "FUCKING HIT A GHOST" << endl;
         this->health -= 1;
-        this->debounceClockGhost.restart();
+        this->healthDebounceClock.restart();
     }
     
-
-
     statusBar.update(dt, this->score, this->health);
 }
 
-bool Packie::checkAlive()
+bool PacMan::checkAlive()
 {
     if (this->health < 1)
-    {
         return false;
-    }
-    return true;
-    
+    return true;  
 }
 
-bool Packie::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map* map, float dir)
+int PacMan::getScore()
+{
+    return this->score;
+}
+
+bool PacMan::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map* map, float dir)
 {
     int tileX = newX/40;
     int tileY = newY/40;
@@ -142,7 +148,7 @@ bool Packie::checkForCollision(float newX, float newY, float deltaX, float delta
     // sf::FloatRect tileBoundPos = map->getTiles()[tileY+dirY][tileX+dirX]->getRect().getGlobalBounds();
 
     //Get pacmanbounds adjusted for an offset
-    sf::FloatRect pacmanBounds = this->packieSprite->getGlobalBounds();
+    sf::FloatRect pacmanBounds = this->pacManSprite->getGlobalBounds();
     // sf::FloatRect pacManBoundsNeg = sf::FloatRect(sf::Vector2f(newX-15*dirX, newY-15*dirY), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
     // sf::FloatRect pacManBoundsPos = sf::FloatRect(sf::Vector2f(newX+15*dirX, newY+15*dirY), sf::Vector2f(pacmanBounds.width, pacmanBounds.height));
     // std::cout << tileBoundNeg.getPosition().y << " " << pacManBoundsNeg.getPosition().y << std::endl;
@@ -160,10 +166,10 @@ bool Packie::checkForCollision(float newX, float newY, float deltaX, float delta
     return false;
 }
 
-void Packie::checkForPellet(Map *map)
+void PacMan::checkForPellet(Map *map)
 {
-    int tileX = this->packieSprite->getPosition().x/40;
-    int tileY = this->packieSprite->getPosition().y/40;
+    int tileX = this->pacManSprite->getPosition().x/40;
+    int tileY = this->pacManSprite->getPosition().y/40;
 
     if (map->getTiles()[tileY][tileX]->hasPellet())
     {
@@ -173,18 +179,19 @@ void Packie::checkForPellet(Map *map)
 
 }
 
-bool Packie::checkForGhost(Ghost &ghost)
+bool PacMan::checkForGhost(vector<Ghost*> ghosts)
 {
-    if (this->packieSprite->getGlobalBounds().findIntersection(ghost.getSprite().getGlobalBounds()))
+    for (Ghost *ghost : ghosts)
+    {
+        if (this->pacManSprite->getGlobalBounds().findIntersection(ghost->getSprite().getGlobalBounds()))
         return true;
-    
+    }
     return false;
-   
 }
 
-void Packie::render(sf::RenderTarget* target)
+void PacMan::render(sf::RenderTarget* target)
 {
-    target->draw(*this->packieSprite); 
+    target->draw(*this->pacManSprite); 
 }
 
 #pragma GCC diagnostic pop

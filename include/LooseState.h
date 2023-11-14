@@ -1,6 +1,7 @@
 #pragma once
 #include "GameState.h"
 #include "Button.h"
+#include "MainMenuState.h"
 
 #include <vector>
 
@@ -9,20 +10,23 @@ class LooseState : public State
     private:
 
         sf::Sprite* bgSprite;
-        sf::Texture bgImage;
+        sf::Texture bgTexture;
 
-        sf::Sprite* backSprite;
-        sf::Texture backImage;
+        sf::Sprite* backArrowSprite;
+        sf::Texture backArrowTexture;
 
-        sf::RectangleShape shape;
+        sf::RectangleShape rectangle;
         sf::Text* text;
+        sf::Text* scoreText;
 
         sf::Font textFont;
+        sf::Font scoreFont;
 
-        sf::Color buttonColor = sf::Color (255,237,10);
+        sf::Color rectangleColor = sf::Color (255,237,10);
         sf::Color textColor = sf::Color (255,122,0);
 
         int score;
+        
 
     public:
 
@@ -32,7 +36,7 @@ class LooseState : public State
 
         //initialisers
         void initBackground();
-        void initEndText();
+        void initEndText(int score);
 
         //Methods
         void endState();
