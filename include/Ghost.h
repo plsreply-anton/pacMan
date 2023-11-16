@@ -42,7 +42,7 @@ private:
     vector<Node*> path;
 
     sf::Clock debounceClock; // For setting new goalpos.
-    float debounceThreshold = 20;
+    float debounceThreshold = 3;
 
 public:
     Ghost(sf::Vector2f startPos, GhostType ghostType);

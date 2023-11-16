@@ -3,18 +3,25 @@
 #include "State.h"
 #include "PacMan.h"
 #include "Map.h"
-#include "StatusBar.h"
 #include "Ghost.h"
-#include "LooseState.h"
 
 
 class GameState : public State
 {
     private:
 
-        sf::Font font;
+        sf::Font looserFont;
+        sf::Font textFont;
+        sf::Text* text;
+        sf::Text* scoreText;
+        sf::Text* highScoreText;
         sf::RectangleShape bgRect;
         bool paused;
+        bool endGame = false;
+        string filePath = "../util/highScore.csv";
+        std::vector<int> highScores;
+        std::vector<std::string> leaderboard;
+        bool highScore = false;
 
         bool keyPressed = false; // Flag to track if a key is currently pressed
         sf::Clock debounceClock; // Clock to measure key press duration
@@ -22,7 +29,15 @@ class GameState : public State
         PacMan pacMan;
         vector <Ghost*> ghosts;
         Map* map;
-        StatusBar statusBar;
+
+        sf::RectangleShape rectangle;
+
+        int health = 3;
+        sf::Font font;
+        sf::Text *currentScoreText;
+        sf::Texture heartTexture;
+        std::vector<sf::Sprite*> heartSprites;
+
 
     public:
 
@@ -33,9 +48,11 @@ class GameState : public State
         //Methods
         void checkForQuit();
         void initWorld();
+        void initStatusbar();
         void endState();
-        void updateKeybinds(const float& dt);
-        void moveButton();
+        void updateInput(const float& dt, sf::Event ev);
+        void endGameDialog();
+        void readFile();
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);
 

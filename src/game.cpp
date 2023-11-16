@@ -19,8 +19,7 @@ Game::~Game()
         delete this->states.top();
         this->states.pop();
         this->states = std::stack<State*>();
-    }
-    
+    }    
 }
  
 void Game::initWindow()
@@ -96,6 +95,10 @@ void Game::updateSFMLEvents()
         {
             this->window->close();
         } 
+        if (!this->states.empty())
+        {
+            this->states.top()->updateInput(this->dt, this->ev);
+        }
     }
 
 }

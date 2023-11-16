@@ -47,7 +47,6 @@ void Button::update()
     else if (this->buttonState == BTN_IDLE)
         this->text->setFillColor(this->textColor);
     else if (this->buttonState == BTN_PRESSED)
-        // Make an animation when clicked
         this->pressed = true;
 }
 

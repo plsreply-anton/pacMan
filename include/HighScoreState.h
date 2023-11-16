@@ -41,8 +41,7 @@ class HighScoreState : public State
         //Methods
         void readFile();
         void endState();
-        void updateKeybinds(const float& dt);
-        void checkForQuit();
+        void updateInput(const float& dt, sf::Event ev);
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);
 };

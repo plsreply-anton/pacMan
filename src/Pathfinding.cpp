@@ -16,10 +16,11 @@ vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f 
     Node* startNode = new Node(start.x/40.f, start.y/40.f, 0, 0, nullptr);
     Node* goalNode = new Node(goal.x, goal.y, 0, 0, nullptr);
 
-    cout << "-------" << endl;
-    cout << "startnode " << startNode->x << " " << startNode->y << endl;
-    cout << "goalNode " << goalNode->x << " " << goalNode->y << endl;
-    cout << "-------" << endl;
+    // cout << "-------" << endl;
+    // cout << "startnode " << startNode->x << " " << startNode->y << endl;
+    // cout << "goalNode " << goalNode->x << " " << goalNode->y << endl;
+    // cout << "-------" << endl;
+
     openList.push(startNode);
     
     while (!openList.empty()) {
@@ -30,7 +31,6 @@ vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f 
 
         // Check if the goal is reached
         if (currentNode->x == goalNode->x && currentNode->y == goalNode->y) {
-            //std::cout << "GOOOOOOOAL" << std::endl;
             // Reconstruct the path and return it
             auto path = new vector<Node*>();
             while (currentNode != nullptr) {
@@ -41,9 +41,7 @@ vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f 
             return path;
         }
 
-        //cout << currentNode->x << " " << currentNode->y << endl;
         closedList[currentNode->y][currentNode->x] = true;
-        //cout << "set closed list doneß" << endl;
 
         // Define possible neighbor offsets
         int dx[] = { -1, 1, 0, 0 };
@@ -65,5 +63,7 @@ vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f 
         }
     }
 
-    return {}; // No path found
+    // cerr << "NO PATH FOUND" << endl;
+    auto path = new vector<Node*>();
+    return path; // No path found
 }

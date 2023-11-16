@@ -28,8 +28,9 @@ class MainMenuState : public State
 
         //Methods
         void endState();
-        void updateKeybinds(const float& dt);
-        void moveButton();
+        void updateInput(const float& dt, sf::Event ev);
+        void initKeybinds();
+        void moveButton(sf::Event ev);
         void setActiveButton();
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);

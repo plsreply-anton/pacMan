@@ -39,17 +39,10 @@ void HighScoreState::endState()
     std::cout << "Ending Highscore State" << std::endl;
 }
 
-void HighScoreState::updateKeybinds(const float& dt)
+void HighScoreState::updateInput(const float& dt, sf::Event ev)
 {
-    this->checkForQuit();
-}
-
-void HighScoreState::checkForQuit()
-{
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-    {
+    if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Space)
         this->quit = true;
-    }
 }
 
 void HighScoreState::initLeaderboard()
@@ -105,7 +98,7 @@ void HighScoreState::readFile()
 
 void HighScoreState::update(const float& dt)
 {
-    this->updateKeybinds(dt);
+    //this->updateInput(dt);
 }
 
 void HighScoreState::render(sf::RenderTarget* target)

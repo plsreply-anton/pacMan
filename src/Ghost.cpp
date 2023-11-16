@@ -25,7 +25,7 @@ void Ghost::initGhost(sf::Vector2f startPos, GhostType ghostType)
         this->ghostTexture.loadFromFile("../util/Blinky.png");
     } else if (ghostType == 1) {
          this->ghostTexture.loadFromFile("../util/Pinky.png");
-    } else if (ghostType == 1) {
+    } else if (ghostType == 2) {
          this->ghostTexture.loadFromFile("../util/Inky.png");
     } else {
         this->ghostTexture.loadFromFile("../util/Clyde.png");
@@ -43,22 +43,22 @@ void Ghost::update(const float& dt, Map *map)
 {
     if (this->goalReached_ or debounceClock.getElapsedTime().asSeconds() > debounceThreshold)
     {
-        this->newPos = this->setNewPosition(map);
+        this->newPos = this->setNewPosition(map); 
         this->path = *pathfinder.findPath(map->getintMap(), this->ghostSprite->getPosition(), this->newPos);
-
-        // cout << "STARTING POS: " << this->ghostSprite->getPosition().x/40 << " " << this->ghostSprite->getPosition().y/40 << endl;
-        // cout << "GOAL POS: " << this->newPos.x << " " << this->newPos.y << endl;
-        // cout << "Pathfinding done" << endl;
-        // for (auto tile : path)
-        //     cout << tile->x << " " << tile->y << endl;
-        // cout << "--------" << endl;
         
         goalReached_=false;
         debounceClock.restart();
     } 
  
-    this->goalReached(this->ghostSprite->getPosition());
-    this->move(dt);
+    if (!this->path.empty())
+    {
+        this->goalReached(this->ghostSprite->getPosition());
+        this->move(dt);
+    } else {
+        // cerr << "PATH EMPTY" << endl;
+    }
+    
+
 }
 
 void Ghost::move(const float& dt)
@@ -120,7 +120,7 @@ sf::Vector2f Ghost::setNewPosition(Map *map) {
         //cout << randY << " " << randX << endl;
 
         if (map->getTiles()[randY][randX]->gettileType() == TileType::Space) {
-            std::cout << "Generated: " << randX << " " << randY << std::endl; 
+            // std::cout << "Generated: " << randX << " " << randY << std::endl; 
             return sf::Vector2f(randX, randY); //Skickar i txt-koordinater
             //return sf::Vector2f(17, 2);
         }
@@ -130,7 +130,7 @@ sf::Vector2f Ghost::setNewPosition(Map *map) {
     }
 
     // Handle the case where no walkable tile is found
-    std::cerr << "No walkable tile found after " << maxRetries << " retries." << std::endl;
+    // std::cerr << "No walkable tile found after " << maxRetries << " retries." << std::endl;
     return sf::Vector2f(17, 1);
 }
 

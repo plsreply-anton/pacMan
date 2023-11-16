@@ -68,55 +68,46 @@ void PacMan::updateMouth()
         this->debounceClock.restart();
 }
 
-void PacMan::update(const float& dt, Map *map, StatusBar &statusBar, vector<Ghost*> ghosts)
+void PacMan::setValues(float deltaX, float deltaY, float rotation)
+{
+    if (deltaX < 0.1 & deltaY < 0.1)
+       this->pacManSprite->setTexture(this->pacManOpenTexture);
+    
+    this->deltaX = deltaX;
+    this->deltaY = deltaY;
+    this->pacManSprite->setRotation(sf::degrees(rotation));
+}
+
+float PacMan::getRotation()
+{
+    return this->pacManSprite->getRotation().asDegrees();
+}
+
+int PacMan::getHealth()
+{
+    return this->health;
+}
+
+void PacMan::update(const float& dt, Map *map, vector<Ghost*> ghosts)
 {   
-    float deltaX = 0.f;
-    float deltaY = 0.f;
-     
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-    {
-        deltaY = 1.f;
-        this->pacManSprite->setRotation(sf::degrees(90));
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-    {
-        deltaY = -1.f;
-        this->pacManSprite->setRotation(sf::degrees(270));
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-    {
-        deltaX = -1.f;
-        this->pacManSprite->setRotation(sf::degrees(180));
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-    {
-        deltaX = 1.f;
-        this->pacManSprite->setRotation(sf::degrees(0));
-    }
-    else
-    {
-        this->pacManSprite->setTexture(this->pacManOpenTexture);
-    }
 
     // Calculate the new position Pacman wants to move to
-    float newX = this->pacManSprite->getPosition().x + deltaX*this->movementSpeed;
-    float newY = this->pacManSprite->getPosition().y + deltaY*this->movementSpeed;
+    float newX = this->pacManSprite->getPosition().x + this->deltaX*this->movementSpeed;
+    float newY = this->pacManSprite->getPosition().y + this->deltaY*this->movementSpeed;
     
     // Check for collisions here
-    if (!checkForCollision(newX+20*deltaX, newY+20*deltaY, deltaX, deltaY, map, deltaX))
+    if (!checkForCollision(newX+20*this->deltaX, newY+20*this->deltaY, this->deltaX, this->deltaY, map, this->deltaX))
     {
-        this->move(dt, deltaX, deltaY);
+        this->move(dt, this->deltaX, this->deltaY);
         this->checkForPellet(map);
     }
 
-    if (checkForGhost(ghosts) && this->healthDebounceClock.getElapsedTime().asMilliseconds() > 2000)
+    if (checkForGhost(ghosts) && this->healthDebounceClock.getElapsedTime().asMilliseconds() > 500)
     {
         cout << "FUCKING HIT A GHOST" << endl;
         this->health -= 1;
         this->healthDebounceClock.restart();
     }
-    
-    statusBar.update(dt, this->score, this->health);
 }
 
 bool PacMan::checkAlive()

@@ -47,16 +47,15 @@ void MainMenuState::endState()
     std::cout << "Ending Menu State" << std::endl;
 }
 
-void MainMenuState::updateKeybinds(const float& dt)
+void MainMenuState::updateInput(const float& dt, sf::Event ev)
 {
-    this->checkForQuit();
-    this->moveButton();
+    this->moveButton(ev);
 }
 
-void MainMenuState::moveButton()
+void MainMenuState::moveButton(sf::Event ev)
 {   
     // Navigate menu, checks if out of bounds etc
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && !keyPressed)
+    if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Down && !keyPressed)
     {
         this->buttonNumber += 1;
         if (this->buttonNumber >= this->buttons.size())
@@ -67,7 +66,7 @@ void MainMenuState::moveButton()
         this->debounceClock.restart();
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !keyPressed)
+    if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Up && !keyPressed)
     {
         this->buttonNumber -= 1;
         if (this->buttonNumber < 0)
@@ -79,8 +78,7 @@ void MainMenuState::moveButton()
     }
 
     // Reset keyPressed if no key is pressed or key has been pressed 200ms+
-    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && 
-        !sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    if (!(ev.type == sf::Event::KeyPressed))
             this->keyPressed = false;
     else if (this->debounceClock.getElapsedTime().asMilliseconds() > 200)
     {
@@ -88,7 +86,7 @@ void MainMenuState::moveButton()
         this->debounceClock.restart();
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+    if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Enter)
         this->buttons[buttonNumber]->buttonPressed();
 }
 
@@ -104,8 +102,6 @@ void MainMenuState::setActiveButton()
 
 void MainMenuState::update(const float& dt)
 {
-    this->updateKeybinds(dt);
-
     for (int i = 0; i < buttons.size(); i++)
     {
         this->buttons[i]->update();
