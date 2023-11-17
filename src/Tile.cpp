@@ -2,14 +2,20 @@
 
 #include "iostream"
 
-Tile::Tile(int tileType, int xPos, int yPos, bool hasPellet)
+Tile::Tile(int tileType, int xPos, int yPos, bool hasPellet, bool isEnergizer)
     : hasPellet_(hasPellet), xPos_(xPos), yPos_(yPos) 
 {
-    if (hasPellet_) 
+    if (hasPellet_ & isEnergizer) 
     {
-        pellet_ = std::make_unique<Pellet>(xPos+20, yPos+20); // Create a Pellet if hasPellet is true
+        pellet_ = std::make_unique<Energizer>(xPos+4, yPos+4); // Create a Pellet if hasPellet is true
         this->tileType_ = 0;
-    } else
+    }  
+    else if (hasPellet_)
+    {
+        pellet_ = std::make_unique<Pellet>(xPos+18, yPos+18); // Create a Pellet if hasPellet is true
+        this->tileType_ = 0;
+    }
+    else
     {
         this->tileType_ = tileType;
     }
@@ -62,6 +68,12 @@ bool Tile::hasPellet()
 {
     return this->hasPellet_;
 }
+
+std::unique_ptr<Pellet> Tile::getPellet()
+{
+    return std::move(this->pellet_);
+}
+
 
 void Tile::render(sf::RenderTarget* target)
 {

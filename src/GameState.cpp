@@ -102,44 +102,27 @@ void GameState::update(const float& dt)
     
     if (!this->pacMan.checkAlive())
         this->endGame = true;
-
-    if ((this->health < this->pacMan.getHealth()+.5) & this->animationEnded)
+    
+    if ((this->pacMan.getEnergizerClock().getElapsedTime().asSeconds() < 5) & this->pacMan.getEnergized())
     {
-        this->animationStarted = true;
-        cout << "fgbns rgsgdfbh" << endl;
+        for (Ghost* ghost : ghosts)
+            ghost->setEnergized(true);
+    } else 
+    {
+        for (Ghost* ghost : ghosts)
+            ghost->setEnergized(false);
     }
     
+
 
     this->health = this->pacMan.getHealth();;
     string scoreString = "score: ";
     scoreString += std::to_string(this->pacMan.getScore());
     this->currentScoreText->setString(scoreString);
+    std::string endScoreString = "YOUR SCORE: ";
+    endScoreString += std::to_string(this->pacMan.getScore());
+    this->scoreText->setString(endScoreString);
 
-    if (this->animationStarted) {
-        this->animationEnded = false;
-            // Get elapsed time since the animation started
-            float elapsedSeconds = clock.getElapsedTime().asSeconds();
-            cout << "fgbns " << endl;
-            int animationDuration = 3;
-
-            // Check if the animation is still running
-            if (elapsedSeconds < animationDuration) {
-                // Calculate scaling factor and alpha based on elapsed time
-               float scaleFactor = 1.0f + 0.9f * elapsedSeconds / animationDuration;
-                int alpha = static_cast<int>(255 * (1.0f - elapsedSeconds / animationDuration));
-
-
-                // Apply scaling and alpha to the sprite
-                this->heartSprites[this->pacMan.getHealth()-1]->setScale(sf::Vector2f(scaleFactor, scaleFactor));
-                this->heartSprites[this->pacMan.getHealth()-1]->setColor(sf::Color(255, 255, 255, alpha));
-            } else {
-                // Reset the sprite to its original state when the animation is complete
-                this->heartSprites[this->pacMan.getHealth()-1]->setScale(sf::Vector2f(1.0f, 1.0f));
-                this->heartSprites[this->pacMan.getHealth()-1]->setColor(sf::Color(255, 255, 255, 255));
-                this->animationStarted = false;
-                this->animationEnded = true;
-            }
-    }
 }
 
 void GameState::endGameDialog()

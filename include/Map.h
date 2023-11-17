@@ -8,7 +8,9 @@
 enum TileType
 {
     Space,
-    Wall
+    Wall,
+    Pellet,
+    Energizer
 };
 
 class Map 

@@ -31,10 +31,12 @@ class PacMan
         float deltaX = 0.f;
         float deltaY = 0.f;
         float rotation = 0;
+        bool energized = false;
+        sf::Clock energizedClock;
         
 
         sf::Clock debounceClock; // Clock to measure close/open mouth
-        sf::Clock healthDebounceClock; // Clock to measure ghost collisions
+        sf::Clock coolDown; // Clock to measure ghost collisions
 
     public:
         
@@ -47,6 +49,8 @@ class PacMan
         void setValues(float deltaX, float deltaY, float rotation);
         float getRotation();
         int getHealth();
+        sf::Clock getEnergizerClock();
+        bool getEnergized();
 
         void move(const float& dt, float x_dir, float y_dir);
         bool checkForCollision(float newX, float newY, float deltaX, float deltaY, Map *map, float dir);

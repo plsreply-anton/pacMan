@@ -102,11 +102,18 @@ void PacMan::update(const float& dt, Map *map, vector<Ghost*> ghosts)
         this->checkForPellet(map);
     }
 
-    if (checkForGhost(ghosts) && this->healthDebounceClock.getElapsedTime().asMilliseconds() > 500)
+    if (checkForGhost(ghosts) && this->coolDown.getElapsedTime().asMilliseconds() > 1000)
     {
-        cout << "FUCKING HIT A GHOST" << endl;
-        this->health -= 1;
-        this->healthDebounceClock.restart();
+        if (this->energized)
+        {
+            this->score += 200;
+            this->energized = false;
+        } else 
+        { 
+            this->health -= 1;
+            this->coolDown.restart();
+        }
+        
     }
 }
 
@@ -120,6 +127,16 @@ bool PacMan::checkAlive()
 int PacMan::getScore()
 {
     return this->score;
+}
+
+sf::Clock PacMan::getEnergizerClock()
+{
+    return this->energizedClock;
+}
+
+bool PacMan::getEnergized()
+{
+    return this->energized;
 }
 
 bool PacMan::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map* map, float dir)
@@ -164,6 +181,16 @@ void PacMan::checkForPellet(Map *map)
 
     if (map->getTiles()[tileY][tileX]->hasPellet())
     {
+        if (map->getTiles()[tileY][tileX]->getPellet()->powerUp())
+        {
+            this->energizedClock.restart();
+            this->energized = true;
+        }
+        if (this->energizedClock.getElapsedTime().asSeconds() > 5)
+        {
+            this->energized = false;
+        }
+        
         this->score += 10;
         map->getTiles()[tileY][tileX]->destroyPellet();
     }
@@ -175,7 +202,11 @@ bool PacMan::checkForGhost(vector<Ghost*> ghosts)
     for (Ghost *ghost : ghosts)
     {
         if (this->pacManSprite->getGlobalBounds().findIntersection(ghost->getSprite().getGlobalBounds()))
-        return true;
+        { 
+            if (this->energized)
+                ghost->setDead(true);
+            return true;
+        }
     }
     return false;
 }

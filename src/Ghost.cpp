@@ -30,6 +30,7 @@ void Ghost::initGhost(sf::Vector2f startPos, GhostType ghostType)
     } else {
         this->ghostTexture.loadFromFile("../util/Clyde.png");
     }
+    this->energizedTexture.loadFromFile("../util/Energized_Ghost.png");
     
     
     this->ghostSprite = new sf::Sprite(this->ghostTexture); 
@@ -57,8 +58,28 @@ void Ghost::update(const float& dt, Map *map)
     } else {
         // cerr << "PATH EMPTY" << endl;
     }
+
+    if (this->dead)
+        this->ghostSprite->setPosition(sf::Vector2f(0,0));
+    
     
 
+}
+
+void Ghost::setEnergized(bool energized)
+{
+    this->energized = energized;
+    if (energized)
+        this->ghostSprite->setTexture(this->energizedTexture);
+    else
+        this->ghostSprite->setTexture(this->ghostTexture);
+    
+}
+
+void Ghost::setDead(bool dead)
+{
+    if (this->energized)
+        this->dead = dead;
 }
 
 void Ghost::move(const float& dt)
@@ -128,7 +149,7 @@ sf::Vector2f Ghost::setNewPosition(Map *map) {
         retryCount++;
         
     }
-
+    
     // Handle the case where no walkable tile is found
     // std::cerr << "No walkable tile found after " << maxRetries << " retries." << std::endl;
     return sf::Vector2f(17, 1);
@@ -136,7 +157,8 @@ sf::Vector2f Ghost::setNewPosition(Map *map) {
 
 void Ghost::render(sf::RenderTarget* target)
 {
-    target->draw(*this->ghostSprite);
+    if (!this->dead)
+        target->draw(*this->ghostSprite);
 }
 
 #pragma GCC diagnostic pop

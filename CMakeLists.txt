@@ -22,7 +22,8 @@ add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp
                       ${CMAKE_SOURCE_DIR}/src/Pellet.cpp
                       ${CMAKE_SOURCE_DIR}/src/Ghost.cpp
                       ${CMAKE_SOURCE_DIR}/src/Pathfinding.cpp
-                      ${CMAKE_SOURCE_DIR}/src/HighScoreState.cpp)
+                      ${CMAKE_SOURCE_DIR}/src/HighScoreState.cpp
+                      ${CMAKE_SOURCE_DIR}/src/Energizer.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 

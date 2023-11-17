@@ -80,12 +80,13 @@ void Map::initTiles()
         for (int j = 0; j < tilemap[i].size(); j++)
         {   
             if (tilemap[i][j] == 0)
-            {
-                row.push_back(new Tile(tilemap[i][j], j*40, i*40, true));
-            } else
-            {   
-                row.push_back(new Tile(tilemap[i][j], j*40, i*40, false));
-            }
+                row.push_back(new Tile(tilemap[i][j], j*40, i*40)); //Normal walkable tile
+            else if (tilemap[i][j] == 2)
+                row.push_back(new Tile(tilemap[i][j], j*40, i*40, true)); //Walkable tile with pellet
+            else if (tilemap[i][j] == 3)
+                row.push_back(new Tile(tilemap[i][j], j*40, i*40, true, true)); //Walkable tile with energizer
+            else
+                row.push_back(new Tile(tilemap[i][j], j*40, i*40)); //Unwalkable tile
         }
         this->tileMap.push_back(row);
     }   

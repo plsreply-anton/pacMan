@@ -32,6 +32,7 @@ class Ghost
 private:
     sf::Sprite* ghostSprite;
     sf::Texture ghostTexture;
+    sf::Texture energizedTexture;
 
     float movementSpeed = 0.5;
     float middleposX, middleposY;
@@ -43,6 +44,8 @@ private:
 
     sf::Clock debounceClock; // For setting new goalpos.
     float debounceThreshold = 3;
+    bool energized = false;
+    bool dead = false;
 
 public:
     Ghost(sf::Vector2f startPos, GhostType ghostType);
@@ -54,6 +57,8 @@ public:
     sf::Vector2f setNewPosition(Map *map);
     void goalReached(sf::Vector2f currentPos);
     sf::Sprite getSprite();
+    void setEnergized(bool energized);
+    void setDead(bool dead);
 
     void update(const float& dt, Map *map);
     void render(sf::RenderTarget* target);

@@ -4,7 +4,7 @@
 
 class Pellet 
 {
-    private:
+    protected:
         sf::CircleShape cicle;
         sf::Color color;
         bool isEaten;
@@ -12,8 +12,9 @@ class Pellet
 
     public:
         Pellet(int xPos, int yPos);
-        ~Pellet();
-        void initSprite(int xPos, int yPos);
-        void render(sf::RenderTarget* target = nullptr);
+        virtual ~Pellet();
+        virtual bool powerUp();
+        virtual void initSprite(int xPos, int yPos);
+        virtual void render(sf::RenderTarget* target = nullptr);
 
 };

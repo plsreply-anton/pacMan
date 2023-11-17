@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Pellet.h"
+#include "Energizer.h"
 
 
 class Tile 
@@ -16,11 +17,13 @@ class Tile
         int yPos_;
         std::unique_ptr<Pellet> pellet_;
 
+
     public:
-        Tile(int tileType, int xPos, int yPos, bool hasPellet = false);      
+        Tile(int tileType, int xPos, int yPos, bool hasPellet = false, bool isEnergizer = false);      
         Tile(const Tile& other);
         void initSprite(int tileType, int xPos, int yPos);
         int gettileType();
+        std::unique_ptr<Pellet> getPellet();
         void destroyPellet();
         bool hasPellet();
         void changeHasPellet();
