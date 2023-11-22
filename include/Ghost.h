@@ -44,7 +44,7 @@ protected:
     float debounceThreshold = 3;
 
     bool dead = false;
-    GhostMode currentMode = Chase;
+    GhostMode currentMode = Scatter;
     sf::Clock updateChaseClock;
     int chaseThreshold;
     sf::Clock modeClock;
@@ -58,17 +58,15 @@ public:
 
     //Getters and setters
     sf::Sprite getSprite();
-    void setEnergized(bool energized);
+    void changeTexture();
     void setDead(bool dead);
-    void setGhostMode(GhostMode mode);
-    GhostMode getGhostMode();
 
     void isTargetReached(sf::Vector2f currentPos);
 
     //Updates and render
     void move(const float& dt);
     virtual sf::Vector2f updateTargetPosition(Map *map, sf::Vector2f pacManPos) = 0;
-    virtual void update(const float& dt, Map *map, sf::Vector2f pacManPos) = 0;
+    virtual void update(const float& dt, Map *map, sf::Vector2f pacManPo, GhostMode modes) = 0;
     void render(sf::RenderTarget* target);
 
 };

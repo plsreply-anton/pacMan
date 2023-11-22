@@ -20,7 +20,6 @@ Inky::~Inky()
     for (Node* node : this->path)
         delete node;
     this->path.clear();
-    cout << "Inky deleted" << endl;
 }
 
 void Inky::initGhost()
@@ -34,14 +33,15 @@ void Inky::initGhost()
     this->ghostSprite->setPosition(this->startPos); 
 }
 
-void Inky::update(const float& dt, Map *map, sf::Vector2f pacManPos)
+void Inky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode mode)
 {
+    this->currentMode = mode;
+    this->changeTexture();
     switch (this->currentMode)
     {
     case Chase:
         if (this->targetPositionReached || this->path.empty() || updateChaseClock.getElapsedTime().asSeconds() < chaseThreshold) {
             this->targetPosition = this->updateTargetPosition(map, pacManPos);
-            cout << "TargetPosition: " << targetPosition.x << " " << targetPosition.y << endl;
             this->path = *pathfinder.findPath(map->getintMap(), this->ghostSprite->getPosition(), this->targetPosition);
             targetPositionReached = false;
             updateChaseClock.restart();

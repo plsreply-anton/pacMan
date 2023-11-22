@@ -19,7 +19,6 @@ Clyde::~Clyde()
     for (Node* node : this->path)
         delete node;
     this->path.clear();
-    cout << "Clyde deleted" << endl;
 }
 
 void Clyde::initGhost()
@@ -33,8 +32,10 @@ void Clyde::initGhost()
     this->ghostSprite->setPosition(this->startPos); 
 }
 
-void Clyde::update(const float& dt, Map *map, sf::Vector2f pacManPos)
+void Clyde::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode mode)
 {
+    this->currentMode = mode;
+    this->changeTexture();
     switch (this->currentMode)
     {
     case Chase:

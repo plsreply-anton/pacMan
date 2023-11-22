@@ -10,15 +10,13 @@ Ghost::Ghost(){}
 
 Ghost::~Ghost(){}
 
-void Ghost::setEnergized(bool energized)
+void Ghost::changeTexture()
 {
-    if (energized)
+    if (this->currentMode == Frightened)
     {
-        this->currentMode = Frightened;
         this->ghostSprite->setTexture(this->energizedTexture);
     }
     else {
-        this->currentMode = Chase;
         this->ghostSprite->setTexture(this->ghostTexture);
     }
 }
@@ -27,16 +25,6 @@ void Ghost::setDead(bool dead)
 {
     if (this->currentMode == Frightened)
         this->dead = dead;
-}
-
-void Ghost::setMode(GhostMode mode)
-{
-    this->currentMode = mode;
-}
-
-GhostMode Ghost::getGhostMode()
-{
-    return this->currentMode;
 }
 
 void Ghost::move(const float& dt)

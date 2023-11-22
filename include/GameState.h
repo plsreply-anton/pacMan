@@ -54,7 +54,7 @@ class GameState : public State
         ~GameState();
 
         //Methods
-        GhostMode updateGhostMode();
+        void updateGhostMode();
         void checkForQuit();
         void initWorld();
         void initStatusbar();

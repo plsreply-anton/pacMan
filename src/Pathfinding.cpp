@@ -16,18 +16,11 @@ vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f 
     Node* startNode = new Node(start.x/40.f, start.y/40.f, 0, 0, nullptr);
     Node* goalNode = new Node(goal.x, goal.y, 0, 0, nullptr);
 
-    cout << "-------" << endl;
-    cout << "startnode " << startNode->x << " " << startNode->y << endl;
-    cout << "goalNode " << goalNode->x << " " << goalNode->y << endl;
-    cout << "-------" << endl;
-
     openList.push(startNode);
     
     while (!openList.empty()) {
         Node* currentNode = openList.top();
         openList.pop();
-
-        //std::cout << "Current Node: (" << currentNode->x << ", " << currentNode->y << ")" << std::endl;
 
         // Check if the goal is reached
         if (currentNode->x == goalNode->x && currentNode->y == goalNode->y) {
@@ -60,11 +53,8 @@ vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f 
 
             Node* neighbor = new Node(x, y, g, 0, currentNode);
             openList.push(neighbor);
-            //std::cout << "Added Neighbor: (" << neighbor->x << ", " << neighbor->y << ")" << std::endl;
         }
     }
-
-    // cerr << "NO PATH FOUND" << endl;
     auto path = new vector<Node*>();
     return path; // No path found
 }

@@ -16,6 +16,6 @@ public:
 
     //Updates
     sf::Vector2f updateTargetPosition(Map *map, sf::Vector2f pacManPos);
-    void update(const float& dt, Map *map, sf::Vector2f pacManPos);
+    void update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode mode);
 
 };

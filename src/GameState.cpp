@@ -24,12 +24,8 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
 
 GameState::~GameState()
 {
-    
-
     for (Ghost *ghost : this->ghosts)
-    {
         delete ghost;
-    }
 
     this->ghosts.clear();
     this->endState(); 
@@ -96,13 +92,14 @@ void GameState::updateInput(const float& dt, sf::Event ev)
 
 void GameState::update(const float& dt)
 {
+    this->updateGhostMode();
     if (!this->endGame)
     {
         
         this->pacMan.update(dt, this->map, this->ghosts);
         for (Ghost *ghost : this->ghosts)
         {
-            ghost->update(dt, this->map, this->pacMan.getSpritePointer()->getPosition());
+            ghost->update(dt, this->map, this->pacMan.getSpritePointer()->getPosition(), this->currentMode);
             
         }    
     } else {
@@ -113,16 +110,6 @@ void GameState::update(const float& dt)
     
     if (!this->pacMan.checkAlive())
         this->endGame = true;
-    
-    if ((this->pacMan.getEnergizerClock().getElapsedTime().asSeconds() < 5) & this->pacMan.getEnergized())
-    {
-        for (Ghost* ghost : ghosts)
-            ghost->setEnergized(true);
-    } else 
-    {
-        for (Ghost* ghost : ghosts)
-            ghost->setEnergized(false);
-    }
 
     this->health = this->pacMan.getHealth();
     if (this->pacMan.getCoolDownClock().getElapsedTime().asMilliseconds() < 1000 && this->health != 3)
@@ -144,7 +131,6 @@ void GameState::update(const float& dt)
     endScoreString += std::to_string(this->pacMan.getScore());
     this->scoreText->setString(endScoreString);
 }
-
 
 void GameState::endGameDialog()
 {   
@@ -203,8 +189,27 @@ void GameState::readFile()
     fin.close();
 }
 
-GhostMode GameState::updateGhostMode()
+void GameState::updateGhostMode()
 {
+
+    if ((this->pacMan.getEnergizerClock().getElapsedTime().asSeconds() < 5) & this->pacMan.getEnergized())
+    {
+        this->currentMode = Frightened;
+        this->modeClock.stop();
+    } else 
+    {
+        this->modeClock.start();
+        if (this->modeClock.getElapsedTime().asSeconds() < 5)
+        {
+            this->currentMode = Scatter;
+        } else if (this->modeClock.getElapsedTime().asSeconds() < 20)
+        {
+            this->currentMode = Chase;
+        } else
+        {
+            this->modeClock.restart();
+        }
+    }
     
 }
 
