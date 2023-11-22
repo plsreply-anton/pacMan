@@ -26,16 +26,17 @@ struct Node {
     Node(int x, int y, int g, int h, Node* parent) : x(x), y(y), g(g), h(h), parent(parent) {}
 };
 
-// Define a custom comparator for the priority queue
+// Astar comparator for the priority queue
 struct CompareNode {
     bool operator()(Node* a, Node* b) {
-        return (a->g + a->h) < (b->g + b->h);
+        return (a->g + a->h) < (b->g + b->h); //Should probably change sign!!!!!!!!!
     }
 };
 
+// Dijkstra comparator for the priority queue
 struct CompareNodeDijkstra {
     bool operator()(Node* const& a, Node* const& b) {
-        return a->g < b->g; // Min-heap: smaller g values have higher priority
+        return a->g > b->g; // Min-heap: smaller g values have higher priority
     }
 };
 

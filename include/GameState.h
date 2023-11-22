@@ -4,6 +4,10 @@
 #include "PacMan.h"
 #include "Map.h"
 #include "Ghost.h"
+#include "Blinky.h"
+#include "Inky.h"
+#include "Pinky.h"
+#include "Clyde.h"
 
 
 class GameState : public State
@@ -31,12 +35,16 @@ class GameState : public State
         Map* map;
 
         sf::RectangleShape rectangle;
+        sf::RectangleShape statusbarRectangle;
 
         int health = 3;
         sf::Font font;
         sf::Text *currentScoreText;
         sf::Texture heartTexture;
         std::vector<sf::Sprite*> heartSprites;
+        sf::Clock blinkClock;
+        sf::Clock modeClock;
+        GhostMode currentMode = Scatter;
 
 
     public:
@@ -46,6 +54,7 @@ class GameState : public State
         ~GameState();
 
         //Methods
+        GhostMode updateGhostMode();
         void checkForQuit();
         void initWorld();
         void initStatusbar();

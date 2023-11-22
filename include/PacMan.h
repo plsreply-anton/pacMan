@@ -25,7 +25,7 @@ class PacMan
         std::string currentOrientation;
         sf::FloatRect newPacmanBounds;
 
-        float movementSpeed = 3;
+        float movementSpeed = 2;
         int score = 0;
         int health = 3;
         float deltaX = 0.f;
@@ -42,24 +42,29 @@ class PacMan
         
         PacMan();
         ~PacMan();
+
         void initSprite();
 
+        //Getters and setters
         sf::Sprite* getSpritePointer();
         int getScore();
-        void setValues(float deltaX, float deltaY, float rotation);
         float getRotation();
         int getHealth();
         sf::Clock getEnergizerClock();
         bool getEnergized();
-
-        void move(const float& dt, float x_dir, float y_dir);
+        sf::Clock getCoolDownClock();
+        void setValues(float deltaX, float deltaY, float rotation);
+        
+        //Checkers
         bool checkForCollision(float newX, float newY, float deltaX, float deltaY, Map *map, float dir);
-        void changeSide();
         void checkForPellet(Map *map);
         bool checkForGhost(vector<Ghost*> ghosts);
         bool checkAlive();
-        void updateMouth(); 
 
+        //Updates and render
+        void move(const float& dt, float x_dir, float y_dir);
+        void changeSide();
+        void updateMouth(); 
         void update(const float& dt, Map *map, vector<Ghost*> ghosts);
         void render(sf::RenderTarget* target);
 };

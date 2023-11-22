@@ -23,9 +23,13 @@ add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp
                       ${CMAKE_SOURCE_DIR}/src/Ghost.cpp
                       ${CMAKE_SOURCE_DIR}/src/Pathfinding.cpp
                       ${CMAKE_SOURCE_DIR}/src/HighScoreState.cpp
+                      ${CMAKE_SOURCE_DIR}/src/Blinky.cpp
+                      ${CMAKE_SOURCE_DIR}/src/Inky.cpp
+                      ${CMAKE_SOURCE_DIR}/src/Pinky.cpp
+                      ${CMAKE_SOURCE_DIR}/src/Clyde.cpp
                       ${CMAKE_SOURCE_DIR}/src/Energizer.cpp)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR} )
 
 #Specifying settings for compilation and linking
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)

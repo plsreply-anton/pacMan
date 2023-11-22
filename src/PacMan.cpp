@@ -30,52 +30,9 @@ sf::Sprite* PacMan::getSpritePointer()
     return this->pacManSprite;
 }
 
-void PacMan::move(const float& dt, float x_dir, float y_dir)
-{   
-    float x = x_dir*this->movementSpeed;
-    float y = y_dir*this->movementSpeed;
-
-    this->pacManSprite->move(sf::Vector2(x, y));
-    this->updateMouth();
-    this->changeSide();
-}
-
-void PacMan::changeSide()
+int PacMan::getScore()
 {
-    if (this->pacManSprite->getPosition().x < 40 && 
-        this->pacManSprite->getPosition().y > 400 &&
-        this->pacManSprite->getPosition().y < 480 )
-    {
-       this->pacManSprite->setPosition(sf::Vector2f(800,420));
-    }
-    if (this->pacManSprite->getPosition().x > 810 && 
-        this->pacManSprite->getPosition().y > 400 &&
-        this->pacManSprite->getPosition().y < 480 )
-    {
-       this->pacManSprite->setPosition(sf::Vector2f(50,420));
-    }
-    
-}
-
-void PacMan::updateMouth()
-{
-    if (this->debounceClock.getElapsedTime().asMilliseconds() < 200)
-        this->pacManSprite->setTexture(this->pacManOpenTexture);
-    else
-        this->pacManSprite->setTexture(this->pacManClosedTexture);
-    
-    if (this->debounceClock.getElapsedTime().asMilliseconds() > 400)
-        this->debounceClock.restart();
-}
-
-void PacMan::setValues(float deltaX, float deltaY, float rotation)
-{
-    if (deltaX < 0.1 & deltaY < 0.1)
-       this->pacManSprite->setTexture(this->pacManOpenTexture);
-    
-    this->deltaX = deltaX;
-    this->deltaY = deltaY;
-    this->pacManSprite->setRotation(sf::degrees(rotation));
+    return this->score;
 }
 
 float PacMan::getRotation()
@@ -88,47 +45,6 @@ int PacMan::getHealth()
     return this->health;
 }
 
-void PacMan::update(const float& dt, Map *map, vector<Ghost*> ghosts)
-{   
-
-    // Calculate the new position Pacman wants to move to
-    float newX = this->pacManSprite->getPosition().x + this->deltaX*this->movementSpeed;
-    float newY = this->pacManSprite->getPosition().y + this->deltaY*this->movementSpeed;
-    
-    // Check for collisions here
-    if (!checkForCollision(newX+20*this->deltaX, newY+20*this->deltaY, this->deltaX, this->deltaY, map, this->deltaX))
-    {
-        this->move(dt, this->deltaX, this->deltaY);
-        this->checkForPellet(map);
-    }
-
-    if (checkForGhost(ghosts) && this->coolDown.getElapsedTime().asMilliseconds() > 1000)
-    {
-        if (this->energized)
-        {
-            this->score += 200;
-            this->energized = false;
-        } else 
-        { 
-            this->health -= 1;
-            this->coolDown.restart();
-        }
-        
-    }
-}
-
-bool PacMan::checkAlive()
-{
-    if (this->health < 1)
-        return false;
-    return true;  
-}
-
-int PacMan::getScore()
-{
-    return this->score;
-}
-
 sf::Clock PacMan::getEnergizerClock()
 {
     return this->energizedClock;
@@ -137,6 +53,21 @@ sf::Clock PacMan::getEnergizerClock()
 bool PacMan::getEnergized()
 {
     return this->energized;
+}
+
+sf::Clock PacMan::getCoolDownClock()
+{
+    return this->coolDown;
+}
+
+void PacMan::setValues(float deltaX, float deltaY, float rotation)
+{
+    if (deltaX < 0.1 & deltaY < 0.1)
+       this->pacManSprite->setTexture(this->pacManOpenTexture);
+    
+    this->deltaX = deltaX;
+    this->deltaY = deltaY;
+    this->pacManSprite->setRotation(sf::degrees(rotation));
 }
 
 bool PacMan::checkForCollision(float newX, float newY, float deltaX, float deltaY, Map* map, float dir)
@@ -209,6 +140,80 @@ bool PacMan::checkForGhost(vector<Ghost*> ghosts)
         }
     }
     return false;
+}
+
+bool PacMan::checkAlive()
+{
+    if (this->health < 1)
+        return false;
+    return true;  
+}
+
+void PacMan::move(const float& dt, float x_dir, float y_dir)
+{   
+    float x = x_dir*this->movementSpeed;
+    float y = y_dir*this->movementSpeed;
+
+    this->pacManSprite->move(sf::Vector2(x, y));
+    this->updateMouth();
+    this->changeSide();
+}
+
+void PacMan::changeSide()
+{
+    if (this->pacManSprite->getPosition().x < 40 && 
+        this->pacManSprite->getPosition().y > 400 &&
+        this->pacManSprite->getPosition().y < 480 )
+    {
+       this->pacManSprite->setPosition(sf::Vector2f(800,420));
+    }
+    if (this->pacManSprite->getPosition().x > 810 && 
+        this->pacManSprite->getPosition().y > 400 &&
+        this->pacManSprite->getPosition().y < 480 )
+    {
+       this->pacManSprite->setPosition(sf::Vector2f(50,420));
+    }
+    
+}
+
+void PacMan::updateMouth()
+{
+    if (this->debounceClock.getElapsedTime().asMilliseconds() < 200)
+        this->pacManSprite->setTexture(this->pacManOpenTexture);
+    else
+        this->pacManSprite->setTexture(this->pacManClosedTexture);
+    
+    if (this->debounceClock.getElapsedTime().asMilliseconds() > 400)
+        this->debounceClock.restart();
+}
+
+void PacMan::update(const float& dt, Map *map, vector<Ghost*> ghosts)
+{   
+
+    // Calculate the new position Pacman wants to move to
+    float newX = this->pacManSprite->getPosition().x + this->deltaX*this->movementSpeed;
+    float newY = this->pacManSprite->getPosition().y + this->deltaY*this->movementSpeed;
+    
+    // Check for collisions here
+    if (!checkForCollision(newX+20*this->deltaX, newY+20*this->deltaY, this->deltaX, this->deltaY, map, this->deltaX))
+    {
+        this->move(dt, this->deltaX, this->deltaY);
+        this->checkForPellet(map);
+    }
+
+    if (checkForGhost(ghosts) && this->coolDown.getElapsedTime().asMilliseconds() > 1000)
+    {
+        if (this->energized)
+        {
+            this->score += 200;
+            //this->energized = false;
+        } else 
+        { 
+            this->health -= 1;
+            this->coolDown.restart();
+        }
+        
+    }
 }
 
 void PacMan::render(sf::RenderTarget* target)

@@ -16,10 +16,10 @@ vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f 
     Node* startNode = new Node(start.x/40.f, start.y/40.f, 0, 0, nullptr);
     Node* goalNode = new Node(goal.x, goal.y, 0, 0, nullptr);
 
-    // cout << "-------" << endl;
-    // cout << "startnode " << startNode->x << " " << startNode->y << endl;
-    // cout << "goalNode " << goalNode->x << " " << goalNode->y << endl;
-    // cout << "-------" << endl;
+    cout << "-------" << endl;
+    cout << "startnode " << startNode->x << " " << startNode->y << endl;
+    cout << "goalNode " << goalNode->x << " " << goalNode->y << endl;
+    cout << "-------" << endl;
 
     openList.push(startNode);
     
@@ -38,6 +38,7 @@ vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f 
                 currentNode = currentNode->parent;
             }
             reverse(path->begin(), path->end());
+            path->erase(path->begin());
             return path;
         }
 

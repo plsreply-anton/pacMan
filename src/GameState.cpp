@@ -14,21 +14,25 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
     this->looserFont.loadFromFile("../util/PacfontGood.ttf");
     this->textFont.loadFromFile("../util/SF Atarian System.ttf");
 
-    ghosts.push_back(new Ghost(sf::Vector2f(160, 60), blinky));
-    ghosts.push_back(new Ghost(sf::Vector2f(740, 760), pinky));
-    ghosts.push_back(new Ghost(sf::Vector2f(740, 60), inky));
-    ghosts.push_back(new Ghost(sf::Vector2f(160, 760), clyde));
+    ghosts.push_back(new Blinky(sf::Vector2f(160, 60)));
+    ghosts.push_back(new Inky(sf::Vector2f(740, 760)));
+    ghosts.push_back(new Pinky(sf::Vector2f(740, 60)));
+    ghosts.push_back(new Clyde(sf::Vector2f(160, 760)));
     this->endGameDialog();
     std::cout << "New Game State" << std::endl;
 }
 
 GameState::~GameState()
 {
-    this->endState(); 
+    
 
     for (Ghost *ghost : this->ghosts)
+    {
         delete ghost;
+    }
+
     this->ghosts.clear();
+    this->endState(); 
 
     for (sf::Sprite* sprite : this->heartSprites)
         delete sprite;
@@ -51,6 +55,9 @@ void GameState::initWorld()
 
 void GameState::initStatusbar()
 {
+    this->statusbarRectangle.setFillColor(sf::Color::Black);
+    this->statusbarRectangle.setPosition(sf::Vector2f(0,840));
+    this->statusbarRectangle.setSize(sf::Vector2f(840, 40));
     this->font.loadFromFile("../util/SF Atarian System.ttf");
     this->font.setSmooth(true);
     this->currentScoreText = new sf::Text(font, "score: 0", 20);
@@ -91,9 +98,13 @@ void GameState::update(const float& dt)
 {
     if (!this->endGame)
     {
+        
         this->pacMan.update(dt, this->map, this->ghosts);
         for (Ghost *ghost : this->ghosts)
-            ghost->update(dt, this->map);
+        {
+            ghost->update(dt, this->map, this->pacMan.getSpritePointer()->getPosition());
+            
+        }    
     } else {
         this->readFile();
         if (this->pacMan.getScore() > this->highScores[4])
@@ -112,18 +123,28 @@ void GameState::update(const float& dt)
         for (Ghost* ghost : ghosts)
             ghost->setEnergized(false);
     }
+
+    this->health = this->pacMan.getHealth();
+    if (this->pacMan.getCoolDownClock().getElapsedTime().asMilliseconds() < 1000 && this->health != 3)
+    {   
+        if (this->blinkClock.getElapsedTime().asMilliseconds() < 100)
+            this->statusbarRectangle.setFillColor(sf::Color::Black);
+        else if (this->blinkClock.getElapsedTime().asMilliseconds() < 200)
+            this->statusbarRectangle.setFillColor(sf::Color::Red);
+        else
+             this->blinkClock.restart();
+    } else {
+        this->statusbarRectangle.setFillColor(sf::Color::Black);
+    }
     
-
-
-    this->health = this->pacMan.getHealth();;
     string scoreString = "score: ";
     scoreString += std::to_string(this->pacMan.getScore());
     this->currentScoreText->setString(scoreString);
     std::string endScoreString = "YOUR SCORE: ";
     endScoreString += std::to_string(this->pacMan.getScore());
     this->scoreText->setString(endScoreString);
-
 }
+
 
 void GameState::endGameDialog()
 {   
@@ -182,6 +203,11 @@ void GameState::readFile()
     fin.close();
 }
 
+GhostMode GameState::updateGhostMode()
+{
+    
+}
+
 void GameState::render(sf::RenderTarget* target)
 {
     if (!target)
@@ -192,6 +218,7 @@ void GameState::render(sf::RenderTarget* target)
     this->pacMan.render(target);
     for (Ghost *ghost : this->ghosts)
         ghost->render(target);
+    target->draw(this->statusbarRectangle);
     target->draw(*this->currentScoreText);
     for (int i = 0; i < this->health; i++)
         target->draw(*this->heartSprites[i]);

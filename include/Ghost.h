@@ -18,49 +18,57 @@
 
 using namespace std;
 
-enum GhostType
-{
-    blinky,
-    pinky,
-    inky,
-    clyde
+enum GhostMode {
+    Chase,
+    Scatter,
+    Frightened
 };
 
 
 class Ghost
 {
-private:
+protected:
     sf::Sprite* ghostSprite;
     sf::Texture ghostTexture;
     sf::Texture energizedTexture;
+    sf::Vector2f startPos;
 
-    float movementSpeed = 0.5;
+    float movementSpeed = 1;
     float middleposX, middleposY;
 
-    sf::Vector2f newPos;
-    bool goalReached_ = true;
+    sf::Vector2f targetPosition;
+    bool targetPositionReached = true;
     Pathfinding pathfinder = Pathfinding();
     vector<Node*> path;
-
     sf::Clock debounceClock; // For setting new goalpos.
     float debounceThreshold = 3;
-    bool energized = false;
+
     bool dead = false;
+    GhostMode currentMode = Chase;
+    sf::Clock updateChaseClock;
+    int chaseThreshold;
+    sf::Clock modeClock;
 
 public:
-    Ghost(sf::Vector2f startPos, GhostType ghostType);
-    ~Ghost();
+    Ghost();
+    //virtual Ghost(sf::Vector2f startPos);
+    virtual ~Ghost() = 0;
 
-    void initGhost(sf::Vector2f startPos, GhostType ghostType);
+    virtual void initGhost() = 0;
 
-    void move(const float& dt);
-    sf::Vector2f setNewPosition(Map *map);
-    void goalReached(sf::Vector2f currentPos);
+    //Getters and setters
     sf::Sprite getSprite();
     void setEnergized(bool energized);
     void setDead(bool dead);
+    void setGhostMode(GhostMode mode);
+    GhostMode getGhostMode();
 
-    void update(const float& dt, Map *map);
+    void isTargetReached(sf::Vector2f currentPos);
+
+    //Updates and render
+    void move(const float& dt);
+    virtual sf::Vector2f updateTargetPosition(Map *map, sf::Vector2f pacManPos) = 0;
+    virtual void update(const float& dt, Map *map, sf::Vector2f pacManPos) = 0;
     void render(sf::RenderTarget* target);
 
 };
