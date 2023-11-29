@@ -1,11 +1,11 @@
 #pragma once
 
-#include "GameState.h"
-#include "HighScoreState.h"
-#include "SettingState.h"
 #include "Button.h"
+#include "AnimationButton.h"
+#include "SliderButton.h"
+#include "State.h"
 
-class MainMenuState : public State
+class SettingState : public State
 {
     private:
         sf::Sprite* bgSprite;
@@ -20,8 +20,8 @@ class MainMenuState : public State
     public:
 
         //Constructor and Destructor
-        MainMenuState(sf::RenderWindow* window, std::stack<State*>* states);
-        virtual ~MainMenuState();
+        SettingState(sf::RenderWindow* window, std::stack<State*>* states);
+        ~SettingState();
 
         //initialisers
         void initButtons();
@@ -30,6 +30,7 @@ class MainMenuState : public State
         //Methods
         void endState();
         void updateInput(const float& dt, sf::Event ev);
+        void saveSettings();
         void initKeybinds();
         void moveButton(sf::Event ev);
         void setActiveButton();

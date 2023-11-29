@@ -1,6 +1,6 @@
 #include "Pathfinding.h"
 
-Pathfinding::Pathfinding() {}
+Pathfinding::Pathfinding(PathfindingStrategy* strategy)  : strategy(strategy)  {}
 
 Pathfinding::~Pathfinding() {}
 
@@ -8,7 +8,7 @@ Pathfinding::~Pathfinding() {}
 vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f start, sf::Vector2f goal) {
 
     // Init open list with neighbouring nodes and sort on g+h
-    priority_queue<Node*, vector<Node*>, CompareNodeDijkstra> openList;
+    priority_queue<Node*, vector<Node*>, CompareNode> openList;
 
     // Init closed list and set false to all, change to true when already visited
     vector<vector<bool>> closedList(map.size(), vector<bool>(map[0].size(), false));
@@ -49,7 +49,8 @@ vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f 
                 continue;
 
             int g = currentNode->g + 1;
-            // int h = abs(x - goalNode->x) + abs(y - goalNode->y); // Manhattan distance
+            int h = strategy->calculateH(x, y, goalNode->x, goalNode->y);
+            //int h = abs(x - goalNode->x) + abs(y - goalNode->y); // Manhattan distance
 
             Node* neighbor = new Node(x, y, g, 0, currentNode);
             openList.push(neighbor);

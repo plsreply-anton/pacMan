@@ -5,13 +5,12 @@
 #include <cmath>
 using namespace std;
 
-Inky::Inky(sf::Vector2f startPos)
+Inky::Inky(sf::Vector2f startPos) : Ghost(startPos)
 {
-    this->startPos = startPos;
     this->initGhost();
-    debounceClock.restart();
     this->chaseThreshold = 3;
     this->movementSpeed = 0.7;
+    this->readSettingsFromFile("../src/config/gameSettings.ini");
 }
 
 Inky::~Inky()
@@ -20,6 +19,8 @@ Inky::~Inky()
     for (Node* node : this->path)
         delete node;
     this->path.clear();
+    delete this->strategy;
+    delete this->pathfinder;
 }
 
 void Inky::initGhost()
@@ -42,7 +43,7 @@ void Inky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode m
     case Chase:
         if (this->targetPositionReached || this->path.empty() || updateChaseClock.getElapsedTime().asSeconds() < chaseThreshold) {
             this->targetPosition = this->updateTargetPosition(map, pacManPos);
-            this->path = *pathfinder.findPath(map->getintMap(), this->ghostSprite->getPosition(), this->targetPosition);
+            this->path = *pathfinder->findPath(map->getintMap(), this->ghostSprite->getPosition(), this->targetPosition);
             targetPositionReached = false;
             updateChaseClock.restart();
         }
@@ -53,7 +54,7 @@ void Inky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode m
         if (this->targetPositionReached or debounceClock.getElapsedTime().asSeconds() > debounceThreshold)
         {
             this->targetPosition = this->updateTargetPosition(map, pacManPos); 
-            this->path = *pathfinder.findPath(map->getintMap(), this->ghostSprite->getPosition(), this->targetPosition);
+            this->path = *pathfinder->findPath(map->getintMap(), this->ghostSprite->getPosition(), this->targetPosition);
             targetPositionReached = false;
             debounceClock.restart();
         } 
@@ -65,6 +66,7 @@ void Inky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode m
         this->isTargetReached(this->ghostSprite->getPosition());
         this->move(dt);
     }
+
 
     if (this->dead)
         this->ghostSprite->setPosition(sf::Vector2f(0,0));

@@ -5,13 +5,13 @@
 #include <cmath>
 using namespace std;
 
-Blinky::Blinky(sf::Vector2f startPos)
+Blinky::Blinky(sf::Vector2f startPos) : Ghost(startPos)
 {
-    this->startPos = startPos;
     this->initGhost();
-    debounceClock.restart();
-    this->chaseThreshold = 2;
     this->movementSpeed = 1.5;
+    this->chaseThreshold = 2;
+    this->readSettingsFromFile("../src/config/gameSettings.ini");
+    
 }
 
 Blinky::~Blinky()
@@ -20,6 +20,8 @@ Blinky::~Blinky()
     for (Node* node : this->path)
         delete node;
     this->path.clear();
+    delete this->strategy;
+    delete this->pathfinder;
 }
 
 void Blinky::initGhost()
@@ -42,7 +44,7 @@ void Blinky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode
     case Chase:
         if (this->targetPositionReached || this->path.empty() || updateChaseClock.getElapsedTime().asSeconds() < chaseThreshold) {
             this->targetPosition = this->updateTargetPosition(map, pacManPos);
-            this->path = *pathfinder.findPath(map->getintMap(), this->ghostSprite->getPosition(), this->targetPosition);
+            this->path = *pathfinder->findPath(map->getintMap(), this->ghostSprite->getPosition(), this->targetPosition);
             targetPositionReached = false;
             updateChaseClock.restart();
         }
@@ -53,7 +55,7 @@ void Blinky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode
         if (this->targetPositionReached or debounceClock.getElapsedTime().asSeconds() > debounceThreshold)
         {
             this->targetPosition = this->updateTargetPosition(map, pacManPos); 
-            this->path = *pathfinder.findPath(map->getintMap(), this->ghostSprite->getPosition(), this->targetPosition);
+            this->path = *pathfinder->findPath(map->getintMap(), this->ghostSprite->getPosition(), this->targetPosition);
             targetPositionReached = false;
             debounceClock.restart();
         } 

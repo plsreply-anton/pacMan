@@ -9,25 +9,31 @@ project(pacMan VERSION 0.1)
 #to give access to version nr for the src code.
 configure_file(pacManConfig.h.in pacManConfig.h)
 
+set(SRC_DIR ${CMAKE_SOURCE_DIR}/src)
+set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
+
 #Add executable files of which the project is built on
-add_executable(${PROJECT_NAME} ${CMAKE_SOURCE_DIR}/src/main.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Game.cpp
-                      ${CMAKE_SOURCE_DIR}/src/State.cpp
-                      ${CMAKE_SOURCE_DIR}/src/GameState.cpp
-                      ${CMAKE_SOURCE_DIR}/src/MainMenuState.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Button.cpp
-                      ${CMAKE_SOURCE_DIR}/src/PacMan.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Map.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Tile.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Pellet.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Ghost.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Pathfinding.cpp
-                      ${CMAKE_SOURCE_DIR}/src/HighScoreState.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Blinky.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Inky.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Pinky.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Clyde.cpp
-                      ${CMAKE_SOURCE_DIR}/src/Energizer.cpp)
+add_executable(${PROJECT_NAME} ${SRC_DIR}/main.cpp
+                    ${SRC_DIR}/Game.cpp
+                    ${SRC_DIR}/State.cpp
+                    ${SRC_DIR}/GameState.cpp
+                    ${SRC_DIR}/MainMenuState.cpp
+                    ${SRC_DIR}/Button.cpp
+                    ${SRC_DIR}/AnimationButton.cpp
+                    ${SRC_DIR}/PacMan.cpp
+                    ${SRC_DIR}/Map.cpp
+                    ${SRC_DIR}/Tile.cpp
+                    ${SRC_DIR}/Pellet.cpp
+                    ${SRC_DIR}/Ghost.cpp
+                    ${SRC_DIR}/Pathfinding.cpp
+                    ${SRC_DIR}/HighScoreState.cpp
+                    ${SRC_DIR}/Blinky.cpp
+                    ${SRC_DIR}/Inky.cpp
+                    ${SRC_DIR}/Pinky.cpp
+                    ${SRC_DIR}/Clyde.cpp
+                    ${SRC_DIR}/Energizer.cpp
+                    ${SRC_DIR}/SettingState.cpp
+                    ${SRC_DIR}/SliderButton.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR} )
 
@@ -37,7 +43,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 
 target_include_directories(${PROJECT_NAME} PRIVATE 
     /Users/antonlarsson/SFML/include
-    ${CMAKE_SOURCE_DIR}/include
+    ${INCLUDE_DIR}
 )
 
 #Speicfy which libraries should ne included
@@ -47,7 +53,6 @@ target_link_libraries(pacMan
     /Users/antonlarsson/SFML/lib/libsfml-system.dylib
     /Users/antonlarsson/SFML/lib/libsfml-audio.dylib
     /Users/antonlarsson/SFML/lib/libsfml-network.dylib)
-
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/pacManConfig.h" DESTINATION include) 

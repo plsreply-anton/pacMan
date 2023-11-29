@@ -6,6 +6,7 @@
 PacMan::PacMan()
 {
    this->initSprite();
+   this->readSettingsFromFile("../src/config/gameSettings.ini");
 }
 
 PacMan::~PacMan()
@@ -24,6 +25,30 @@ void PacMan::initSprite()
                                 this->pacManSprite->getGlobalBounds().height/2));
     this->pacManSprite->setPosition(sf::Vector2f(320, 480)); 
 }
+
+void PacMan::readSettingsFromFile(string filePath)
+{
+    std::ifstream inFile(filePath);
+    if (!inFile.is_open()) {
+        std::cerr << "Error opening file: " << filePath << std::endl;
+        return;
+    }
+
+    std::string line;
+    float multiplier;
+    while (std::getline(inFile, line)) {
+        std::istringstream iss(line);
+        std::string identifier;
+            
+        if (std::getline(iss, identifier, ' ')) {
+            if (identifier == "pacManSpeedMultiplier")
+                iss >> multiplier;
+            else if (identifier == "initialHealth")
+                iss >> this->health;
+        }
+    }
+    this->movementSpeed = this->movementSpeed*multiplier;
+}   
 
 sf::Sprite* PacMan::getSpritePointer()
 {

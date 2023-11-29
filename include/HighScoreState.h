@@ -16,7 +16,7 @@ class HighScoreState : public State
         sf::Sprite* backArrowSprite;
         sf::Texture backArrowTexture;
 
-        sf::RectangleShape shape;
+        sf::RectangleShape rectangle;
         sf::Text* text;
 
         sf::Font headerFont;

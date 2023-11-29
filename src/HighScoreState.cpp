@@ -49,16 +49,22 @@ void HighScoreState::initLeaderboard()
 {
     this->leaderboardFont.loadFromFile("../util/SF Atarian System.ttf");
     this->headerFont.loadFromFile("../util/PacfontGood.ttf");
-    int pos_x = ((sf::Vector2u(this->window->getSize()).x - 200)/2)+130;
-    int pos_y = 340;
-    this->shape.setPosition(sf::Vector2f(pos_x,pos_y));
-    this->shape.setSize(sf::Vector2f(200, 50));
-    this->shape.setFillColor(this->buttonColor);
-    this->text = new sf::Text(headerFont, "highscores", 20);
-    this->text->setFillColor(this->textColor);
-    this->text->setPosition(
-        sf::Vector2f(int(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text->getGlobalBounds().width / 2.f), 
-                     int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->text->getGlobalBounds().height / 2.f)));
+    
+    sf::Vector2f rectPos = sf::Vector2f(this->window->getSize().x/2 + 200, this->window->getSize().y/2+50);
+    this->rectangle.setSize(sf::Vector2f(300, 300));
+    this->rectangle.setOrigin(sf::Vector2f(this->rectangle.getSize().x/2, this->rectangle.getSize().y/2));
+    this->rectangle.setPosition(rectPos);
+    sf::Color rectangleColor = sf::Color::Black;
+    rectangleColor.a = 210;
+    this->rectangle.setFillColor(rectangleColor);
+
+    this->text = new sf::Text(this->headerFont, "highscores", 40);
+    sf::Color textColor = sf::Color(255,237,10);
+    textColor.a = 210;
+    this->text->setOrigin(sf::Vector2f(this->text->getGlobalBounds().width/2, this->text->getGlobalBounds().height/2));
+    this->text->setPosition(sf::Vector2f(sf::Vector2f(rectPos.x, rectPos.y-125)));
+    this->text->setFillColor(textColor);
+
     this->readFile();
 }
 
@@ -89,8 +95,9 @@ void HighScoreState::readFile()
             // add all the column data of a row to a vector 
             temp += word;
         } 
-        this->leaderboard.push_back(new sf::Text(leaderboardFont, temp, 20));
-        this->leaderboard[i]->setPosition(sf::Vector2f(525, 400 + i*40));
+        this->leaderboard.push_back(new sf::Text(leaderboardFont, temp, 25));
+        this->leaderboard[i]->setOrigin(sf::Vector2f(this->leaderboard[i]->getGlobalBounds().width/2, this->leaderboard[i]->getGlobalBounds().height/2));
+        this->leaderboard[i]->setPosition(sf::Vector2f(this->window->getSize().x/2 + 200, this->window->getSize().y/2-40 + i*50));
         this->leaderboard[i]->setFillColor(this->textColor);
         i ++;
     }
@@ -107,7 +114,7 @@ void HighScoreState::render(sf::RenderTarget* target)
         target = this->window;
 
     target->draw(*this->bgSprite);
-    target->draw(this->shape);
+    target->draw(this->rectangle);
     target->draw(*this->text);
     for (int i = 0; i < 5; i++)
     {

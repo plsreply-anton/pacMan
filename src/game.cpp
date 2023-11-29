@@ -93,7 +93,11 @@ void Game::updateSFMLEvents()
             this->window->close();
         } else if ((this->ev.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)))
         {
-            this->window->close();
+            while (!states.empty())
+            {
+                delete this->states.top();
+                this->states.pop();
+            }
         } 
         if (!this->states.empty())
         {

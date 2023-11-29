@@ -3,6 +3,8 @@
 
 #include "Button.h"
 
+Button::Button(){};
+
 Button::Button(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextColor,
                 std::string text, float x, float y, float width, float height)
 {
@@ -26,6 +28,7 @@ Button::Button(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextC
 Button::~Button()
 {
     delete this->text;
+    delete this->currentValueText;
 }
 
 void Button::setActiveButton()
@@ -37,8 +40,9 @@ void Button::setUnactiveButton()
 {
     this->buttonState=BTN_IDLE;
     this->pressed = false;
-
 }
+
+void Button::moveButton(sf::Event ev){}
 
 void Button::update()
 {
@@ -53,6 +57,20 @@ void Button::update()
 short unsigned Button::getButtonState()
 {
     return this->buttonState;
+}
+
+bool Button::useAstar()
+{
+    return false;
+}
+
+float Button::getCurrentValue()
+{
+    return 0;
+}
+void Button::setButtonText(string text)
+{
+    this->text->setString(text);
 }
 
 void Button::buttonPressed()

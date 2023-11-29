@@ -9,6 +9,10 @@
 #include "Pinky.h"
 #include "Clyde.h"
 
+struct ScoreData {
+    std::string line;
+    int score;
+};
 
 class GameState : public State
 {
@@ -23,9 +27,11 @@ class GameState : public State
         bool paused;
         bool endGame = false;
         string filePath = "../util/highScore.csv";
-        std::vector<int> highScores;
-        std::vector<std::string> leaderboard;
-        bool highScore = false;
+        std::vector<ScoreData> highScores;
+        bool highScore_ = false;
+        bool fileRead = false;
+        bool useAstar = false;
+        int initialHealth = 3;
 
         bool keyPressed = false; // Flag to track if a key is currently pressed
         sf::Clock debounceClock; // Clock to measure key press duration
@@ -36,6 +42,7 @@ class GameState : public State
 
         sf::RectangleShape rectangle;
         sf::RectangleShape statusbarRectangle;
+        sf::RectangleShape playerNameRectangle;
 
         int health = 3;
         sf::Font font;
@@ -45,16 +52,18 @@ class GameState : public State
         sf::Clock blinkClock;
         sf::Clock modeClock;
         GhostMode currentMode = Scatter;
-
+        sf::Text* playerName = new sf::Text(textFont, "", 20);
+        string playerNameString = "";
 
     public:
-
         //Constructor and Destructor
         GameState(sf::RenderWindow* window, std::stack<State*>* states);
         ~GameState();
 
         //Methods
         void updateGhostMode();
+        void updatePlayerName();
+        void writeHighScore();
         void checkForQuit();
         void initWorld();
         void initStatusbar();

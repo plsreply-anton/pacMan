@@ -27,7 +27,7 @@ class PacMan
 
         float movementSpeed = 2;
         int score = 0;
-        int health = 3;
+        int health = 4;
         float deltaX = 0.f;
         float deltaY = 0.f;
         float rotation = 0;
@@ -44,6 +44,7 @@ class PacMan
         ~PacMan();
 
         void initSprite();
+        void readSettingsFromFile(string filePath);
 
         //Getters and setters
         sf::Sprite* getSpritePointer();

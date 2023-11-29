@@ -15,6 +15,7 @@
 
 #include "Map.h"
 #include "Pathfinding.h"
+#include "PathfindingStrategy.h"
 
 using namespace std;
 
@@ -23,7 +24,6 @@ enum GhostMode {
     Scatter,
     Frightened
 };
-
 
 class Ghost
 {
@@ -38,23 +38,27 @@ protected:
 
     sf::Vector2f targetPosition;
     bool targetPositionReached = true;
-    Pathfinding pathfinder = Pathfinding();
+    PathfindingStrategy* strategy;
+    Pathfinding* pathfinder;
     vector<Node*> path;
     sf::Clock debounceClock; // For setting new goalpos.
     float debounceThreshold = 3;
+    bool useAstar = false;
 
     bool dead = false;
     GhostMode currentMode = Scatter;
     sf::Clock updateChaseClock;
     int chaseThreshold;
     sf::Clock modeClock;
+    vector<sf::Vector2f> deadPos{sf::Vector2f(400,420),sf::Vector2f(420,420),sf::Vector2f(440,420)}; 
 
 public:
     Ghost();
-    //virtual Ghost(sf::Vector2f startPos);
+    Ghost(sf::Vector2f startPos);
     virtual ~Ghost() = 0;
 
     virtual void initGhost() = 0;
+    void readSettingsFromFile(string filePath);
 
     //Getters and setters
     sf::Sprite getSprite();

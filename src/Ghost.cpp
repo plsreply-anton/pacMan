@@ -8,7 +8,45 @@ using namespace std;
 
 Ghost::Ghost(){}
 
+Ghost::Ghost(sf::Vector2f startPos)
+{
+
+    this->startPos = startPos;
+    if (this->useAstar)
+        this->strategy =new AStarStrategy();
+    else
+        this->strategy = new DijkstraStrategy();
+    
+    this->pathfinder = new Pathfinding(this->strategy);
+}
+
 Ghost::~Ghost(){}
+
+void Ghost::readSettingsFromFile(string filePath)
+{
+    std::ifstream inFile(filePath);
+    if (!inFile.is_open()) {
+        std::cerr << "Error opening file: " << filePath << std::endl;
+        return;
+    }
+
+    std::string line;
+    float multiplier;
+    while (std::getline(inFile, line)) {
+        std::istringstream iss(line);
+        std::string identifier;
+            
+        if (std::getline(iss, identifier, ' ')) {
+            if (identifier == "useAstar") {
+                iss >> std::boolalpha >> this->useAstar;
+            } else if (identifier == "ghostSpeedMultiplier") {
+                iss >> multiplier;
+            }
+        }
+    }
+    this->movementSpeed = this->movementSpeed*multiplier;
+}   
+
 
 void Ghost::changeTexture()
 {

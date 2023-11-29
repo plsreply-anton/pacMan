@@ -115,9 +115,15 @@ void MainMenuState::update(const float& dt)
             this->states->push(new HighScoreState(this->window, this->states));
             this->buttons[i]->setActiveButton();
         } 
+        if (this->buttons[i]->getButtonState() == 2 && buttonNumber == 2)
+        {
+            this->states->push(new SettingState(this->window, this->states));
+            this->buttons[i]->setActiveButton();
+        } 
         else if (this->buttons[i]->getButtonState() == 2 && buttonNumber == 3)
             this->quit = true;
     }
+
 }
 
 void MainMenuState::render(sf::RenderTarget* target)
