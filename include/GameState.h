@@ -18,41 +18,45 @@ class GameState : public State
 {
     private:
 
-        sf::Font looserFont;
-        sf::Font textFont;
+        sf::Font pacManFont;
+        sf::Font atariFont;
+
         sf::Text* text;
         sf::Text* scoreText;
         sf::Text* highScoreText;
-        sf::RectangleShape bgRect;
-        bool paused;
+        sf::Text* currentScoreText;
+        sf::Text* playerName = new sf::Text(atariFont, "", 20);
+
+        
+        bool paused = false;
         bool endGame = false;
-        string filePath = "../util/highScore.csv";
-        std::vector<ScoreData> highScores;
         bool highScore_ = false;
         bool fileRead = false;
         bool useAstar = false;
+        bool keyPressed = false; 
+
+        const string filePath = "../util/highScore.csv";
+
+        vector<ScoreData> highScores;
+        vector<sf::Sprite*> heartSprites;
+       
         int initialHealth = 3;
+        int health = 3;
 
-        bool keyPressed = false; // Flag to track if a key is currently pressed
-        sf::Clock debounceClock; // Clock to measure key press duration
-
+        Map* map;
         PacMan pacMan;
         vector <Ghost*> ghosts;
-        Map* map;
+        GhostMode currentMode = Scatter;
+       
 
         sf::RectangleShape rectangle;
         sf::RectangleShape statusbarRectangle;
         sf::RectangleShape playerNameRectangle;
-
-        int health = 3;
-        sf::Font font;
-        sf::Text *currentScoreText;
         sf::Texture heartTexture;
-        std::vector<sf::Sprite*> heartSprites;
         sf::Clock blinkClock;
         sf::Clock modeClock;
-        GhostMode currentMode = Scatter;
-        sf::Text* playerName = new sf::Text(textFont, "", 20);
+        sf::Clock debounceClock;
+        
         string playerNameString = "";
 
     public:
@@ -60,18 +64,21 @@ class GameState : public State
         GameState(sf::RenderWindow* window, std::stack<State*>* states);
         ~GameState();
 
-        //Methods
-        void updateGhostMode();
-        void updatePlayerName();
-        void writeHighScore();
-        void checkForQuit();
+        //Initializers
         void initWorld();
         void initStatusbar();
-        void endState();
-        void updateInput(const float& dt, sf::Event ev);
+
+        //Methods
+        void endState() const;
         void endGameDialog();
+
+        void checkForQuit();
         void readFile();
+        void writeHighScore();
+
+        void updateGhostMode();
+        void updatePlayerName();
+        void updateInput(const float& dt, const sf::Event ev);
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);
-
 };

@@ -28,10 +28,10 @@ class MainMenuState : public State
         void initBackground();
 
         //Methods
-        void endState();
-        void updateInput(const float& dt, sf::Event ev);
+        void endState() const;
+        void updateInput(const float& dt, const sf::Event ev);
         void initKeybinds();
-        void moveButton(sf::Event ev);
+        void moveButton(const sf::Event ev);
         void setActiveButton();
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);

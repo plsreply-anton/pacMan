@@ -8,6 +8,7 @@ SettingState::SettingState(sf::RenderWindow* window, std::stack<State*>* states)
 {
     this->initBackground();
     this->initButtons();
+
     std::cout << "New Settings State" << std::endl;
 }
 
@@ -16,22 +17,23 @@ SettingState::~SettingState()
     for (Button *button : buttons)
         delete button;
     this->buttons.clear();
+
     delete this->bgSprite;
+    
     this->endState();
 }
 
 void SettingState::initBackground()
 {
     this->bgImage.loadFromFile("../util/menuImage.png");
-    this->bgImage.setSmooth(true);
     this->bgSprite = new sf::Sprite(this->bgImage);
 }
 
 void SettingState::initButtons()
 { 
-    int width = 200;
-    int height = 50; 
-    int pos_x = ((sf::Vector2u(this->window->getSize()).x - width)/2)+130;
+    const int width = 200;
+    const int height = 50; 
+    const int pos_x = ((sf::Vector2u(this->window->getSize()).x - width)/2)+130;
 
     vector<string> searchLabels = {"Dijkstra", "Astar"};
     this->buttons.push_back(new AnimationButton(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "Pathfinder" ,searchLabels , pos_x, 340, width, height));
@@ -41,64 +43,63 @@ void SettingState::initButtons()
     this->buttons[0]->setActiveButton();
 }
 
-void SettingState::endState()
+void SettingState::endState() const
 {
     std::cout << "Ending Settings State" << std::endl;
 }
 
 void SettingState::updateInput(const float& dt, sf::Event ev)
 {
-    if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Space)
+    if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Enter)
     {
         this->saveSettings();
         this->quit = true;
     }
+
     this->moveButton(ev);
 }
 
-void SettingState::moveButton(sf::Event ev)
-{   
+void SettingState::moveButton(const sf::Event ev)
+{
     // Navigate menu, checks if out of bounds etc
-    if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Down && !keyPressed)
+    if (ev.type == sf::Event::KeyPressed && !keyPressed)
     {
-        this->buttonNumber += 1;
-        if (this->buttonNumber >= this->buttons.size())
-            this->buttonNumber = this->buttons.size()-1;
+        switch (ev.key.code)
+        {
+            case sf::Keyboard::Down:
+                this->buttonNumber = std::min(this->buttonNumber + 1, static_cast<int>(this->buttons.size()) - 1);
+                break;
+            case sf::Keyboard::Up:
+                this->buttonNumber = std::max(this->buttonNumber - 1, 0);
+                break;
+            case sf::Keyboard::Left:
+            case sf::Keyboard::Right:
+                this->buttons[this->buttonNumber]->buttonPressed();
+                this->buttons[buttonNumber]->moveButton(ev);
+                break;
+            default:
+                break;
+        }
 
-        this->setActiveButton();
-        this->keyPressed = true; 
-        this->debounceClock.restart();
+        if (ev.key.code == sf::Keyboard::Down || ev.key.code == sf::Keyboard::Up)
+        {
+            this->setActiveButton();
+            this->keyPressed = true;
+            this->debounceClock.restart();
+        }
     }
 
-    if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Up && !keyPressed)
+    // Reset keyPressed if no key is pressed or key has been pressed for 200ms+
+    if (ev.type != sf::Event::KeyPressed || this->debounceClock.getElapsedTime().asMilliseconds() > 200)
     {
-        this->buttonNumber -= 1;
-        if (this->buttonNumber < 0)
-            this->buttonNumber = 0;
-
-        this->setActiveButton();
-        this->keyPressed = true;
-        this->debounceClock.restart();
-    }
-
-    // Reset keyPressed if no key is pressed or key has been pressed 200ms+
-    if (!(ev.type == sf::Event::KeyPressed))
-            this->keyPressed = false;
-    else if (this->debounceClock.getElapsedTime().asMilliseconds() > 200)
-    {
-        this->keyPressed = false; 
+        this->keyPressed = false;
         this->debounceClock.restart();
     }
 
     if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Enter)
-        this->buttons[this->buttonNumber]->buttonPressed();
-    
-    if (ev.type == sf::Event::KeyPressed && (ev.key.code == sf::Keyboard::Left || ev.key.code == sf::Keyboard::Right))
     {
         this->buttons[this->buttonNumber]->buttonPressed();
-        this->buttons[buttonNumber]->moveButton(ev);
     }
-
 }
 
 void SettingState::setActiveButton()
@@ -109,7 +110,7 @@ void SettingState::setActiveButton()
     this->buttons[this->buttonNumber]->setActiveButton();
 }
 
-void SettingState::saveSettings()
+void SettingState::saveSettings() const
 {
     ofstream outFile("../src/config/gameSettings.ini");
 
@@ -132,14 +133,8 @@ void SettingState::update(const float& dt)
     for (int i = 0; i < buttons.size(); i++)
     {
         this->buttons[i]->update();
-        if (this->buttons[i]->getButtonState() == 2 && buttonNumber == 0)
-            this->buttons[i]->setActiveButton(); 
-        else if (this->buttons[i]->getButtonState() == 2 && buttonNumber == 1)
-            this->buttons[i]->setActiveButton(); 
-        else if (this->buttons[i]->getButtonState() == 2 && buttonNumber == 2)
-            this->buttons[i]->setActiveButton(); 
-        else if (this->buttons[i]->getButtonState() == 2 && buttonNumber == 3)
-            this->buttons[i]->setActiveButton();
+        if (buttons[i]->getButtonState() == 2 && buttonNumber == i)
+            buttons[i]->setActiveButton();
     }
 }
 

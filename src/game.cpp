@@ -24,16 +24,16 @@ Game::~Game()
  
 void Game::initWindow()
 {
+    string title = "PacMan, by Anton";
     int width = 860;
     int height = 880;
-    ifstream ifs("../src/config/window.ini");
-
-    string title = "PacMan, by Anton";
-    sf::VideoMode window_bounds(sf::Vector2u(width, height));
     unsigned framerate_limit = 120;
     bool vertical_sync_enabled = false;
     unsigned int antialiasing_level = 0;
+    sf::VideoMode window_bounds(sf::Vector2u(width, height));
+    
     cout << "Current Working Directory: " << filesystem::current_path() << endl;
+    ifstream ifs("../src/config/window.ini");
     
     if (ifs.is_open())
     {
@@ -46,13 +46,10 @@ void Game::initWindow()
         window_bounds = sf::VideoMode(sf::Vector2u(width, height));
     } 
     else if(!ifs.is_open())
-    {
         cerr << "Error: Could not open ../src/config/window.ini" << endl;
-    }
 
     sf::ContextSettings window_settings;
     window_settings.antialiasingLevel = antialiasing_level;
-
     this->window = new sf::RenderWindow(window_bounds, title, sf::Style::Default, window_settings);
     this->window->setFramerateLimit(framerate_limit);
     this->window->setVerticalSyncEnabled(vertical_sync_enabled);
@@ -117,7 +114,7 @@ void Game::run()
     }
 }
 
-void Game::render()
+void Game::render() const
 {
     this->window->clear();
 

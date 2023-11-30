@@ -11,6 +11,13 @@ Inky::Inky(sf::Vector2f startPos) : Ghost(startPos)
     this->chaseThreshold = 3;
     this->movementSpeed = 0.7;
     this->readSettingsFromFile("../src/config/gameSettings.ini");
+    
+    if (this->useAstar)
+        this->strategy =new AStarStrategy();
+    else
+        this->strategy = new DijkstraStrategy();
+    
+    this->pathfinder = new Pathfinding(this->strategy);
 }
 
 Inky::~Inky()
@@ -34,7 +41,7 @@ void Inky::initGhost()
     this->ghostSprite->setPosition(this->startPos); 
 }
 
-void Inky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode mode)
+void Inky::update(const float& dt, Map *map, const sf::Vector2f& pacManPos, const GhostMode& mode)
 {
     this->currentMode = mode;
     this->changeTexture();
@@ -72,7 +79,7 @@ void Inky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode m
         this->ghostSprite->setPosition(sf::Vector2f(0,0));
 }
 
-sf::Vector2f Inky::updateTargetPosition(Map *map, sf::Vector2f pacManPos) {
+sf::Vector2f Inky::updateTargetPosition(Map *map, const sf::Vector2f& pacManPos) {
     int maxRetries = 100;
     int retryCount = 0;
 

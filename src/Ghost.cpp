@@ -8,21 +8,11 @@ using namespace std;
 
 Ghost::Ghost(){}
 
-Ghost::Ghost(sf::Vector2f startPos)
-{
-
-    this->startPos = startPos;
-    if (this->useAstar)
-        this->strategy =new AStarStrategy();
-    else
-        this->strategy = new DijkstraStrategy();
-    
-    this->pathfinder = new Pathfinding(this->strategy);
-}
+Ghost::Ghost(sf::Vector2f startPos) : startPos(startPos) {}
 
 Ghost::~Ghost(){}
 
-void Ghost::readSettingsFromFile(string filePath)
+void Ghost::readSettingsFromFile(const string& filePath)
 {
     std::ifstream inFile(filePath);
     if (!inFile.is_open()) {
@@ -47,19 +37,15 @@ void Ghost::readSettingsFromFile(string filePath)
     this->movementSpeed = this->movementSpeed*multiplier;
 }   
 
-
 void Ghost::changeTexture()
 {
     if (this->currentMode == Frightened)
-    {
         this->ghostSprite->setTexture(this->energizedTexture);
-    }
-    else {
+    else
         this->ghostSprite->setTexture(this->ghostTexture);
-    }
 }
 
-void Ghost::setDead(bool dead)
+void Ghost::setDead(const bool& dead)
 {
     if (this->currentMode == Frightened)
         this->dead = dead;
@@ -103,13 +89,13 @@ void Ghost::move(const float& dt)
     }
 }
 
- void Ghost::isTargetReached(sf::Vector2f currentPos)
+ void Ghost::isTargetReached(const sf::Vector2f& currentPos)
  {  
     if (abs(currentPos.x/40-this->targetPosition.x) < 1 && abs(currentPos.y/40-this->targetPosition.y) < 1)
         this->targetPositionReached = true;
  }
 
-sf::Sprite Ghost::getSprite()
+sf::Sprite Ghost::getSprite() const
 { 
     return *this->ghostSprite;
 }

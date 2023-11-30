@@ -6,22 +6,15 @@
 GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
     : State(window, states)
 {
+
+    this->pacManFont.loadFromFile("../util/PacfontGood.ttf");
+    this->atariFont.loadFromFile("../util/SF Atarian System.ttf");
+
     this->initialHealth = this->pacMan.getHealth();
     this->health = this->pacMan.getHealth();
 
-    this->bgRect.setSize(sf::Vector2f(window->getSize().x, window->getSize().y));
-    this->bgRect.setFillColor(sf::Color::Black);
-    this->paused = false;
     this->initWorld();
-    
-    this->looserFont.loadFromFile("../util/PacfontGood.ttf");
-    this->textFont.loadFromFile("../util/SF Atarian System.ttf");
-    ghosts.push_back(new Blinky(sf::Vector2f(160, 60)));
-    ghosts.push_back(new Inky(sf::Vector2f(740, 760)));
-    ghosts.push_back(new Pinky(sf::Vector2f(740, 60)));
-    ghosts.push_back(new Clyde(sf::Vector2f(160, 760)));
     this->endGameDialog();
-    this->playerName->setString(" ");
     std::cout << "New Game State" << std::endl;
 }
 
@@ -50,6 +43,11 @@ void GameState::initWorld()
     this->map->loadMapFromFile();
     this->map->initTiles();
     this->initStatusbar();
+
+    ghosts.push_back(new Blinky(sf::Vector2f(160, 60)));
+    ghosts.push_back(new Inky(sf::Vector2f(740, 760)));
+    ghosts.push_back(new Pinky(sf::Vector2f(740, 60)));
+    ghosts.push_back(new Clyde(sf::Vector2f(160, 760)));
 }
 
 void GameState::initStatusbar()
@@ -57,9 +55,7 @@ void GameState::initStatusbar()
     this->statusbarRectangle.setFillColor(sf::Color::Black);
     this->statusbarRectangle.setPosition(sf::Vector2f(0,840));
     this->statusbarRectangle.setSize(sf::Vector2f(840, 40));
-    this->font.loadFromFile("../util/SF Atarian System.ttf");
-    this->font.setSmooth(true);
-    this->currentScoreText = new sf::Text(font, "score: 0", 20);
+    this->currentScoreText = new sf::Text(atariFont, "score: 0", 20);
     this->currentScoreText->setPosition(sf::Vector2f(20, 850));
 
     this->heartTexture.loadFromFile("../util/heart.png");
@@ -72,33 +68,46 @@ void GameState::initStatusbar()
     }
 }
 
-void GameState::endState()
+void GameState::endState() const
 {
     std::cout << "Ending Game State" << std::endl;
 }
 
-void GameState::updateInput(const float& dt, sf::Event ev)
+void GameState::updateInput(const float& dt, const sf::Event ev)
 {
-    if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Space)
-        this->quit = true;
-    else if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Down)
-        this->pacMan.setValues(0, 1, 90);
-    else if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Up)
-        this->pacMan.setValues(0, -1, 270);
-    else if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Left)
-        this->pacMan.setValues(-1, 0, 180);
-    else if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Right)
-        this->pacMan.setValues(1, 0, 0);
-    else
-        this->pacMan.setValues(0, 0, this->pacMan.getRotation());
+    if (ev.type == sf::Event::KeyPressed)
+    {
+        switch (ev.key.code)
+        {
+            case sf::Keyboard::Space:
+                this->quit = true;
+                break;
+            case sf::Keyboard::Down:
+                this->pacMan.setValues(0, 1, 90);
+                break;
+            case sf::Keyboard::Up:
+                this->pacMan.setValues(0, -1, 270);
+                break;
+            case sf::Keyboard::Left:
+                this->pacMan.setValues(-1, 0, 180);
+                break;
+            case sf::Keyboard::Right:
+                this->pacMan.setValues(1, 0, 0);
+                break;
+            default:
+                this->pacMan.setValues(0, 0, this->pacMan.getRotation());
+                break;
+        }
+    }
     
     if (highScore_ && ev.type == sf::Event::TextEntered)
     {
-        if (ev.text.unicode < 128)    
+        if (ev.text.unicode < 128)  
+        {  
             this->playerName->setString(string((this->playerName->getString()) + static_cast<char>(ev.text.unicode)));
-        
-        this->playerName->setOrigin(sf::Vector2f(this->playerName->getGlobalBounds().width/2, this->playerName->getGlobalBounds().height/2));
-        this->playerName->setPosition(sf::Vector2f(sf::Vector2f(this->window->getSize().x/2, this->window->getSize().y/2 + 110)));
+            this->playerName->setOrigin(sf::Vector2f(this->playerName->getGlobalBounds().width/2, this->playerName->getGlobalBounds().height/2));
+            this->playerName->setPosition(sf::Vector2f(this->window->getSize().x / 2.0f, this->window->getSize().y / 2.0f + 110));
+        }
     }
 
     if (highScore_ && ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Enter)
@@ -111,85 +120,95 @@ void GameState::updateInput(const float& dt, sf::Event ev)
 void GameState::update(const float& dt)
 {
     this->updateGhostMode();
+
     if (!this->endGame)
     {
-        
         this->pacMan.update(dt, this->map, this->ghosts);
+
         for (Ghost *ghost : this->ghosts)
-        {
             ghost->update(dt, this->map, this->pacMan.getSpritePointer()->getPosition(), this->currentMode);
-            
-        }    
-    } else if (!fileRead){
+
+        if (!this->pacMan.checkAlive() || (this->map->getTotalPellets() == this->pacMan.getCollectedPellets()))
+            this->endGame = true;
+
+        this->health = this->pacMan.getHealth();
+
+        if (this->pacMan.getCoolDownClock().getElapsedTime().asMilliseconds() < 1000 && this->health != this->initialHealth)
+        {   
+            if (this->blinkClock.getElapsedTime().asMilliseconds() < 100)
+                this->statusbarRectangle.setFillColor(sf::Color::Black);
+            else if (this->blinkClock.getElapsedTime().asMilliseconds() < 200)
+                this->statusbarRectangle.setFillColor(sf::Color::Red);
+            else
+                this->blinkClock.restart();
+        }
+        else 
+        {
+            this->statusbarRectangle.setFillColor(sf::Color::Black);
+        }
+
+    } 
+    else if (!fileRead)
+    {
         this->readFile();
+
         if (this->pacMan.getScore() > this->highScores[4].score)
             this->highScore_ = true;
     }
     
-    if (!this->pacMan.checkAlive())
-        this->endGame = true;
-
-    this->health = this->pacMan.getHealth();
-    if (this->pacMan.getCoolDownClock().getElapsedTime().asMilliseconds() < 1000 && this->health != this->initialHealth)
-    {   
-        if (this->blinkClock.getElapsedTime().asMilliseconds() < 100)
-            this->statusbarRectangle.setFillColor(sf::Color::Black);
-        else if (this->blinkClock.getElapsedTime().asMilliseconds() < 200)
-            this->statusbarRectangle.setFillColor(sf::Color::Red);
-        else
-             this->blinkClock.restart();
-    } else {
-        this->statusbarRectangle.setFillColor(sf::Color::Black);
-    }
-    
-    string scoreString = "score: ";
-    scoreString += std::to_string(this->pacMan.getScore());
+    string scoreString = "score: " + std::to_string(this->pacMan.getScore());
     this->currentScoreText->setString(scoreString);
-    std::string endScoreString = "YOUR SCORE: ";
-    endScoreString += std::to_string(this->pacMan.getScore());
+    std::string endScoreString = "YOUR SCORE: " + std::to_string(this->pacMan.getScore());
     this->scoreText->setString(endScoreString);
 }
 
 void GameState::endGameDialog()
 {   
-    sf::Vector2f centrePos = sf::Vector2f(this->window->getSize().x/2, this->window->getSize().y/2);
+    const sf::Vector2u windowSize = this->window->getSize();
+    const sf::Vector2f centrePos = sf::Vector2f(static_cast<float>(windowSize.x) / 2.0f, static_cast<float>(windowSize.y) / 2.0f);
+
+    // Configure background rectangle
     this->rectangle.setSize(sf::Vector2f(300, 300));
-    this->rectangle.setOrigin(sf::Vector2f(this->rectangle.getSize().x/2, this->rectangle.getSize().y/2));
+    this->rectangle.setOrigin(this->rectangle.getSize() / 2.0f);
     this->rectangle.setPosition(centrePos);
     sf::Color rectangleColor = sf::Color::Black;
     rectangleColor.a = 210;
     this->rectangle.setFillColor(rectangleColor);
 
-    this->text = new sf::Text(looserFont, "looser", 40);
+    // Configure "looser" text
+    this->text = new sf::Text(pacManFont, "looser", 40);
     sf::Color textColor = sf::Color(255,237,10);
     textColor.a = 210;
-    this->text->setOrigin(sf::Vector2f(this->text->getGlobalBounds().width/2, this->text->getGlobalBounds().height/2));
-    this->text->setPosition(sf::Vector2f(sf::Vector2f(this->window->getSize().x/2, this->window->getSize().y/2 - 100)));
+    this->text->setOrigin(sf::Vector2f(this->text->getGlobalBounds().width / 2.0f, this->text->getGlobalBounds().height / 2.0f));
+    this->text->setPosition(centrePos - sf::Vector2f(0, 100));
     this->text->setFillColor(textColor);
 
-    std::string scoreString = "YOUR SCORE: ";
-    scoreString += std::to_string(this->pacMan.getScore());
-    this->scoreText = new sf::Text(textFont, scoreString, 20);
+    // Configure score texts
+    string scoreString = "YOUR SCORE: " + to_string(this->pacMan.getScore());
+    this->scoreText = new sf::Text(atariFont, scoreString, 20);
     this->scoreText->setFillColor(textColor);
-    this->scoreText->setOrigin(sf::Vector2f(this->scoreText->getGlobalBounds().width/2, this->scoreText->getGlobalBounds().height/2));
-    this->scoreText->setPosition(sf::Vector2f(sf::Vector2f(this->window->getSize().x/2, this->window->getSize().y/2 - 60)));
-    this->scoreText->setFillColor(textColor);
+    this->scoreText->setOrigin(sf::Vector2f(this->scoreText->getGlobalBounds().width / 2.0f, this->scoreText->getGlobalBounds().height / 2.0f));
+    this->scoreText->setPosition(centrePos - sf::Vector2f(0, 60));
 
-    this->highScoreText = new sf::Text(textFont, "You set a highscore, input name: ", 20);
-    this->highScoreText->setOrigin(sf::Vector2f(this->highScoreText->getGlobalBounds().width/2, this->highScoreText->getGlobalBounds().height/2));
-    this->highScoreText->setPosition(sf::Vector2f(sf::Vector2f(this->window->getSize().x/2, this->window->getSize().y/2 + 80)));
+    // Configure high score text
+    this->highScoreText = new sf::Text(atariFont, "You set a highscore, input name: ", 20);
+    this->highScoreText->setOrigin(sf::Vector2f(this->highScoreText->getGlobalBounds().width / 2.0f, this->highScoreText->getGlobalBounds().height / 2.0f));
+    this->highScoreText->setPosition(centrePos + sf::Vector2f(0, 80));
     this->highScoreText->setFillColor(textColor);
 
-    this->playerName->setOrigin(sf::Vector2f(this->playerName->getGlobalBounds().width/2, this->playerName->getGlobalBounds().height/2));
-    this->playerName->setPosition(sf::Vector2f(sf::Vector2f(this->window->getSize().x/2, this->window->getSize().y/2 + 110)));
+    // Configure player name text
+    this->playerName->setOrigin(sf::Vector2f(this->playerName->getGlobalBounds().width / 2.0f, this->playerName->getGlobalBounds().height / 2.0f));
+    this->playerName->setPosition(centrePos + sf::Vector2f(0, 110));
+    this->playerName->setPosition(centrePos + sf::Vector2f(0, 110));
     this->playerName->setFillColor(textColor);
 
+    // Configure player name input rectangle
     sf::Color rectColor = sf::Color(10,10,10);
     rectColor.a = 250;
     this->playerNameRectangle.setFillColor(rectColor);
     this->playerNameRectangle.setSize(sf::Vector2f(120, 25));
-    this->playerNameRectangle.setOrigin(sf::Vector2f(this->playerNameRectangle.getGlobalBounds().width/2, this->playerNameRectangle.getGlobalBounds().height/2));
-    this->playerNameRectangle.setPosition(sf::Vector2f(sf::Vector2f(this->window->getSize().x/2, this->window->getSize().y/2 + 115)));
+    this->playerNameRectangle.setOrigin(sf::Vector2f(this->playerNameRectangle.getGlobalBounds().width / 2.0f, this->playerNameRectangle.getGlobalBounds().height / 2.0f));;
+    this->playerNameRectangle.setPosition(centrePos + sf::Vector2f(0, 115));
 }
 
 void GameState::writeHighScore()
@@ -237,8 +256,7 @@ void GameState::readFile()
 
 void GameState::updateGhostMode()
 {
-
-    if ((this->pacMan.getEnergizerClock().getElapsedTime().asSeconds() < 5) & this->pacMan.getEnergized())
+    if ((this->pacMan.getEnergizerClock().getElapsedTime().asSeconds() < 5) && this->pacMan.getEnergized())
     {
         this->currentMode = Frightened;
         this->modeClock.stop();
@@ -251,7 +269,6 @@ void GameState::updateGhostMode()
         else
             this->modeClock.restart();
     }
-    
 }
 
 void GameState::render(sf::RenderTarget* target)
@@ -259,7 +276,6 @@ void GameState::render(sf::RenderTarget* target)
     if (!target)
         target = this->window;
 
-    target->draw(this->bgRect);
     this->map->render(target);
     this->pacMan.render(target);
     for (Ghost *ghost : this->ghosts)

@@ -1,4 +1,3 @@
-// PathfindingStrategy.h
 #pragma once
 
 #include <vector>
@@ -11,16 +10,10 @@ public:
 
 class DijkstraStrategy : public PathfindingStrategy {
 public:
-    virtual int calculateH(int x, int y, int goalX, int goalY) const override {
-        // Dijkstra's algorithm has no heuristic
-        return 0;
-    }
+    int calculateH(int x, int y, int goalX, int goalY) const override;
 };
 
 class AStarStrategy : public PathfindingStrategy {
 public:
-    virtual int calculateH(int x, int y, int goalX, int goalY) const override {
-        // A* algorithm heuristic (Manhattan distance)
-        return abs(x - goalX) + abs(y - goalY);
-    }
+    int calculateH(int x, int y, int goalX, int goalY) const override;
 };

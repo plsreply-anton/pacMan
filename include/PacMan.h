@@ -33,6 +33,7 @@ class PacMan
         float rotation = 0;
         bool energized = false;
         sf::Clock energizedClock;
+        int collectedPellets = 0;
         
 
         sf::Clock debounceClock; // Clock to measure close/open mouth
@@ -54,6 +55,7 @@ class PacMan
         sf::Clock getEnergizerClock();
         bool getEnergized();
         sf::Clock getCoolDownClock();
+        int getCollectedPellets();
         void setValues(float deltaX, float deltaY, float rotation);
         
         //Checkers

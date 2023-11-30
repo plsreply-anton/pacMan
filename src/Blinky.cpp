@@ -12,6 +12,13 @@ Blinky::Blinky(sf::Vector2f startPos) : Ghost(startPos)
     this->chaseThreshold = 2;
     this->readSettingsFromFile("../src/config/gameSettings.ini");
     
+    if (this->useAstar)
+        this->strategy =new AStarStrategy();
+    else
+        this->strategy = new DijkstraStrategy();
+    
+    this->pathfinder = new Pathfinding(this->strategy);
+    
 }
 
 Blinky::~Blinky()
@@ -35,7 +42,7 @@ void Blinky::initGhost()
     this->ghostSprite->setPosition(this->startPos); 
 }
 
-void Blinky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode mode)
+void Blinky::update(const float& dt, Map *map, const sf::Vector2f& pacManPos, const GhostMode& mode)
 {
     this->currentMode = mode;
     this->changeTexture();
@@ -72,8 +79,8 @@ void Blinky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode
         this->ghostSprite->setPosition(sf::Vector2f(0,0));
 }
 
-sf::Vector2f Blinky::updateTargetPosition(Map *map, sf::Vector2f pacManPos) {
-    int maxRetries = 100;
+sf::Vector2f Blinky::updateTargetPosition(Map *map, const sf::Vector2f& pacManPos) {
+    const int maxRetries = 100;
     int retryCount = 0;
 
     switch (this->currentMode) {

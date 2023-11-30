@@ -10,53 +10,64 @@ AnimationButton::AnimationButton(sf::Color buttonColor, sf::Color textColor, sf:
     this->buttonColor = buttonColor;
     this->activeButtonColor = activeTextColor;
 
-    //this->text = new sf::Text(font, textVector[0], 40);
-    
-    // this->text->setPosition(
-    //     sf::Vector2f(int(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text->getGlobalBounds().width / 2.f), 
-    //                  int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->text->getGlobalBounds().height)));
-    this->buttonState=BTN_IDLE;
     this->textVector = textVector;
     this->initGraphics(x, y, width, height, text);
 
 }
 
-void AnimationButton::initGraphics(float x, float y, float width, float height, std::string text)
+void AnimationButton::initGraphics(const float& x, const float& y, const float& width, const float& height, const std::string& text)
 {
-    this->shape.setPosition(sf::Vector2f(x,y));
+    // Initialize main button shape
+    this->shape.setPosition(sf::Vector2f(x, y));
     this->shape.setSize(sf::Vector2f(width, height));
     this->shape.setFillColor(this->buttonColor);
 
-    this->leftArrow.setPointCount(3);
-    this->leftArrow.setRadius(14);
-    this->leftArrow.setOrigin(sf::Vector2f(this->leftArrow.getRadius(), this->leftArrow.getRadius()));
-    this->leftArrow.setPosition(sf::Vector2f(int(this->shape.getPosition().x +15), 
-                                        int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f))));
-    this->leftArrow.setFillColor(this->textColor);
-    this->leftArrow.setRotation(sf::degrees(270));
+    // Initialize left arrow
+    this->initArrow(this->leftArrow, true);
 
-    this->rightArrow.setPointCount(3);
-    this->rightArrow.setRadius(14);
-    this->rightArrow.setOrigin(sf::Vector2f(this->rightArrow.getRadius(), this->rightArrow.getRadius()));
-    this->rightArrow.setPosition(sf::Vector2f(int(this->shape.getPosition().x + this->shape.getGlobalBounds().width -15), 
-                                        int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f))));
-    this->rightArrow.setFillColor(this->textColor);
-    this->rightArrow.setRotation(sf::degrees(90));
+    // Initialize right arrow
+    this->initArrow(this->rightArrow, false);
 
+    // Initialize button text
+    this->initButtonText(text);
 
+    // Initialize current value text
+    this->initCurrentValueText();
+}
+
+void AnimationButton::initArrow(sf::CircleShape& arrow, bool isLeft)
+{
+    arrow.setPointCount(3);
+    arrow.setRadius(14);
+    arrow.setOrigin(sf::Vector2f(arrow.getRadius(), arrow.getRadius()));
+    
+    float arrowX = isLeft ? this->shape.getPosition().x + 15 : this->shape.getPosition().x + this->shape.getGlobalBounds().width - 15;
+    
+    arrow.setPosition(sf::Vector2f(static_cast<int>(arrowX), 
+                                   static_cast<int>(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f))));
+    
+    arrow.setFillColor(this->textColor);
+    arrow.setRotation(isLeft ? sf::degrees(270) : sf::degrees(90));
+}
+
+void AnimationButton::initButtonText(const std::string& text)
+{
     this->text = new sf::Text(this->font, text, 20);
     this->text->setPosition(
-        sf::Vector2f(int(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text->getGlobalBounds().width / 2.f), 
-                     int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->text->getGlobalBounds().height / 2.f)-15));
+        sf::Vector2f(static_cast<int>(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text->getGlobalBounds().width / 2.f), 
+                     static_cast<int>(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->text->getGlobalBounds().height / 2.f) - 15));
+}
 
+void AnimationButton::initCurrentValueText()
+{
     this->currentValueText = new sf::Text(font, this->textVector[this->currentIndex], 15);
     this->currentValueText->setPosition(
-        sf::Vector2f(int(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->currentValueText->getGlobalBounds().width / 2.f)+ 40, 
-                     int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->currentValueText->getGlobalBounds().height / 2.f) + 5));
+        sf::Vector2f(static_cast<int>(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->currentValueText->getGlobalBounds().width / 2.f) + 40, 
+                     static_cast<int>(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->currentValueText->getGlobalBounds().height / 2.f) + 5));
     this->currentValueText->setFillColor(sf::Color::Black);
 }
 
-bool AnimationButton::useAstar()
+bool AnimationButton::useAstar() const
 {
     if (this->currentIndex == 0)
         return false;
@@ -72,6 +83,7 @@ void AnimationButton::update()
         this->text->setFillColor(this->textColor);
     else if (this->buttonState == BTN_PRESSED)
         this->pressed = true;
+
     this->updateCurrentValue();
 
     if (this->arrowClock.getElapsedTime().asMilliseconds() > 200)
@@ -83,14 +95,13 @@ void AnimationButton::update()
 
 void AnimationButton::updateCurrentValue()
 {
-    //this->currentIndex = (this->currentIndex + 1) % textVector.size();
     this->currentValueText->setString(this->textVector[currentIndex]);
     this->currentValueText->setPosition(
-        sf::Vector2f(int(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->currentValueText->getGlobalBounds().width / 2.f), 
-            int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->currentValueText->getGlobalBounds().height) + 10));
+        sf::Vector2f(static_cast<int>(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->currentValueText->getGlobalBounds().width / 2.f), 
+                     static_cast<int>(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->currentValueText->getGlobalBounds().height) + 10));
 }
 
-void AnimationButton::moveButton(sf::Event ev)
+void AnimationButton::moveButton(const sf::Event ev)
 {
 
     if (ev.key.code == sf::Keyboard::Left && this->currentIndex > 0)
@@ -109,11 +120,11 @@ void AnimationButton::moveButton(sf::Event ev)
 
 void AnimationButton::render(sf::RenderTarget* target)
 {
-
     target->draw(this->shape);
     target->draw(*this->text);
     target->draw(*this->currentValueText);
     target->draw(this->leftArrow);
     target->draw(this->rightArrow);
 }
+
 #pragma GCC diagnostic pop

@@ -58,19 +58,19 @@ public:
     virtual ~Ghost() = 0;
 
     virtual void initGhost() = 0;
-    void readSettingsFromFile(string filePath);
+    void readSettingsFromFile(const string& filePath);
 
     //Getters and setters
-    sf::Sprite getSprite();
+    sf::Sprite getSprite() const;
     void changeTexture();
-    void setDead(bool dead);
+    void setDead(const bool& dead);
 
-    void isTargetReached(sf::Vector2f currentPos);
+    void isTargetReached(const sf::Vector2f& currentPos);
 
     //Updates and render
     void move(const float& dt);
-    virtual sf::Vector2f updateTargetPosition(Map *map, sf::Vector2f pacManPos) = 0;
-    virtual void update(const float& dt, Map *map, sf::Vector2f pacManPo, GhostMode modes) = 0;
+    virtual sf::Vector2f updateTargetPosition(Map *map, const sf::Vector2f& pacManPos) = 0;
+    virtual void update(const float& dt, Map *map, const sf::Vector2f& pacManPo, const GhostMode& modes) = 0;
     void render(sf::RenderTarget* target);
 
 };

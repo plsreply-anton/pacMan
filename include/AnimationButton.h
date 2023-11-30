@@ -21,11 +21,16 @@ class AnimationButton : public Button
         //Constructor and Destructor
         AnimationButton(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextColor, 
                 string text, vector<string> textVector, float x, float y, float width, float height);
-        void initGraphics(float x, float y, float width, float height, std::string text);
+        void initGraphics(const float& x, const float& y, const float& width, const float& height, const std::string& text);
+        void initArrow(sf::CircleShape& arrow, bool isLeft);
+        void initButtonText(const std::string& text);
+        void initCurrentValueText();
+
+        
         //Methods
-        bool useAstar();
+        bool useAstar() const;
         void updateCurrentValue();
-        void moveButton(sf::Event ev);
+        void moveButton(const sf::Event ev);
         void update();
         void render(sf::RenderTarget* target);
 };

@@ -30,16 +30,9 @@ struct Node {
 // Astar comparator for the priority queue
 struct CompareNode {
     bool operator()(Node* a, Node* b) {
-        return (a->g + a->h) > (b->g + b->h); //Should probably change sign!!!!!!!!!
+        return (a->g + a->h) > (b->g + b->h);
     }
 };
-
-// Dijkstra comparator for the priority queue
-// struct CompareNodeDijkstra {
-//     bool operator()(Node* const& a, Node* const& b) {
-//         return a->g > b->g; // Min-heap: smaller g values have higher priority
-//     }
-// };
 
 class Pathfinding {
 
@@ -49,7 +42,7 @@ private:
 public:
     Pathfinding(PathfindingStrategy* strategy);
     ~Pathfinding();
-    vector<Node*>* findPath(vector<vector<TileType>> map, sf::Vector2f start, sf::Vector2f goal);
+    vector<Node*>* findPath(vector<vector<TileType>> map, const sf::Vector2f& start, const sf::Vector2f& goal);
 };
 
 

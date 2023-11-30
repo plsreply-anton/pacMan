@@ -10,9 +10,10 @@ using namespace std;
 
 class SliderButton : public Button
 {
-    protected:
+    private:
         sf::CircleShape rightArrow;
         sf::CircleShape leftArrow;
+
         float currentValue = 1;
         bool useFloat = true;
         float min = 0;
@@ -25,16 +26,17 @@ class SliderButton : public Button
         //Constructor and Destructor
         SliderButton(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextColor, 
                     std::string text, float x, float y, float width, float height, bool useFloat, float min, float max);
-        void initGraphics(float x, float y, float width, float height, std::string text);
+        
+        //Initializers
+        void initGraphics(const float& x, const float& y, const float& width, const float& height, const std::string& text);
+        void initArrow(sf::CircleShape& arrow, bool isLeft);
+        void initButtonText(const std::string& text);
+        void initCurrentValueText();
+
         //Methods
-        void setActiveButton();
-        void setUnactiveButton();
-        short unsigned getButtonState();
-        void buttonPressed();
-        void setButtonText(string text);
-        void update();
-        void moveButton(sf::Event ev); 
+        float getCurrentValue() const;
+        void moveButton(const sf::Event ev); 
         void updateCurrentValue();
-        float getCurrentValue();
+        void update();
         void render(sf::RenderTarget* target);
 };

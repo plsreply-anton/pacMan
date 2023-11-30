@@ -28,11 +28,11 @@ class SettingState : public State
         void initBackground();
 
         //Methods
-        void endState();
-        void updateInput(const float& dt, sf::Event ev);
-        void saveSettings();
+        void endState() const;
+        void updateInput(const float& dt, const sf::Event ev);
+        void saveSettings() const;
         void initKeybinds();
-        void moveButton(sf::Event ev);
+        void moveButton(const sf::Event ev);
         void setActiveButton();
         void update(const float& dt);
         void render(sf::RenderTarget* target = nullptr);

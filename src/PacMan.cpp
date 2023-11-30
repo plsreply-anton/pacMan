@@ -137,6 +137,7 @@ void PacMan::checkForPellet(Map *map)
 
     if (map->getTiles()[tileY][tileX]->hasPellet())
     {
+        this->collectedPellets += 1;
         if (map->getTiles()[tileY][tileX]->getPellet()->powerUp())
         {
             this->energizedClock.restart();
@@ -151,6 +152,11 @@ void PacMan::checkForPellet(Map *map)
         map->getTiles()[tileY][tileX]->destroyPellet();
     }
 
+}
+
+int PacMan::getCollectedPellets()
+{
+    return this->collectedPellets;
 }
 
 bool PacMan::checkForGhost(vector<Ghost*> ghosts)
@@ -186,7 +192,7 @@ void PacMan::move(const float& dt, float x_dir, float y_dir)
 
 void PacMan::changeSide()
 {
-    if (this->pacManSprite->getPosition().x < 40 && 
+    if (this->pacManSprite->getPosition().x < 30 && 
         this->pacManSprite->getPosition().y > 400 &&
         this->pacManSprite->getPosition().y < 480 )
     {
@@ -196,7 +202,7 @@ void PacMan::changeSide()
         this->pacManSprite->getPosition().y > 400 &&
         this->pacManSprite->getPosition().y < 480 )
     {
-       this->pacManSprite->setPosition(sf::Vector2f(50,420));
+       this->pacManSprite->setPosition(sf::Vector2f(40,420));
     }
     
 }

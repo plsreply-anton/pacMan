@@ -10,6 +10,13 @@ Pinky::Pinky(sf::Vector2f startPos) : Ghost(startPos)
     this->initGhost();
     this->chaseThreshold = 1;
     this->readSettingsFromFile("../src/config/gameSettings.ini");
+    
+    if (this->useAstar)
+        this->strategy =new AStarStrategy();
+    else
+        this->strategy = new DijkstraStrategy();
+    
+    this->pathfinder = new Pathfinding(this->strategy);
 }
 
 Pinky::~Pinky()
@@ -33,7 +40,7 @@ void Pinky::initGhost()
     this->ghostSprite->setPosition(this->startPos); 
 }
 
-void Pinky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode mode)
+void Pinky::update(const float& dt, Map *map, const sf::Vector2f& pacManPos, const GhostMode& mode)
 {
     this->currentMode = mode;
     this->changeTexture();
@@ -71,7 +78,7 @@ void Pinky::update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode 
         this->ghostSprite->setPosition(sf::Vector2f(0,0));
 }
 
-sf::Vector2f Pinky::updateTargetPosition(Map *map, sf::Vector2f pacManPos) {
+sf::Vector2f Pinky::updateTargetPosition(Map *map, const sf::Vector2f& pacManPos) {
     int maxRetries = 100;
     int retryCount = 0;
 

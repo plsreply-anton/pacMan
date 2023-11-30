@@ -13,7 +13,7 @@ class Game
     
         sf::Event ev;
 
-        sf::Clock dtClock;
+        const sf::Clock dtClock;
         float dt;
 
     public:
@@ -22,16 +22,13 @@ class Game
         Game();
         virtual ~Game();
 
-        //Getters
-        const sf::RenderWindow* getWindow() const;
-
         //Initialisers
         void initWindow();
         void initStates();
 
         //Methods
         void update();
-        void render();
+        void render() const;
         void run();
         void updateSFMLEvents();
         void updateDt();

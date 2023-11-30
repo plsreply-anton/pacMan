@@ -18,6 +18,7 @@ class Map
     private:
         std::vector<std::vector<TileType>> tilemap;
         std::vector<std::vector<Tile *>> tileMap;
+        int totalPellets = 0;
 
     public:
         Map();
@@ -25,6 +26,7 @@ class Map
         Map& operator=(const Map& other);
         Map(const Map& other);
         std::vector<std::vector<TileType>> getintMap();
+        int getTotalPellets();
         
         void initTiles();
         void loadMapFromFile(const std::string &filename = "../util/map.txt");

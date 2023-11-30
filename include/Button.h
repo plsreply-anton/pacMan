@@ -13,7 +13,7 @@ enum buttonState{BTN_IDLE = 0, BTN_HOVER = 1, BTN_PRESSED = 2};
 class Button 
 {
     protected:
-        short unsigned buttonState;
+        short unsigned buttonState = BTN_IDLE;
         bool pressed;
 
         sf::RectangleShape shape;
@@ -32,16 +32,20 @@ class Button
         Button(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextColor, 
                 std::string text, float x, float y, float width, float height);
         virtual ~Button();
+        virtual void initGraphics(const float& x, const float& y, const float& width, const float& height, const std::string& text);
 
-        //Methods
+
+        //Setters and getter
         void setActiveButton();
         void setUnactiveButton();
-        short unsigned getButtonState();
+        void setButtonText(const string text);
+        virtual float getCurrentValue() const;
+        short unsigned getButtonState() const;
+        virtual bool useAstar() const;
         void buttonPressed();
-        void setButtonText(string text);
-        virtual bool useAstar();
-        virtual float getCurrentValue();
-        virtual void moveButton(sf::Event ev);
+
+        //Methods
+        virtual void moveButton(const sf::Event ev);
         virtual void update();
         virtual void render(sf::RenderTarget* target);
 };

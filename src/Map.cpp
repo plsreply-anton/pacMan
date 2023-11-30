@@ -81,11 +81,13 @@ void Map::initTiles()
         {   
             if (tilemap[i][j] == 0)
                 row.push_back(new Tile(tilemap[i][j], j*40, i*40)); //Normal walkable tile
-            else if (tilemap[i][j] == 2)
+            else if (tilemap[i][j] == 2) {
                 row.push_back(new Tile(tilemap[i][j], j*40, i*40, true)); //Walkable tile with pellet
-            else if (tilemap[i][j] == 3)
+                this->totalPellets += 1;
+            } else if (tilemap[i][j] == 3) {
                 row.push_back(new Tile(tilemap[i][j], j*40, i*40, true, true)); //Walkable tile with energizer
-            else
+                this->totalPellets += 1;
+            } else
                 row.push_back(new Tile(tilemap[i][j], j*40, i*40)); //Unwalkable tile
         }
         this->tileMap.push_back(row);
@@ -100,6 +102,11 @@ std::vector<std::vector<Tile*>> Map::getTiles()
 std::vector<std::vector<TileType>> Map::getintMap()
 {
     return this->tilemap;
+}
+
+int Map::getTotalPellets()
+{
+    return this->totalPellets;
 }
 
 void Map::render(sf::RenderTarget* target)

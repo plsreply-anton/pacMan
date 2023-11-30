@@ -15,7 +15,7 @@ public:
     void initGhost();
 
     //Updates
-    sf::Vector2f updateTargetPosition(Map *map, sf::Vector2f pacManPos);
-    void update(const float& dt, Map *map, sf::Vector2f pacManPos, GhostMode mode);
+    sf::Vector2f updateTargetPosition(Map *map, const sf::Vector2f& pacManPos);
+    void update(const float& dt, Map *map, const sf::Vector2f& pacManPos, const GhostMode& mode);
 
 };

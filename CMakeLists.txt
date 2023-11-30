@@ -26,6 +26,7 @@ add_executable(${PROJECT_NAME} ${SRC_DIR}/main.cpp
                     ${SRC_DIR}/Pellet.cpp
                     ${SRC_DIR}/Ghost.cpp
                     ${SRC_DIR}/Pathfinding.cpp
+                    ${SRC_DIR}/PathfindingStrategy.cpp
                     ${SRC_DIR}/HighScoreState.cpp
                     ${SRC_DIR}/Blinky.cpp
                     ${SRC_DIR}/Inky.cpp
@@ -40,6 +41,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR} )
 #Specifying settings for compilation and linking
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 target_include_directories(${PROJECT_NAME} PRIVATE 
     /Users/antonlarsson/SFML/include

@@ -13,27 +13,25 @@ MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* state
 
 MainMenuState::~MainMenuState()
 {
-    this->endState();
     for (int i = 0; i < buttons.size(); i++)
-    {
        delete this->buttons[i];
-    }
     this->buttons.clear();
+
     delete this->bgSprite;
+    this->endState();
 }
 
 void MainMenuState::initBackground()
 {
     this->bgImage.loadFromFile("../util/menuImage.png");
-    this->bgImage.setSmooth(true);
     this->bgSprite = new sf::Sprite(this->bgImage);
 }
 
 void MainMenuState::initButtons()
 { 
-    int width = 200;
-    int height = 50; 
-    int pos_x = ((sf::Vector2u(this->window->getSize()).x - width)/2)+130;
+    const int width = 200;
+    const int height = 50; 
+    const int pos_x = ((sf::Vector2u(this->window->getSize()).x - width)/2)+130;
 
     this->buttons.push_back(new Button(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "PLAY", pos_x, 340, width, height));
     this->buttons.push_back(new Button(sf::Color (255,237,10), sf::Color (255,255,255), sf::Color (255,122,0), "LEADERBOARD", pos_x, 420, width, height));
@@ -42,17 +40,17 @@ void MainMenuState::initButtons()
     this->buttons[0]->setActiveButton();
 }
 
-void MainMenuState::endState()
+void MainMenuState::endState() const
 {
     std::cout << "Ending Menu State" << std::endl;
 }
 
-void MainMenuState::updateInput(const float& dt, sf::Event ev)
+void MainMenuState::updateInput(const float& dt, const sf::Event ev)
 {
     this->moveButton(ev);
 }
 
-void MainMenuState::moveButton(sf::Event ev)
+void MainMenuState::moveButton(const sf::Event ev)
 {   
     // Navigate menu, checks if out of bounds etc
     if (ev.type == sf::Event::KeyPressed && ev.key.code == sf::Keyboard::Down && !keyPressed)
@@ -98,8 +96,6 @@ void MainMenuState::setActiveButton()
     this->buttons[this->buttonNumber]->setActiveButton();
 }
 
-
-
 void MainMenuState::update(const float& dt)
 {
     for (int i = 0; i < buttons.size(); i++)
@@ -135,7 +131,6 @@ void MainMenuState::render(sf::RenderTarget* target)
     
     for (int i = 0; i < buttons.size(); i++)
         this->buttons[i]->render(target);
-    
 }
 
 #pragma GCC diagnostic pop

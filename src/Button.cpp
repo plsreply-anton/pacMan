@@ -10,9 +10,21 @@ Button::Button(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextC
 {
     this->font.loadFromFile("../util/PacfontGood.ttf");
     this->font.setSmooth(true);
+
     this->buttonColor = buttonColor;
     this->activeButtonColor = activeTextColor;
 
+    this->initGraphics(x, y, width, height, text);
+}
+
+Button::~Button()
+{
+    delete this->text;
+    delete this->currentValueText;
+}
+
+void Button::initGraphics(const float& x, const float& y, const float& width, const float& height, const std::string& text)
+{
     this->shape.setPosition(sf::Vector2f(x,y));
     this->shape.setSize(sf::Vector2f(width, height));
     this->shape.setFillColor(buttonColor);
@@ -22,13 +34,7 @@ Button::Button(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextC
     this->text->setPosition(
         sf::Vector2f(int(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text->getGlobalBounds().width / 2.f), 
                      int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->text->getGlobalBounds().height / 2.f)));
-    this->buttonState=BTN_IDLE;
-}
 
-Button::~Button()
-{
-    delete this->text;
-    delete this->currentValueText;
 }
 
 void Button::setActiveButton()
@@ -42,8 +48,33 @@ void Button::setUnactiveButton()
     this->pressed = false;
 }
 
-void Button::moveButton(sf::Event ev){}
+short unsigned Button::getButtonState() const
+{
+    return this->buttonState;
+}
 
+bool Button::useAstar() const
+{
+    return false;
+}
+
+float Button::getCurrentValue() const
+{
+    return 0;
+}
+
+void Button::setButtonText(string text)
+{
+    this->text->setString(text);
+}
+
+void Button::buttonPressed()
+{
+    this->buttonState = BTN_PRESSED;
+}
+
+void Button::moveButton(const sf::Event ev){}
+    
 void Button::update()
 {
     if (this->buttonState == BTN_HOVER)
@@ -54,30 +85,6 @@ void Button::update()
         this->pressed = true;
 }
 
-short unsigned Button::getButtonState()
-{
-    return this->buttonState;
-}
-
-bool Button::useAstar()
-{
-    return false;
-}
-
-float Button::getCurrentValue()
-{
-    return 0;
-}
-void Button::setButtonText(string text)
-{
-    this->text->setString(text);
-}
-
-void Button::buttonPressed()
-{
-    this->buttonState = BTN_PRESSED;
-}
-    
 void Button::render(sf::RenderTarget* target)
 {
 

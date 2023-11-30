@@ -4,8 +4,7 @@ Pathfinding::Pathfinding(PathfindingStrategy* strategy)  : strategy(strategy)  {
 
 Pathfinding::~Pathfinding() {}
 
-// A* pathfinding algorithm
-vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f start, sf::Vector2f goal) {
+vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, const sf::Vector2f& start, const sf::Vector2f& goal) {
 
     // Init open list with neighbouring nodes and sort on g+h
     priority_queue<Node*, vector<Node*>, CompareNode> openList;
@@ -50,9 +49,8 @@ vector<Node*>* Pathfinding::findPath(vector<vector<TileType>> map, sf::Vector2f 
 
             int g = currentNode->g + 1;
             int h = strategy->calculateH(x, y, goalNode->x, goalNode->y);
-            //int h = abs(x - goalNode->x) + abs(y - goalNode->y); // Manhattan distance
 
-            Node* neighbor = new Node(x, y, g, 0, currentNode);
+            Node* neighbor = new Node(x, y, g, h, currentNode);
             openList.push(neighbor);
         }
     }
