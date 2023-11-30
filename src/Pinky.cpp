@@ -31,8 +31,8 @@ Pinky::~Pinky()
 
 void Pinky::initGhost()
 {
-    this->ghostTexture.loadFromFile("../util/Pinky.png");
-    this->energizedTexture.loadFromFile("../util/Energized_Ghost.png");
+    this->ghostTexture.loadFromFile("../util/sprites/pinky.png");
+    this->energizedTexture.loadFromFile("../util/sprites/energized_Ghost.png");
     this->ghostSprite = new sf::Sprite(this->ghostTexture); 
     this->ghostSprite->setOrigin(sf::Vector2f(
                                 this->ghostSprite->getGlobalBounds().width/2,

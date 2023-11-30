@@ -8,7 +8,7 @@ Button::Button(){};
 Button::Button(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextColor,
                 std::string text, float x, float y, float width, float height)
 {
-    this->font.loadFromFile("../util/PacfontGood.ttf");
+    this->font.loadFromFile("../util/fonts/pacManFont.ttf");
     this->font.setSmooth(true);
 
     this->buttonColor = buttonColor;
@@ -34,7 +34,6 @@ void Button::initGraphics(const float& x, const float& y, const float& width, co
     this->text->setPosition(
         sf::Vector2f(int(this->shape.getPosition().x + (this->shape.getGlobalBounds().width / 2.f) - this->text->getGlobalBounds().width / 2.f), 
                      int(this->shape.getPosition().y + (this->shape.getGlobalBounds().height / 2.f) - this->text->getGlobalBounds().height / 2.f)));
-
 }
 
 void Button::setActiveButton()

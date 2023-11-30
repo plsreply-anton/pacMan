@@ -94,17 +94,17 @@ void Map::initTiles()
     }   
 }
 
-std::vector<std::vector<Tile*>> Map::getTiles()
+std::vector<std::vector<Tile*>> Map::getTiles() const
 {
     return this->tileMap;
 }
 
-std::vector<std::vector<TileType>> Map::getintMap()
+std::vector<std::vector<TileType>> Map::getintMap() const
 {
     return this->tilemap;
 }
 
-int Map::getTotalPellets()
+int Map::getTotalPellets() const
 {
     return this->totalPellets;
 }

@@ -6,7 +6,7 @@
 AnimationButton::AnimationButton(sf::Color buttonColor, sf::Color textColor, sf::Color activeTextColor,
                 string text, vector<string> textVector, float x, float y, float width, float height)
 {
-    this->font.loadFromFile("../util/SF Atarian System.ttf");
+    this->font.loadFromFile("../util/fonts/atariFont.ttf");
     this->buttonColor = buttonColor;
     this->activeButtonColor = activeTextColor;
 

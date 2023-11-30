@@ -32,8 +32,8 @@ Clyde::~Clyde()
 
 void Clyde::initGhost()
 {
-    this->ghostTexture.loadFromFile("../util/Clyde.png");
-    this->energizedTexture.loadFromFile("../util/Energized_Ghost.png");
+    this->ghostTexture.loadFromFile("../util/sprites/clyde.png");
+    this->energizedTexture.loadFromFile("../util/sprites/energized_Ghost.png");
     this->ghostSprite = new sf::Sprite(this->ghostTexture); 
     this->ghostSprite->setOrigin(sf::Vector2f(
                                 this->ghostSprite->getGlobalBounds().width/2,

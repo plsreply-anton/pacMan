@@ -8,13 +8,13 @@ Energizer::Energizer(int xPos, int yPos)
         this->initSprite(xPos, yPos);
     }
 
-bool Energizer::powerUp()
+bool Energizer::powerUp() const
 {
     return true;   
 }
 
 
-void Energizer::initSprite(int xPos, int yPos)
+void Energizer::initSprite(const int& xPos, const int& yPos)
 {
     this->color = sf::Color(255,255,102);
     this->cicle.setFillColor(this->color);
@@ -26,7 +26,5 @@ void Energizer::initSprite(int xPos, int yPos)
 void Energizer::render(sf::RenderTarget* target)
 {
     if (!isEaten)
-    {
         target->draw(this->cicle);
-    }
 }

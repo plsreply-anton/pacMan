@@ -24,7 +24,7 @@ HighScoreState::~HighScoreState()
 
 void HighScoreState::initBackground()
 {
-    this->bgTexture.loadFromFile("../util/menuImage.png");
+    this->bgTexture.loadFromFile("../util/sprites/menuImage.png");
     this->bgSprite = new sf::Sprite(this->bgTexture);
 }
 
@@ -41,8 +41,8 @@ void HighScoreState::updateInput(const float& dt, const sf::Event ev)
 
 void HighScoreState::initLeaderboard()
 {
-    this->atariFont.loadFromFile("../util/SF Atarian System.ttf");
-    this->pacManFont.loadFromFile("../util/PacfontGood.ttf");
+    this->atariFont.loadFromFile("../util/fonts/atariFont.ttf");
+    this->pacManFont.loadFromFile("../util/fonts/pacManFont.ttf");
     
     sf::Vector2f rectPos = sf::Vector2f(this->window->getSize().x / 2 + 200, this->window->getSize().y / 2 + 50);
     this->rectangle.setSize(sf::Vector2f(300, 300));

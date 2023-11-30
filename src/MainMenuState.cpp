@@ -23,7 +23,7 @@ MainMenuState::~MainMenuState()
 
 void MainMenuState::initBackground()
 {
-    this->bgImage.loadFromFile("../util/menuImage.png");
+    this->bgImage.loadFromFile("../util/sprites/menuImage.png");
     this->bgSprite = new sf::Sprite(this->bgImage);
 }
 

@@ -14,7 +14,7 @@ bool Pellet::powerUp()
     return false;
 }
 
-void Pellet::initSprite(int xPos, int yPos)
+void Pellet::initSprite(const int& xPos, const int& yPos)
 {
     this->color = sf::Color(255,255,102);
     this->cicle.setFillColor(this->color);
@@ -26,7 +26,5 @@ void Pellet::initSprite(int xPos, int yPos)
 void Pellet::render(sf::RenderTarget* target)
 {
     if (!isEaten)
-    {
         target->draw(this->cicle);
-    }
 }

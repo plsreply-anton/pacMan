@@ -7,8 +7,8 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
     : State(window, states)
 {
 
-    this->pacManFont.loadFromFile("../util/PacfontGood.ttf");
-    this->atariFont.loadFromFile("../util/SF Atarian System.ttf");
+    this->pacManFont.loadFromFile("../util/fonts/pacManFont.ttf");
+    this->atariFont.loadFromFile("../util/fonts/atariFont.ttf");
 
     this->initialHealth = this->pacMan.getHealth();
     this->health = this->pacMan.getHealth();
@@ -58,7 +58,7 @@ void GameState::initStatusbar()
     this->currentScoreText = new sf::Text(atariFont, "score: 0", 20);
     this->currentScoreText->setPosition(sf::Vector2f(20, 850));
 
-    this->heartTexture.loadFromFile("../util/heart.png");
+    this->heartTexture.loadFromFile("../util/sprites/heart.png");
 
     for (int i = 0; i < this->health; i++)
     {

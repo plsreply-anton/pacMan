@@ -32,19 +32,16 @@ Tile::Tile(const Tile& other)
     }
 }
 
-void Tile::initSprite(int tileType, int xPos, int yPos)
+void Tile::initSprite(const int& tileType, const int& xPos, const int& yPos)
 {
-    if (!tileType)
-        this->color_ = sf::Color::Black;
-    else
-        this->color_ = sf::Color::Blue;
+    this->color_ = (tileType == 0) ? sf::Color::Black : sf::Color::Blue;
     
     this->rect_.setFillColor(this->color_);
     this->rect_.setSize(sf::Vector2f(this->width_, this->height_));
     this->rect_.setPosition(sf::Vector2f(static_cast<float>(xPos), static_cast<float>(yPos)));
 }
 
-int Tile::gettileType()
+int Tile::gettileType() const
 {
     return this->tileType_;
 }
@@ -59,12 +56,12 @@ void Tile::destroyPellet()
     this->hasPellet_=false;
 }
 
-sf::RectangleShape Tile::getRect()
+sf::RectangleShape Tile::getRect() const
 {
     return this->rect_;
 }
 
-bool Tile::hasPellet()
+bool Tile::hasPellet() const
 {
     return this->hasPellet_;
 }
@@ -74,13 +71,10 @@ std::unique_ptr<Pellet> Tile::getPellet()
     return std::move(this->pellet_);
 }
 
-
 void Tile::render(sf::RenderTarget* target)
 {
     target->draw(this->rect_);
     
     if (hasPellet_)
-    {
         this->pellet_->render(target);
-    }
 }

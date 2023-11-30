@@ -16,8 +16,8 @@ PacMan::~PacMan()
 
 void PacMan::initSprite()
 {
-    this->pacManOpenTexture.loadFromFile("../util/pacMan_35_open.png");
-    this->pacManClosedTexture.loadFromFile("../util/pacMan_35_closed.png");
+    this->pacManOpenTexture.loadFromFile("../util/sprites/pacMan_open.png");
+    this->pacManClosedTexture.loadFromFile("../util/sprites/pacMan_closed.png");
 
     this->pacManSprite = new sf::Sprite(this->pacManClosedTexture); 
     this->pacManSprite->setOrigin(sf::Vector2f(

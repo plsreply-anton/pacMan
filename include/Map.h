@@ -21,16 +21,24 @@ class Map
         int totalPellets = 0;
 
     public:
+        //Constructor and destructor
         Map();
         ~Map();
+
+        //Assignment operator
         Map& operator=(const Map& other);
+
+        //Copy Constructor
         Map(const Map& other);
-        std::vector<std::vector<TileType>> getintMap();
-        int getTotalPellets();
-        
+
+        //Initializer
         void initTiles();
         void loadMapFromFile(const std::string &filename = "../util/map.txt");
-        std::vector<std::vector<Tile*>> getTiles();
-        void render(sf::RenderTarget* target);
 
+        //Getters
+        std::vector<std::vector<TileType>> getintMap() const;
+        int getTotalPellets() const;
+        std::vector<std::vector<Tile*>> getTiles() const;
+
+        void render(sf::RenderTarget* target);
 };

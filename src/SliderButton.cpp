@@ -10,7 +10,7 @@ SliderButton::SliderButton(sf::Color buttonColor, sf::Color textColor, sf::Color
     this->min = min;
     this->max = max;
 
-    this->font.loadFromFile("../util/SF Atarian System.ttf");
+    this->font.loadFromFile("../util/fonts/atariFont.ttf");
     this->buttonColor = buttonColor;
     this->activeButtonColor = activeTextColor;
     

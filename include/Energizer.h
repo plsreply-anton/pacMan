@@ -6,13 +6,13 @@
 class Energizer : public Pellet
 {
     private:
-        int radius = 16;
+        const int radius = 16;
 
     public:
         Energizer(int xPos, int yPos);
 
-        bool powerUp();
-        void initSprite(int xPos, int yPos);
+        bool powerUp() const;
+        void initSprite(const int& xPos, const int& yPos);
         void render(sf::RenderTarget* target = nullptr);
 
 };
