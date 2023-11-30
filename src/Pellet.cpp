@@ -9,7 +9,7 @@ Pellet::Pellet(int xPos, int yPos)
 
 Pellet::~Pellet(){}
 
-bool Pellet::powerUp()
+bool Pellet::powerUp() const
 {
     return false;
 }

@@ -18,23 +18,23 @@ add_executable(${PROJECT_NAME} ${SRC_DIR}/main.cpp
                     ${SRC_DIR}/State.cpp
                     ${SRC_DIR}/GameState.cpp
                     ${SRC_DIR}/MainMenuState.cpp
+                    ${SRC_DIR}/SettingState.cpp
                     ${SRC_DIR}/Button.cpp
                     ${SRC_DIR}/AnimationButton.cpp
-                    ${SRC_DIR}/PacMan.cpp
+                    ${SRC_DIR}/SliderButton.cpp
+                    ${SRC_DIR}/HighScoreState.cpp
                     ${SRC_DIR}/Map.cpp
                     ${SRC_DIR}/Tile.cpp
                     ${SRC_DIR}/Pellet.cpp
+                    ${SRC_DIR}/Energizer.cpp
+                    ${SRC_DIR}/PacMan.cpp
                     ${SRC_DIR}/Ghost.cpp
-                    ${SRC_DIR}/Pathfinding.cpp
-                    ${SRC_DIR}/PathfindingStrategy.cpp
-                    ${SRC_DIR}/HighScoreState.cpp
                     ${SRC_DIR}/Blinky.cpp
                     ${SRC_DIR}/Inky.cpp
                     ${SRC_DIR}/Pinky.cpp
                     ${SRC_DIR}/Clyde.cpp
-                    ${SRC_DIR}/Energizer.cpp
-                    ${SRC_DIR}/SettingState.cpp
-                    ${SRC_DIR}/SliderButton.cpp)
+                    ${SRC_DIR}/Pathfinding.cpp
+                    ${SRC_DIR}/PathfindingStrategy.cpp)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_BINARY_DIR} )
 
@@ -43,12 +43,13 @@ set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
+#Specify directories to include
 target_include_directories(${PROJECT_NAME} PRIVATE 
     /Users/antonlarsson/SFML/include
     ${INCLUDE_DIR}
 )
 
-#Speicfy which libraries should ne included
+#Specify which libraries to be included
 target_link_libraries(pacMan
     /Users/antonlarsson/SFML/lib/libsfml-graphics.dylib
     /Users/antonlarsson/SFML/lib/libsfml-window.dylib
@@ -56,5 +57,6 @@ target_link_libraries(pacMan
     /Users/antonlarsson/SFML/lib/libsfml-audio.dylib
     /Users/antonlarsson/SFML/lib/libsfml-network.dylib)
 
+#Install settings
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/pacManConfig.h" DESTINATION include) 
