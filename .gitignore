@@ -32,23 +32,21 @@
 *.app
 
 # CMake files
-CMakeLists.txt.user
-CMakeCache.txt
-CMakeFiles
-CMakeScripts
-Testing
-Makefile
-cmake_install.cmake
-install_manifest.txt
-compile_commands.json
-CTestTestfile.cmake
-_deps
-.cmake/
+**/CMakeLists.txt.user
+**/CMakeCache.txt
+**/CMakeFiles
+**/CMakeScripts
+**/Testing
+**/Makefile
+**/cmake_install.cmake
+**/install_manifest.txt
+**/compile_commands.json
+**/CTestTestfile.cmake
+**/_deps
+**/.cmake/
 
 #VS CODE
-.vscode/
+**/.vscode/
 
-#Executable
-/build/pacMan
-
-
+# macOS directory settings file
+**/.DS_Store
