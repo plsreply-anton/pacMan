@@ -1,6 +1,8 @@
 # PacMan Game Project
 
-Setting up a new git repo for personal project. Initilized in order to learn more about CMake. Currently, the collision check is incredibly buggy and the pellets likewise. Should redo the while map and move-process.
+Setting up a new git repo for personal project. Initilized in order to learn more about CMake and c++ pointers. Come a long way. Working on adding levels
+
+*Note: This project is using unreleased SFML 3.0 which is installed locally from source. The offical rep can be found *[here](https://github.com/SFML/SFML)*
 
 ![Alt](/util/sprites/menuImage.png)
 
