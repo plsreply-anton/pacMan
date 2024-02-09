@@ -48,9 +48,9 @@ protected:
     bool dead = false;
     GhostMode currentMode = Scatter;
     sf::Clock updateChaseClock;
+    sf::Clock deadClock;
     int chaseThreshold;
     sf::Clock modeClock;
-    vector<sf::Vector2f> deadPos{sf::Vector2f(400,420),sf::Vector2f(420,420),sf::Vector2f(440,420)}; 
 
 public:
     Ghost();

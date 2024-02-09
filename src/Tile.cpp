@@ -35,7 +35,6 @@ Tile::Tile(const Tile& other)
 void Tile::initSprite(const int& tileType, const int& xPos, const int& yPos)
 {
     this->color_ = (tileType == 0) ? sf::Color::Black : sf::Color::Blue;
-    
     this->rect_.setFillColor(this->color_);
     this->rect_.setSize(sf::Vector2f(this->width_, this->height_));
     this->rect_.setPosition(sf::Vector2f(static_cast<float>(xPos), static_cast<float>(yPos)));
@@ -49,6 +48,11 @@ int Tile::gettileType() const
 void Tile::changeHasPellet()
 {   
     this->hasPellet_=false;
+}
+
+void Tile::setTileColor(sf::Color color)
+{
+    this->rect_.setFillColor(color);
 }
 
 void Tile::destroyPellet()

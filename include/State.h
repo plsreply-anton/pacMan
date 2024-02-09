@@ -21,7 +21,7 @@ class State
         std::stack<State*>* states; //Pointer to pointers for states
         std::vector<sf::Texture> textures;
         sf::RenderWindow* window;
-        bool quit;
+        bool quit = false;
         
     public:
 

@@ -12,6 +12,7 @@ class Game
         std::stack<State*> states; //Pointers to all different states
     
         sf::Event ev;
+        bool isPaused=false;
 
         const sf::Clock dtClock;
         float dt;

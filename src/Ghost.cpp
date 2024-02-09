@@ -48,7 +48,10 @@ void Ghost::changeTexture()
 void Ghost::setDead(const bool& dead)
 {
     if (this->currentMode == Frightened)
+    {
         this->dead = dead;
+        // this->ghostSprite->setPosition(this->startPos);
+    }
 }
 
 void Ghost::move(const float& dt)
@@ -102,7 +105,7 @@ sf::Sprite Ghost::getSprite() const
 
 void Ghost::render(sf::RenderTarget* target)
 {
-    if (!this->dead)
+    //if (!this->dead)
         target->draw(*this->ghostSprite);
 }
 

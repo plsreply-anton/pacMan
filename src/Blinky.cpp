@@ -76,7 +76,10 @@ void Blinky::update(const float& dt, Map *map, const sf::Vector2f& pacManPos, co
     }
 
     if (this->dead)
-        this->ghostSprite->setPosition(sf::Vector2f(0,0));
+    {
+        this->ghostSprite->setPosition(this->startPos);
+    }
+        
 }
 
 sf::Vector2f Blinky::updateTargetPosition(Map *map, const sf::Vector2f& pacManPos) {

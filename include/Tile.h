@@ -34,6 +34,7 @@ class Tile
         bool hasPellet()const ;
         std::unique_ptr<Pellet> getPellet();
         void changeHasPellet();
+        void setTileColor(sf::Color color);
         void destroyPellet();
 
         void render(sf::RenderTarget* target = nullptr);

@@ -8,6 +8,10 @@ MainMenuState::MainMenuState(sf::RenderWindow* window, std::stack<State*>* state
 {
     this->initBackground();
     this->initButtons();
+    this->music.openFromFile("../util/audio/mainTune.flac");
+    this->music.play();
+    this->music.setVolume(50);
+    this->music.setLoop(true);
     std::cout << "New Menu State" << std::endl;
 }
 
@@ -43,6 +47,11 @@ void MainMenuState::initButtons()
 void MainMenuState::endState() const
 {
     std::cout << "Ending Menu State" << std::endl;
+}
+
+void MainMenuState::pauseMusic()
+{
+    this->music.pause();
 }
 
 void MainMenuState::updateInput(const float& dt, const sf::Event ev)
@@ -98,6 +107,11 @@ void MainMenuState::setActiveButton()
 
 void MainMenuState::update(const float& dt)
 {
+    if (this->music.getStatus() == sf::Music::Status::Paused)
+    {
+        this->music.play();
+    }
+    
     for (int i = 0; i < buttons.size(); i++)
     {
         this->buttons[i]->update();
@@ -105,6 +119,7 @@ void MainMenuState::update(const float& dt)
         {
             this->states->push(new GameState(this->window, this->states));
             this->buttons[i]->setActiveButton();
+            //this->music.pause();
         } 
         if (this->buttons[i]->getButtonState() == 2 && buttonNumber == 1)
         {

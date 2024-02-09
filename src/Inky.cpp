@@ -76,7 +76,7 @@ void Inky::update(const float& dt, Map *map, const sf::Vector2f& pacManPos, cons
 
 
     if (this->dead)
-        this->ghostSprite->setPosition(sf::Vector2f(0,0));
+        this->ghostSprite->setPosition(this->startPos);
 }
 
 sf::Vector2f Inky::updateTargetPosition(Map *map, const sf::Vector2f& pacManPos) {

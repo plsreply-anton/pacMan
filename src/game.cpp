@@ -95,7 +95,10 @@ void Game::updateSFMLEvents()
                 delete this->states.top();
                 this->states.pop();
             }
-        } 
+        } else if ((this->ev.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)))
+        {
+            this->isPaused ? this->isPaused=false : this->isPaused=true;
+        }
         if (!this->states.empty())
         {
             this->states.top()->updateInput(this->dt, this->ev);
@@ -106,7 +109,7 @@ void Game::updateSFMLEvents()
 
 void Game::run()
 {
-    while (this->window->isOpen())
+    while (this->window->isOpen() & !this->isPaused)
     {
         this->updateDt();
         this->update();
@@ -116,6 +119,8 @@ void Game::run()
 
 void Game::render() const
 {
+    if (!this->isPaused)
+    {
     this->window->clear();
 
     //Render items
@@ -125,7 +130,7 @@ void Game::render() const
     }
 
     this->window->display();
-
+    }
 }
 
 void Game::updateDt()

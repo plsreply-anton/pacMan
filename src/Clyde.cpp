@@ -68,7 +68,7 @@ void Clyde::update(const float& dt, Map *map, const sf::Vector2f& pacManPos, con
 
 
     if (this->dead)
-        this->ghostSprite->setPosition(sf::Vector2f(0,0));
+        this->ghostSprite->setPosition(this->startPos);
 }
 
 sf::Vector2f Clyde::updateTargetPosition(Map *map, const sf::Vector2f& pacManPos) {

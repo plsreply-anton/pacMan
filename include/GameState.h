@@ -36,6 +36,12 @@ class GameState : public State
         bool keyPressed = false; 
 
         const string filePath = "../util/highScore.csv";
+        sf::SoundBuffer gameOverSoundBuffer;
+        sf::Sound* gameOverSound;
+        sf::SoundBuffer lifeLostBuffer;
+        sf::Sound* lifeLostSound;
+        bool gameOverSoundPlayed = false;
+        sf::Music wakawaka;
 
         vector<ScoreData> highScores;
         vector<sf::Sprite*> heartSprites;

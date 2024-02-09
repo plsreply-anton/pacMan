@@ -5,6 +5,7 @@
 #include "SettingState.h"
 #include "Button.h"
 
+
 class MainMenuState : public State
 {
     private:
@@ -17,6 +18,8 @@ class MainMenuState : public State
         bool keyPressed = false; // Flag to track if a key is currently pressed
         sf::Clock debounceClock; // Clock to measure key press duration
 
+        sf::Music music;
+
     public:
 
         //Constructor and Destructor
@@ -28,6 +31,7 @@ class MainMenuState : public State
         void initBackground();
 
         //Methods
+        void pauseMusic();
         void endState() const;
         void updateInput(const float& dt, const sf::Event ev);
         void initKeybinds();

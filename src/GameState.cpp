@@ -3,8 +3,8 @@
 
 #include "GameState.h"
 
-GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
-    : State(window, states)
+GameState::GameState(sf::RenderWindow* window, std::stack<State*>*)
+    : State(window,states)
 {
 
     this->pacManFont.loadFromFile("../util/fonts/pacManFont.ttf");
@@ -15,6 +15,15 @@ GameState::GameState(sf::RenderWindow* window, std::stack<State*>* states)
 
     this->initWorld();
     this->endGameDialog();
+
+    if (!this->gameOverSoundBuffer.loadFromFile("../util/audio/game_over.flac"))
+        cout << "ERROR LOADING SOUND" << endl;
+    this->gameOverSound = new sf::Sound(this->gameOverSoundBuffer);
+
+    if (!this->lifeLostBuffer.loadFromFile("../util/audio/lifeLost2.flac"))
+        cout << "ERROR LOADING SOUND" << endl;
+    this->lifeLostSound = new sf::Sound(this->lifeLostBuffer);
+
     std::cout << "New Game State" << std::endl;
 }
 
@@ -35,6 +44,8 @@ GameState::~GameState()
     delete this->text;
     delete this->highScoreText;
     delete this->currentScoreText;
+    delete this->gameOverSound;
+    delete this->lifeLostSound;
 }
 
 void GameState::initWorld()
@@ -44,10 +55,10 @@ void GameState::initWorld()
     this->map->initTiles();
     this->initStatusbar();
 
-    ghosts.push_back(new Blinky(sf::Vector2f(160, 60)));
-    ghosts.push_back(new Inky(sf::Vector2f(740, 760)));
-    ghosts.push_back(new Pinky(sf::Vector2f(740, 60)));
-    ghosts.push_back(new Clyde(sf::Vector2f(160, 760)));
+    ghosts.push_back(new Blinky(sf::Vector2f(10*40+20, 9*40+20)));
+    ghosts.push_back(new Inky(sf::Vector2f(9*40+20, 10*40+20)));
+    ghosts.push_back(new Pinky(sf::Vector2f(10*40+20, 10*40+20)));
+    ghosts.push_back(new Clyde(sf::Vector2f(11*40+20, 10*40+20)));
 }
 
 void GameState::initStatusbar()
@@ -135,6 +146,11 @@ void GameState::update(const float& dt)
 
         if (this->pacMan.getCoolDownClock().getElapsedTime().asMilliseconds() < 1000 && this->health != this->initialHealth)
         {   
+            if (this->lifeLostSound->getStatus() != sf::Sound::Status::Playing && this->pacMan.getCoolDownClock().getElapsedTime().asMilliseconds() < 50)
+            {
+                this->lifeLostSound->play();
+            }
+            
             if (this->blinkClock.getElapsedTime().asMilliseconds() < 100)
                 this->statusbarRectangle.setFillColor(sf::Color::Black);
             else if (this->blinkClock.getElapsedTime().asMilliseconds() < 200)
@@ -147,14 +163,25 @@ void GameState::update(const float& dt)
             this->statusbarRectangle.setFillColor(sf::Color::Black);
         }
 
-    } 
-    else if (!fileRead)
+    } else
     {
-        this->readFile();
+        if (this->gameOverSound->getStatus() != sf::Sound::Status::Playing && !this->gameOverSoundPlayed)
+        {
+            this->gameOverSound->play();
+            
+        } else {
+            this->gameOverSoundPlayed = true;
+        }
+        
+        
+        if (!fileRead)
+        {
+            this->readFile();
 
-        if (this->pacMan.getScore() > this->highScores[4].score)
-            this->highScore_ = true;
-    }
+            if (this->pacMan.getScore() > this->highScores[4].score)
+                this->highScore_ = true;
+        }
+    } 
     
     string scoreString = "score: " + std::to_string(this->pacMan.getScore());
     this->currentScoreText->setString(scoreString);

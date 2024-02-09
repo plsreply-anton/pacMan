@@ -75,7 +75,7 @@ void Pinky::update(const float& dt, Map *map, const sf::Vector2f& pacManPos, con
 
 
     if (this->dead)
-        this->ghostSprite->setPosition(sf::Vector2f(0,0));
+        this->ghostSprite->setPosition(this->startPos);
 }
 
 sf::Vector2f Pinky::updateTargetPosition(Map *map, const sf::Vector2f& pacManPos) {
